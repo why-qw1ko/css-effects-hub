@@ -288,6 +288,7 @@ export const useEffectsStore = defineStore('effects', () => {
         //   likes: parseInt(frontmatter.likes) || 0
         // }
         // when building effect object (inside loadEffectsFromMarkdown)
+        // 修改
         const normalizedId = String(frontmatter.id ?? Date.now().toString()).replace(/^["']|["']$/g, '').trim()
 
         const effect: Effect = {
