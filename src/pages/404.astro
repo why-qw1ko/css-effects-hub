@@ -1,0 +1,72 @@
+---
+import MainLayout from '../layouts/MainLayout.astro'
+---
+
+<MainLayout>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- 页面头部 -->
+    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center">
+          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            页面未找到
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            抱歉，您访问的页面不存在或已被移动。
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-center">
+        <div class="mb-8">
+          <svg class="mx-auto h-32 w-32 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.467-.881-6.084-2.291.15-.291.318-.571.5-.838M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+          404 - 页面不存在
+        </h2>
+        
+        <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+          抱歉，我们找不到您请求的页面。请检查URL是否正确，或者返回首页继续浏览。
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/" class="btn-primary">
+            返回首页
+          </a>
+          <a href="/effects" class="btn-secondary">
+            浏览动效库
+          </a>
+        </div>
+        
+        <div class="mt-12">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+            您可能在寻找：
+          </h3>
+          <div class="flex flex-wrap justify-center gap-3">
+            <a href="/" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200">
+              首页
+            </a>
+            <a href="/effects" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200">
+              动效库
+            </a>
+            <a href="/categories" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200">
+              分类浏览
+            </a>
+            <a href="/about" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200">
+              关于我们
+            </a>
+            <a href="/contribute" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors duration-200">
+              贡献动效
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>

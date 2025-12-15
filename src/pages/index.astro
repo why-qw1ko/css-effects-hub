@@ -1,0 +1,134 @@
+---
+import MainLayout from '../layouts/MainLayout.astro'
+// import FeaturedEffects from '../components/ui/FeaturedEffects.vue'
+---
+
+<MainLayout>
+  <div class="min-h-screen">
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            <span class="bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+              CSS 动效博客
+            </span>
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+            探索精美的CSS动画效果，每一个动效都是独立的技术文章。
+            提供完整的代码示例、实时预览和详细的使用指南。
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="/effects" class="btn-primary text-lg px-8 py-3">
+              开始阅读
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 装饰性背景 -->
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <div class="absolute -top-4 -right-4 w-72 h-72 bg-primary-200 dark:bg-primary-900 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-xl opacity-70 animate-pulse"></div>
+        <div class="absolute -bottom-8 -left-4 w-72 h-72 bg-secondary-200 dark:bg-secondary-900 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-xl opacity-70 animate-pulse delay-700"></div>
+      </div>
+    </section>
+
+    <!-- 精选动效 -->
+    <section class="py-16 bg-white dark:bg-gray-900">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            精选动效
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400">
+            精心挑选的CSS动效示例
+          </p>
+        </div>
+
+        <!-- <FeaturedEffects client:load /></div> -->
+
+        <div class="text-center mt-12">
+          <a href="/effects" class="btn-primary">
+            查看更多动效
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 功能特点 -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            博客特色
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400">
+            为开发者精心打造的CSS动效学习资源
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              技术文章
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              每个动效都是独立的技术文章，包含详细的技术解析
+            </p>
+          </div>
+
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-secondary-600 dark:text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              在线演示
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              每个动效都有在线演示，可以直接体验效果
+            </p>
+          </div>
+
+          <div class="text-center p-6">
+            <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              分类系统
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              清晰的分类和标签系统，快速找到相关的动效
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-primary-600 dark:bg-primary-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-white mb-4">
+          开始学习CSS动效
+        </h2>
+        <p class="text-xl text-primary-100 mb-8">
+          立即探索我们的动效博客，学习精美的CSS动画技巧
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/effects" class="bg-white text-primary-600 hover:bg-gray-50 px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+            开始阅读
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</MainLayout>

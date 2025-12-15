@@ -1,0 +1,180 @@
+---
+import MainLayout from '../layouts/MainLayout.astro'
+---
+
+<MainLayout>
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- 页面头部 -->
+    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center">
+          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            关于我们
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+            CSS动效中心致力于为开发者提供最好的CSS动画资源和学习平台
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <!-- 介绍 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+        <div>
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+            我们的使命
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400 mb-4">
+            CSS动效中心成立于2025年，我们的使命是为Web开发者提供最优质、最实用的CSS动画资源。
+            我们相信，好的动画效果不仅能提升用户体验，更能让网站脱颖而出。
+          </p>
+          <p class="text-lg text-gray-600 dark:text-gray-400">
+            通过收集、整理和分享各种精美的CSS动效，我们希望帮助开发者创造出更加生动、
+            有趣和吸引人的网页体验。
+          </p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              持续更新
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400">
+              我们会持续添加新的动效资源，确保内容始终保持最新
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 团队介绍 -->
+      <div class="mb-16">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            我们的团队
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-400">
+            由一群热爱Web设计和开发的开发者组成
+          </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div class="w-24 h-24 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl font-bold">MM</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              MiniMax Agent
+            </h3>
+            <p class="text-primary-600 dark:text-primary-400 font-medium mb-3">
+              创始人 & 开发者
+            </p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              专注于前端技术和用户体验设计，致力于创造更好的Web体验
+            </p>
+          </div>
+
+          <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl font-bold">AI</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              AI 助手团队
+            </h3>
+            <p class="text-green-600 dark:text-green-400 font-medium mb-3">
+              技术支持
+            </p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              提供智能化的技术支持和代码优化建议
+            </p>
+          </div>
+
+          <div class="text-center p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-white text-2xl font-bold">社区</span>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              开发者社区
+            </h3>
+            <p class="text-purple-600 dark:text-purple-400 font-medium mb-3">
+              贡献者
+            </p>
+            <p class="text-gray-600 dark:text-gray-400 text-sm">
+              全球开发者的贡献和支持让这个平台不断发展
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 统计信息 -->
+      <div class="mb-16">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-8 border border-gray-200 dark:border-gray-700">
+          <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              数据统计
+            </h2>
+            <p class="text-lg text-gray-600 dark:text-gray-400">
+              我们的平台发展情况
+            </p>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
+                2+
+              </div>
+              <div class="text-gray-600 dark:text-gray-400">
+                动效示例
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-secondary-600 dark:text-secondary-400 mb-2">
+                100%
+              </div>
+              <div class="text-gray-600 dark:text-gray-400">
+                开源免费
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
+                24/7
+              </div>
+              <div class="text-gray-600 dark:text-gray-400">
+                在线可用
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                0
+              </div>
+              <div class="text-gray-600 dark:text-gray-400">
+                版权问题
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 联系我们 -->
+      <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          联系我们
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+          有任何问题或建议？我们很乐意听到您的声音
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="mailto:contact@css-effects.com" class="btn-primary">
+            发送邮件
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-secondary">
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>

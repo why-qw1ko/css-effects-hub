@@ -1,0 +1,14 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro'
+import EffectDetail from '../../components/ui/EffectDetail.vue'
+
+interface Props {
+  id: string
+}
+
+const { id } = Astro.params
+---
+
+<MainLayout>
+  <EffectDetail id={id} client:load />
+</MainLayout>
