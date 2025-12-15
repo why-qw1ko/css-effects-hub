@@ -113,36 +113,80 @@ export const useEffectsStore = defineStore('effects', () => {
   }
 
   // 解析Markdown文件
+  // const parseMarkdown = (content: string): { frontmatter: any, code: string } => {
+  //   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
+  //   if (!frontmatterMatch) {
+  //     return { frontmatter: {}, code: content }
+  //   }
+    
+  //   const frontmatterText = frontmatterMatch[1]
+  //   const code = frontmatterMatch[2]
+    
+  //   // 简单的YAML解析（仅支持基本类型）
+  //   const frontmatter: any = {}
+  //   frontmatterText.split('\n').forEach(line => {
+  //     const [key, ...valueParts] = line.split(': ')
+  //     if (key && valueParts.length > 0) {
+  //       const value = valueParts.join(': ').trim()
+  //       // 尝试解析JSON格式的数组
+  //       if (value.startsWith('[') && value.endsWith(']')) {
+  //         try {
+  //           frontmatter[key] = JSON.parse(value)
+  //         } catch {
+  //           frontmatter[key] = value
+  //         }
+  //       } else {
+  //         frontmatter[key] = value
+  //       }
+  //     }
+  //   })
+    
+  //   return { frontmatter, code }
+  // }
+
+
+  // Replace parseMarkdown implementation with this:
   const parseMarkdown = (content: string): { frontmatter: any, code: string } => {
     const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
     if (!frontmatterMatch) {
       return { frontmatter: {}, code: content }
     }
-    
+
     const frontmatterText = frontmatterMatch[1]
     const code = frontmatterMatch[2]
-    
-    // 简单的YAML解析（仅支持基本类型）
+
     const frontmatter: any = {}
+
     frontmatterText.split('\n').forEach(line => {
       const [key, ...valueParts] = line.split(': ')
-      if (key && valueParts.length > 0) {
-        const value = valueParts.join(': ').trim()
-        // 尝试解析JSON格式的数组
-        if (value.startsWith('[') && value.endsWith(']')) {
-          try {
-            frontmatter[key] = JSON.parse(value)
-          } catch {
-            frontmatter[key] = value
-          }
-        } else {
-          frontmatter[key] = value
+      if (!key) return
+      const rawValue = valueParts.join(': ').trim()
+      if (rawValue === '') {
+        frontmatter[key] = ''
+        return
+      }
+
+      // 如果是数组或对象的 JSON 形式，尝试 parse
+      if ((rawValue.startsWith('[') && rawValue.endsWith(']')) ||
+          (rawValue.startsWith('{') && rawValue.endsWith('}'))) {
+        try {
+          frontmatter[key] = JSON.parse(rawValue)
+          return
+        } catch {
+          // fallthrough -> treat as plain string
         }
       }
+
+      // 去掉首尾的单/双引号（例如 "5" 或 '5' -> 5 字符串）
+      const value = rawValue.replace(/^["']|["']$/g, '')
+
+      // 保持为字符串（避免类型不匹配）；如果需要可在后面转换特定字段
+      frontmatter[key] = value
     })
-    
+
     return { frontmatter, code }
   }
+
 
   // 从Markdown文件中提取代码示例
   const extractCodeExamples = (content: string): { html: string, css: string } => {
@@ -167,53 +211,105 @@ export const useEffectsStore = defineStore('effects', () => {
     return { html, css }
   }
 
-  // 从Markdown文件加载动效数据
+  // // 从Markdown文件加载动效数据
+  // const loadEffectsFromMarkdown = async () => {
+  //   const effectFiles = [
+  //     'floating-card.md',
+  //     'pulse-button.md', 
+  //     'loading-spinner.md',
+  //     'gradient-border.md',
+  //     'text-slide.md',
+  //     'navigation-hover.md',
+  //     'flip-card.md',
+  //     'ripple-button.md',
+  //     'text-shake.md',
+  //     'marquee-text.md'
+  //   ]
+    
+  //   const loadedEffects: Effect[] = []
+    
+  //   for (const fileName of effectFiles) {
+  //     try {
+  //       const response = await fetch(`/content/effects/${fileName}`)
+  //       if (response.ok) {
+  //         const content = await response.text()
+  //         const { frontmatter } = parseMarkdown(content)
+  //         const { html, css } = extractCodeExamples(content)
+          
+  //         const effect: Effect = {
+  //           id: frontmatter.id || Date.now().toString(),
+  //           name: frontmatter.name || 'Unknown Effect',
+  //           description: frontmatter.description || '',
+  //           category: frontmatter.category || '其他',
+  //           difficulty: frontmatter.difficulty || 'easy',
+  //           tags: frontmatter.tags || [],
+  //           html: html,
+  //           css: css,
+  //           demoComponent: frontmatter.demoComponent || 'EffectCard',
+  //           author: frontmatter.author || 'Anonymous',
+  //           createdAt: frontmatter.createdAt || new Date().toISOString(),
+  //           likes: parseInt(frontmatter.likes) || 0
+  //         }
+          
+  //         loadedEffects.push(effect)
+  //       }
+  //     } catch (error) {
+  //       console.warn(`Failed to load ${fileName}:`, error)
+  //     }
+  //   }
+    
+  //   return loadedEffects
+  // }
+
+    // stores/effects.ts - 替换 loadEffectsFromMarkdown 的实现为：
   const loadEffectsFromMarkdown = async () => {
-    const effectFiles = [
-      'floating-card.md',
-      'pulse-button.md', 
-      'loading-spinner.md',
-      'gradient-border.md',
-      'text-slide.md',
-      'navigation-hover.md',
-      'flip-card.md',
-      'ripple-button.md',
-      'text-shake.md',
-      'marquee-text.md'
-    ]
-    
+    const modules = import.meta.glob('/src/content/effects/*.md', { as: 'raw' })
     const loadedEffects: Effect[] = []
-    
-    for (const fileName of effectFiles) {
+
+    for (const path in modules) {
       try {
-        const response = await fetch(`/content/effects/${fileName}`)
-        if (response.ok) {
-          const content = await response.text()
-          const { frontmatter } = parseMarkdown(content)
-          const { html, css } = extractCodeExamples(content)
-          
-          const effect: Effect = {
-            id: frontmatter.id || Date.now().toString(),
-            name: frontmatter.name || 'Unknown Effect',
-            description: frontmatter.description || '',
-            category: frontmatter.category || '其他',
-            difficulty: frontmatter.difficulty || 'easy',
-            tags: frontmatter.tags || [],
-            html: html,
-            css: css,
-            demoComponent: frontmatter.demoComponent || 'EffectCard',
-            author: frontmatter.author || 'Anonymous',
-            createdAt: frontmatter.createdAt || new Date().toISOString(),
-            likes: parseInt(frontmatter.likes) || 0
-          }
-          
-          loadedEffects.push(effect)
+        const getRaw = modules[path] as () => Promise<string>
+        const content = await getRaw()
+        const { frontmatter } = parseMarkdown(content)
+        const { html, css } = extractCodeExamples(content)
+
+        // const effect: Effect = {
+        //   id: frontmatter.id || Date.now().toString(),
+        //   name: frontmatter.name || 'Unknown Effect',
+        //   description: frontmatter.description || '',
+        //   category: frontmatter.category || '其他',
+        //   difficulty: frontmatter.difficulty || 'easy',
+        //   tags: frontmatter.tags || [],
+        //   html,
+        //   css,
+        //   demoComponent: frontmatter.demoComponent || 'EffectCard',
+        //   author: frontmatter.author || 'Anonymous',
+        //   createdAt: frontmatter.createdAt || new Date().toISOString(),
+        //   likes: parseInt(frontmatter.likes) || 0
+        // }
+        // when building effect object (inside loadEffectsFromMarkdown)
+        const normalizedId = String(frontmatter.id ?? Date.now().toString()).replace(/^["']|["']$/g, '').trim()
+
+        const effect: Effect = {
+          id: normalizedId,
+          name: frontmatter.name || 'Unknown Effect',
+          description: frontmatter.description || '',
+          category: frontmatter.category || '其他',
+          difficulty: (frontmatter.difficulty as any) || 'easy',
+          tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : (frontmatter.tags ? [String(frontmatter.tags)] : []),
+          html: html,
+          css: css,
+          demoComponent: frontmatter.demoComponent || 'EffectCard',
+          author: frontmatter.author || 'Anonymous',
+          createdAt: frontmatter.createdAt || new Date().toISOString(),
+          likes: parseInt(String(frontmatter.likes || '0'), 10) || 0
         }
-      } catch (error) {
-        console.warn(`Failed to load ${fileName}:`, error)
+        loadedEffects.push(effect)
+      } catch (e) {
+        console.warn('Failed to parse markdown', path, e)
       }
     }
-    
+
     return loadedEffects
   }
 

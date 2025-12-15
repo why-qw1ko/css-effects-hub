@@ -19,8 +19,8 @@ import Footer from '../components/ui/Footer.vue'
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
-    <ThemeProvider client:load>
-      <PiniaProvider client:load>
+    <PiniaProvider client:load>
+      <ThemeProvider client:load>
         <div class="min-h-screen flex flex-col">
           <Header client:load />
           <main class="flex-1">
@@ -28,7 +28,7 @@ import Footer from '../components/ui/Footer.vue'
           </main>
           <Footer client:load />
         </div>
-      </PiniaProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </PiniaProvider>
   </body>
 </html>
