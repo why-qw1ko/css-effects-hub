@@ -148,40 +148,26 @@ export const useEffectsStore = defineStore('effects', () => {
   // Replace parseMarkdown implementation with this:
   const parseMarkdown = (content: string): { frontmatter: any, code: string } => {
     const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
-    if (!frontmatterMatch) {
-      return { frontmatter: {}, code: content }
-    }
+    if (!frontmatterMatch) return { frontmatter: {}, code: content }
 
     const frontmatterText = frontmatterMatch[1]
     const code = frontmatterMatch[2]
-
     const frontmatter: any = {}
 
     frontmatterText.split('\n').forEach(line => {
       const [key, ...valueParts] = line.split(': ')
       if (!key) return
       const rawValue = valueParts.join(': ').trim()
-      if (rawValue === '') {
-        frontmatter[key] = ''
-        return
-      }
+      if (rawValue === '') { frontmatter[key] = ''; return }
 
-      // 如果是数组或对象的 JSON 形式，尝试 parse
+      // 如果看起来是 JSON 数组或对象，尝试 JSON.parse
       if ((rawValue.startsWith('[') && rawValue.endsWith(']')) ||
           (rawValue.startsWith('{') && rawValue.endsWith('}'))) {
-        try {
-          frontmatter[key] = JSON.parse(rawValue)
-          return
-        } catch {
-          // fallthrough -> treat as plain string
-        }
+        try { frontmatter[key] = JSON.parse(rawValue); return } catch {}
       }
 
-      // 去掉首尾的单/双引号（例如 "5" 或 '5' -> 5 字符串）
-      const value = rawValue.replace(/^["']|["']$/g, '')
-
-      // 保持为字符串（避免类型不匹配）；如果需要可在后面转换特定字段
-      frontmatter[key] = value
+      // 去掉首尾的单/双引号
+      frontmatter[key] = rawValue.replace(/^["']|["']$/g, '')
     })
 
     return { frontmatter, code }

@@ -5,7 +5,7 @@ createdAt: "2025-12-15"
 demoComponent: FlipCard
 description: 具有3D翻转效果的卡片组件，可展示前后两面内容
 difficulty: medium
-id: "5"
+id: 5
 likes: 38
 name: 翻转卡片
 tags:
