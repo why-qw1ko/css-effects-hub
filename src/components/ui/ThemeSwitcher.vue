@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
-import { useThemeStore } from '../../stores/theme'
 
+// 只在客户端动态导入 Pinia store
+let useThemeStore: () => any
 const themeStore = ref(null)
 
-onMounted(() => {
+onMounted(async () => {
+  // 动态导入 store，确保只在客户端执行
+  const { useThemeStore: importedUseThemeStore } = await import('../../stores/theme')
+  useThemeStore = importedUseThemeStore
+  
   themeStore.value = useThemeStore()
 })
 

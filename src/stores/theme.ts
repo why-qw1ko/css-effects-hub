@@ -53,10 +53,24 @@ export const useThemeStore = defineStore('theme', () => {
     saveThemePreference()
   }
   
+  // 将十六进制颜色转换为 RGB 格式
+  const hexToRgb = (hex: string): string => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+    return result
+      ? `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`
+      : '14 165 233' // 默认蓝色
+  }
+  
   const updateCSSVariables = () => {
     const root = document.documentElement
+    
+    // 设置十六进制颜色变量
     root.style.setProperty('--color-primary', primaryColor.value)
     root.style.setProperty('--color-secondary', secondaryColor.value)
+    
+    // 设置 RGB 格式变量（用于 Tailwind）
+    root.style.setProperty('--color-primary-rgb', hexToRgb(primaryColor.value))
+    root.style.setProperty('--color-secondary-rgb', hexToRgb(secondaryColor.value))
     
     // 安全地切换主题类
     root.classList.remove('light', 'dark')

@@ -1,25 +1,46 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useEffectsStore } from '../../stores/effects'
+  import { onMounted } from 'vue'
+import { ref, computed } from 'vue'
 
-const effectsStore = ref(null)
+// 定义组件 props，使用类型化的 defineProps 和 withDefaults
+interface Effect {
+  id: string
+  name: string
+  description: string
+  category: string
+  difficulty: 'easy' | 'medium' | 'hard'
+  tags: string[]
+  author?: string
+  createdAt: string
+  likes: number
+}
+
+// 定义组件 props，使用类型化的 defineProps 和 withDefaults
+const props = withDefaults(defineProps<{
+  effects?: Effect[]
+}>(), {
+  effects: () => []
+})
 
 // 搜索和分类状态
 const searchQuery = ref('')
 const currentCategory = ref('all')
 
-onMounted(async () => {
-  effectsStore.value = useEffectsStore()
-  await effectsStore.value.initializeSampleEffects()
+onMounted(() => {
+  console.log('EffectsList props.effects =', props.effects)
 })
-
 // 计算属性
 const categories = computed(() => {
-  return effectsStore.value?.categories || []
+  // 确保 effects 是一个数组
+  const effectsArray = Array.isArray(props.effects) ? props.effects : []
+  return Array.from(new Set(effectsArray.map(e => e.category)))
 })
 
+// 计算属性 - 过滤效果列表
 const filteredEffects = computed(() => {
-  let filtered = effectsStore.value?.effects || []
+  // 确保 effects 是一个数组
+  const effectsArray = Array.isArray(props.effects) ? [...props.effects] : []
+  let filtered = effectsArray
   
   // 分类过滤
   if (currentCategory.value !== 'all') {
@@ -29,12 +50,24 @@ const filteredEffects = computed(() => {
   // 搜索过滤
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
-    filtered = filtered.filter(effect =>
-      effect.name.toLowerCase().includes(query) ||
-      effect.description.toLowerCase().includes(query) ||
-      effect.tags.some(tag => tag.toLowerCase().includes(query))
-    )
+
+    filtered = filtered.filter(effect => {
+      const nameMatch =
+        effect.name?.toLowerCase().includes(query)
+
+      const descMatch =
+        effect.description?.toLowerCase().includes(query)
+
+      const tagsMatch =
+        Array.isArray(effect.tags) &&
+        effect.tags.some(tag =>
+          tag.toLowerCase().includes(query)
+        )
+
+      return nameMatch || descMatch || tagsMatch
+    })
   }
+
   
   return filtered
 })
@@ -87,6 +120,7 @@ const getDifficultyText = (difficulty: string) => {
       return '未知'
   }
 }
+
 </script>
 
 <template>

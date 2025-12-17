@@ -1,7 +1,6 @@
+// 使用静态导入，避免动态加载未安装的组件
 import Prism from 'prismjs'
-import 'prismjs/components/prism-css'
-import 'prismjs/components/prism-html'
-import 'prismjs/components/prism-javascript'
+// 只导入需要的主题
 import 'prismjs/themes/prism-tomorrow.css'
 
 /**

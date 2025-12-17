@@ -1,6 +1,34 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro'
 import EffectsList from '../components/ui/EffectsList.vue'
+import { getCollection } from 'astro:content'
+
+// 在构建时获取所有动效数据
+const effects = await getCollection('effects')
+
+// 调试信息
+console.log('Fetched effects:', effects)
+console.log('Effects length:', effects.length)
+
+// 转换为组件需要的格式，使用 frontmatter 中的 id 字段
+let effectsData = []
+if (Array.isArray(effects) && effects.length > 0) {
+  effectsData = effects.map(effect => {
+    const { demoComponent, ...rest } = effect.data
+    return {
+      ...rest,
+      id: effect.data.id
+    }
+  })
+}
+
+// 确保 safeEffectsData 总是一个数组
+const safeEffectsData = Array.isArray(effectsData) ? effectsData : []
+
+// 调试信息
+console.log('safeEffectsData =', safeEffectsData)
+console.log('safeEffectsData.length =', safeEffectsData.length)
+console.log('JSON.stringify(safeEffectsData) =', JSON.stringify(safeEffectsData))
 ---
 
 <MainLayout>
@@ -21,7 +49,8 @@ import EffectsList from '../components/ui/EffectsList.vue'
 
     <!-- 动效列表 -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <EffectsList client:load />
+      <!-- 直接将数据作为 props 传递，Astro 会自动序列化 -->
+      <EffectsList :effects="safeEffectsData" client:load />
     </div>
   </div>
 </MainLayout>

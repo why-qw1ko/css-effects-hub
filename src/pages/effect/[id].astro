@@ -1,14 +1,57 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro'
 import EffectDetail from '../../components/ui/EffectDetail.vue'
+import { getCollection } from 'astro:content'
 
 interface Props {
   id: string
 }
 
 const { id } = Astro.params
+
+// 获取所有动效数据，然后根据 id 过滤
+const effects = await getCollection('effects')
+let effectEntry
+let effectData
+
+// 根据 frontmatter 中的 id 字段查找效果
+const matchedEffect = effects.find(effect => effect.data.id === id)
+
+if (!matchedEffect) {
+  // 如果效果不存在，重定向到 404
+  Astro.redirect('/404')
+}
+
+// 解析 Markdown 内容，提取代码示例
+const content = matchedEffect.body
+const codeBlocks = content.match(/```(\w+)?\n([\s\S]*?)```/g) || []
+let html = ''
+let css = ''
+
+codeBlocks.forEach(block => {
+  const match = block.match(/```(\w+)?\n([\s\S]*?)```/)
+  if (match) {
+    const language = match[1] || ''
+    const code = match[2].trim()
+    
+    if (language === 'html' || language === '') {
+      html = code
+    } else if (language === 'css') {
+      css = code
+    }
+  }
+})
+
+// 构建完整的 effect 数据对象
+effectData = {
+  ...matchedEffect.data,
+  id: matchedEffect.data.id,
+  html,
+  css,
+  demoComponent: matchedEffect.data.demoComponent || 'EffectCard'
+}
 ---
 
 <MainLayout>
-  <EffectDetail id={id} client:load />
+  <EffectDetail :effect="effectData" client:load />
 </MainLayout>

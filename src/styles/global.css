@@ -3,8 +3,17 @@
 @tailwind utilities;
 
 @layer base {
+  /* 定义主题 CSS 变量 */
+  :root {
+    --color-primary: #0ea5e9;
+    --color-secondary: #d946ef;
+  }
+  
   html {
     scroll-behavior: smooth;
+    /* 确保 CSS 变量可用 */
+    --color-primary: #0ea5e9;
+    --color-secondary: #d946ef;
   }
   
   /* 主题色彩方案 */
