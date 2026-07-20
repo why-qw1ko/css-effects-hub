@@ -5,58 +5,44 @@ export default {
   theme: {
     extend: {
       colors: {
+        bg: 'var(--bg)',
+        card: 'var(--card)',
         primary: {
-          50: 'rgb(240 249 255 / <alpha-value>)',
-          100: 'rgb(224 242 254 / <alpha-value>)',
-          200: 'rgb(186 230 253 / <alpha-value>)',
-          300: 'rgb(125 211 252 / <alpha-value>)',
-          400: 'rgb(56 189 248 / <alpha-value>)',
-          500: 'rgb(var(--color-primary-rgb) / <alpha-value>)',
-          600: 'rgb(2 132 199 / <alpha-value>)',
-          700: 'rgb(3 105 161 / <alpha-value>)',
-          800: 'rgb(7 89 133 / <alpha-value>)',
-          900: 'rgb(12 74 110 / <alpha-value>)',
-          950: 'rgb(8 47 73 / <alpha-value>)',
+          DEFAULT: 'var(--primary)',
+          hover: 'var(--primary-hover)',
+          dim: 'var(--primary-dim)',
         },
-        secondary: {
-          50: 'rgb(253 244 255 / <alpha-value>)',
-          100: 'rgb(250 232 255 / <alpha-value>)',
-          200: 'rgb(245 208 254 / <alpha-value>)',
-          300: 'rgb(240 171 252 / <alpha-value>)',
-          400: 'rgb(232 121 249 / <alpha-value>)',
-          500: 'rgb(var(--color-secondary-rgb) / <alpha-value>)',
-          600: 'rgb(192 38 211 / <alpha-value>)',
-          700: 'rgb(162 28 175 / <alpha-value>)',
-          800: 'rgb(134 25 143 / <alpha-value>)',
-          900: 'rgb(112 26 117 / <alpha-value>)',
-          950: 'rgb(74 4 78 / <alpha-value>)',
-        }
+        surface: {
+          DEFAULT: 'var(--surface)',
+          2: 'var(--surface-2)',
+        },
+        txt: {
+          DEFAULT: 'var(--text)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
+        },
+        border: {
+          DEFAULT: 'var(--border)',
+          hover: 'var(--border-hover)',
+        },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Monaco', 'Consolas', 'monospace'],
+        sans: ['Syne', 'DM Mono', 'system-ui', 'sans-serif'],
+        mono: ['DM Mono', 'SF Mono', 'monospace'],
+        display: ['Syne', 'system-ui', 'sans-serif'],
       },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out',
-        'bounce-gentle': 'bounceGentle 0.6s ease-in-out',
+      borderRadius: {
+        'card': '14px',
+        'btn': '8px',
+        'full': '100px',
       },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        bounceGentle: {
-          '0%, 20%, 50%, 80%, 100%': { transform: 'translateY(0)' },
-          '40%': { transform: 'translateY(-5px)' },
-          '60%': { transform: 'translateY(-3px)' },
-        }
-      }
+      boxShadow: {
+        'sm': '0 1px 3px rgba(0,0,0,0.04)',
+        'md': '0 4px 20px rgba(0,0,0,0.06)',
+        'lg': '0 12px 44px rgba(0,0,0,0.08)',
+        'card-hover': '0 8px 30px rgba(79,124,255,0.12)',
+      },
     },
   },
   plugins: [],
-}
+};

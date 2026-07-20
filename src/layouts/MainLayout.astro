@@ -1,34 +1,36 @@
 ---
-import '../styles/global.css'
-import ThemeProvider from '../components/ui/ThemeProvider.vue'
-import PiniaProvider from '../components/ui/PiniaProvider.vue'
-import Header from '../components/ui/Header.vue'
-import Footer from '../components/ui/Footer.vue'
+import '../styles/global.css';
+import Header from '../components/ui/Header.vue';
+import Footer from '../components/ui/Footer.vue';
+import { previewKeyframes } from '../data/effects';
 ---
 
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="CSS动效分享平台 - 发现和分享精美的CSS动画效果" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CSS Design Plus — 精选 CSS 动效合集，提供代码示例与 AI Prompt" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>CSS动效分享平台</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <title>CSS Design Plus</title>
+    <style set:html={previewKeyframes}></style>
+    <script>
+      // Apply theme before paint
+      (function() {
+        const t = localStorage.getItem('cdp-theme');
+        const dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (dark) document.documentElement.classList.add('dark');
+      })();
+    </script>
   </head>
-  <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
-    <PiniaProvider client:load>
-      <ThemeProvider client:load>
-        <div class="min-h-screen flex flex-col">
-          <Header client:load />
-          <main class="flex-1">
-            <slot />
-          </main>
-          <Footer client:load />
-        </div>
-      </ThemeProvider>
-    </PiniaProvider>
+  <body>
+    <Header client:load />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer />
   </body>
 </html>

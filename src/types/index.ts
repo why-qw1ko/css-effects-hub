@@ -1,38 +1,29 @@
 export interface Effect {
-  id: string
-  name: string
-  description: string
-  category: string
-  difficulty: 'easy' | 'medium' | 'hard'
-  tags: string[]
-  html: string
-  css: string
-  demoComponent: string
-  preview?: string
-  author?: string
-  createdAt: string
-  likes: number
+  id: string;
+  name: string;
+  nameEn: string;
+  category: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+  tags: string[];
+  description: string;
+  html: string;
+  css: string;
+  js?: string;
+  prompt: string;
+  previewHtml: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  nameEn: string;
+  icon: string;
+  count: number;
 }
 
 export interface ThemeColors {
-  primary: string
-  secondary: string
-  accent: string
-  background: string
-  surface: string
-  text: string
-  textSecondary: string
-}
-
-export interface NavigationItem {
-  label: string
-  href: string
-  icon?: string
-  external?: boolean
-}
-
-export interface CodeLanguage {
-  id: string
-  name: string
-  highlight: string
+  primary: string;
+  bg: string;
+  card: string;
+  text: string;
 }

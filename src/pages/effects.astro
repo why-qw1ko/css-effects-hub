@@ -1,56 +1,48 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro'
-import EffectsList from '../components/ui/EffectsList.vue'
-import { getCollection } from 'astro:content'
+import MainLayout from '../layouts/MainLayout.astro';
+import EffectCard from '../components/effects/EffectCard.vue';
+import SearchBar from '../components/ui/SearchBar.vue';
+import CategoryNav from '../components/ui/CategoryNav.vue';
+import EffectDetail from '../components/effects/EffectDetail.vue';
+import { effects, categories } from '../data/effects';
 
-// 在构建时获取所有动效数据
-const effects = await getCollection('effects')
-
-// 调试信息
-console.log('Fetched effects:', effects)
-console.log('Effects length:', effects.length)
-
-// 转换为组件需要的格式，使用 frontmatter 中的 id 字段
-let effectsData = []
-if (Array.isArray(effects) && effects.length > 0) {
-  effectsData = effects.map(effect => {
-    const { demoComponent, ...rest } = effect.data
-    return {
-      ...rest,
-      id: effect.data.id
-    }
-  })
-}
-
-// 确保 safeEffectsData 总是一个数组
-const safeEffectsData = Array.isArray(effectsData) ? effectsData : []
-
-// 调试信息
-console.log('safeEffectsData =', safeEffectsData)
-console.log('safeEffectsData.length =', safeEffectsData.length)
-console.log('JSON.stringify(safeEffectsData) =', JSON.stringify(safeEffectsData))
+const allCategories = [
+  { id: 'all', name: '全部', nameEn: 'All', icon: '🎯', count: effects.length },
+  ...categories.map(cat => ({
+    ...cat,
+    count: effects.filter(e => e.category === cat.id).length,
+  })).filter(cat => cat.count > 0),
+];
 ---
 
 <MainLayout>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <!-- 页面头部 -->
-    <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div class="text-center">
-          <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            CSS 动效博客
-          </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            探索精美的CSS动效作品，每一个都是独立的技术文章
-          </p>
-        </div>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <div class="bg-card border-b border-border">
+      <div class="max-w-[1400px] mx-auto px-6 py-12 text-center">
+        <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">动效库</h1>
+        <p class="font-mono text-sm text-txt-secondary">探索所有 CSS 动效，点击查看详情</p>
       </div>
     </div>
 
-    <!-- 动效列表 -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <!-- 直接将数据作为 props 传递，Astro 会自动序列化 -->
-      <EffectsList :effects="safeEffectsData" client:load />
+    <!-- Content -->
+    <div class="max-w-[1400px] mx-auto px-6 py-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+        <CategoryNav categories={allCategories} active="all" client:load />
+        <SearchBar modelValue="" client:load />
+      </div>
+
+      <div class="font-mono text-xs text-txt-tertiary mb-4">
+        显示 <span class="text-primary font-medium">{effects.length}</span> / {effects.length}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {effects.map(effect => (
+          <a href={`/effect/${effect.id}`} class="block no-underline">
+            <EffectCard effect={effect} client:load />
+          </a>
+        ))}
+      </div>
     </div>
   </div>
 </MainLayout>
