@@ -1,18 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import EffectCard from '../components/effects/EffectCard.vue';
-import EffectDetail from '../components/effects/EffectDetail.vue';
-import SearchBar from '../components/ui/SearchBar.vue';
-import CategoryNav from '../components/ui/CategoryNav.vue';
-import { effects, categories } from '../data/effects';
-
-const allCategories = [
-  { id: 'all', name: '全部', nameEn: 'All', icon: '🎯', count: effects.length },
-  ...categories.map(cat => ({
-    ...cat,
-    count: effects.filter(e => e.category === cat.id).length,
-  })).filter(cat => cat.count > 0),
-];
+import EffectGrid from '../components/effects/EffectGrid.vue';
+import { effects } from '../data/effects';
 ---
 
 <MainLayout>
@@ -33,44 +22,9 @@ const allCategories = [
       </div>
     </section>
 
-    <!-- Filters -->
-    <section class="max-w-[1400px] mx-auto px-6 pb-6" id="effects-app">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-        <CategoryNav
-          categories={allCategories}
-          active="all"
-          client:load
-        />
-        <SearchBar modelValue="" client:load />
-      </div>
-
-      <div class="font-mono text-xs text-txt-tertiary mb-4">
-        显示 <span class="text-primary font-medium" id="showCount">{effects.length}</span> / {effects.length}
-      </div>
-
-      <!-- Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="effectsGrid">
-        {effects.map((effect, i) => (
-          <div class="effect-card-wrap" data-category={effect.category} data-idx={i}>
-            <a href={`/effect/${effect.id}`} class="block no-underline">
-              <div class="card cursor-pointer group">
-                <div class="preview-container" set:html={effect.previewHtml}></div>
-                <div class="p-4">
-                  <div class="flex items-center justify-between mb-2">
-                    <span class="badge badge-blue">{categories.find(c => c.id === effect.category)?.name || effect.category}</span>
-                    <span class="font-mono text-[10px] text-txt-tertiary uppercase tracking-wider">{effect.nameEn}</span>
-                  </div>
-                  <h3 class="font-display font-bold text-base text-txt mb-1">{effect.name}</h3>
-                  <p class="font-mono text-xs text-txt-secondary leading-relaxed line-clamp-2">{effect.description}</p>
-                </div>
-              </div>
-            </a>
-          </div>
-        ))}
-      </div>
+    <!-- Effects Grid -->
+    <section class="max-w-[1400px] mx-auto px-6 pb-16">
+      <EffectGrid client:load />
     </section>
   </div>
-
-  <!-- Toast -->
-  <div class="toast" id="toast">已复制到剪贴板 ✓</div>
 </MainLayout>
