@@ -74,7 +74,13 @@
   }
   .card {
     @apply bg-card border border-border rounded-card overflow-hidden
-           transition-all duration-300 hover:border-primary/40 hover:shadow-card-hover;
+           transition-all duration-300 hover:border-primary hover:shadow-card-hover;
+  }
+  .card:hover {
+    border-color: rgba(79, 124, 255, 0.4);
+  }
+  .dark .card:hover {
+    border-color: rgba(200, 162, 255, 0.4);
   }
   .badge {
     @apply inline-block text-[10px] font-medium px-2.5 py-1 rounded-full uppercase tracking-wider;
