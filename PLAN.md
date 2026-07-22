@@ -147,35 +147,35 @@ src/components/
 ## 执行计划
 
 ### Phase 1 — 骨架搭建
-- [ ] 清理旧项目，建立新目录结构
-- [ ] package.json + astro.config + tailwind 配置
-- [ ] 全局样式 + 主题系统
-- [ ] MainLayout + Header + Footer
-- [ ] 首页 Hero
-- [ ] 动效列表页骨架
+- [x] 清理旧项目，建立新目录结构
+- [x] package.json + astro.config + tailwind 配置
+- [x] 全局样式 + 主题系统
+- [x] MainLayout + Header + Footer
+- [x] 首页 Hero
+- [x] 动效列表页骨架
 
 ### Phase 2 — 基础动画（12 个）
-- [ ] 动效数据定义
-- [ ] EffectCard + EffectGrid 组件
-- [ ] EffectDetail + CodeBlock 组件
-- [ ] 动效详情页路由
-- [ ] 预览系统
+- [x] 动效数据定义
+- [x] EffectCard + EffectGrid 组件
+- [x] EffectDetail + CodeBlock 组件
+- [x] 动效详情页路由
+- [x] 预览系统
 
 ### Phase 3 — 文字效果 + 光标交互（25 个）
-- [ ] 批量添加动效数据
-- [ ] 验证预览和代码复制
+- [x] 批量添加动效数据 (15个文字效果)
+- [x] 验证预览和代码复制
 
 ### Phase 4 — 卡片组件 + 背景氛围（20 个）
-- [ ] 批量添加动效数据
-- [ ] 复杂动效的预览处理
+- [x] 批量添加动效数据 (10颜色 + 10几何)
+- [x] 复杂动效的预览处理
 
 ### Phase 5 — 加载动画 + 滚动效果（22 个）
-- [ ] 批量添加动效数据
-- [ ] 滚动类动效的容器内模拟
+- [x] 批量添加动效数据 (12加载 + 10滚动)
+- [x] 滚动类动效的容器内模拟
 
 ### Phase 6 — 按钮交互 + 过渡 + 微交互 + 形状（40 个）
-- [ ] 批量添加动效数据
-- [ ] 最终验收
+- [x] 批量添加动效数据 (10按钮 + 8过渡 + 16高级 + 10微交互)
+- [x] 最终验收
 
 ## 注意事项
 
