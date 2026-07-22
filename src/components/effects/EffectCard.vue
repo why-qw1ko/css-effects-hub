@@ -32,15 +32,15 @@ const categoryBadgeClass = computed(() => {
   const map: Record<string, string> = {
     basic: 'badge-blue',
     text: 'badge-purple',
-    cursor: 'badge-green',
-    card: 'badge-orange',
+    color: 'badge-orange',
+    geometry: 'badge-green',
     loading: 'badge-pink',
-    background: 'badge-gray',
+    hover: 'badge-green',
     scroll: 'badge-blue',
-    button: 'badge-green',
+    button: 'badge-orange',
     transition: 'badge-purple',
+    advanced: 'badge-pink',
     micro: 'badge-orange',
-    shape: 'badge-pink',
   };
   return map[props.effect.category] || 'badge-gray';
 });

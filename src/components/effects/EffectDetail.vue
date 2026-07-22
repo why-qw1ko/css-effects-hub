@@ -104,10 +104,10 @@ const categoryName = computed(() => {
 const badgeClass = computed(() => {
   if (!props.effect) return '';
   const map: Record<string, string> = {
-    basic: 'badge-blue', text: 'badge-purple', cursor: 'badge-green',
-    card: 'badge-orange', loading: 'badge-pink', background: 'badge-gray',
-    scroll: 'badge-blue', button: 'badge-green', transition: 'badge-purple',
-    micro: 'badge-orange', shape: 'badge-pink',
+    basic: 'badge-blue', text: 'badge-purple', color: 'badge-orange',
+    geometry: 'badge-green', loading: 'badge-pink', hover: 'badge-green',
+    scroll: 'badge-blue', button: 'badge-orange', transition: 'badge-purple',
+    advanced: 'badge-pink', micro: 'badge-orange',
   };
   return map[props.effect.category] || 'badge-gray';
 });
