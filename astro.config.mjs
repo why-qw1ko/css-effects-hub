@@ -3,6 +3,8 @@ import vue from '@astrojs/vue';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
+  site: 'https://why-qw1ko.github.io',
+  base: '/css-effects-hub/',
   integrations: [
     vue({ appEntrypoint: '/src/plugins/vue.ts' }),
     tailwind({ applyBaseStyles: false }),
