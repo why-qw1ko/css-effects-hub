@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { effects, categories } from '../../data/effects';
+import { effects } from '../../data/effects';
 import { useEffectsStore } from '../../stores/effects';
 import EffectCard from './EffectCard.vue';
 import CategoryNav from '../ui/CategoryNav.vue';

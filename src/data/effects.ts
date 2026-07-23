@@ -2656,4 +2656,8 @@ export const previewKeyframes = `
 @keyframes oF3_{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(18px,8px) scale(1.05)}75%{transform:translate(-8px,-18px) scale(.95)}}
 @keyframes agBG_{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes neonP_{from{text-shadow:0 0 7px #fff,0 0 10px #fff,0 0 21px #fff,0 0 42px #4F7CFF}to{text-shadow:0 0 4px #fff,0 0 7px #fff,0 0 14px #fff,0 0 30px #4F7CFF,0 0 60px #4F7CFF,0 0 100px #4F7CFF}}
+@keyframes float1_{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-15px)}}
+@keyframes float2_{0%,100%{transform:translate(0,0)}50%{transform:translate(-15px,20px)}}
+@keyframes float3_{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,10px)}}
+@keyframes starPop_{0%{transform:scale(1)}50%{transform:scale(1.4) rotate(15deg)}100%{transform:scale(1) rotate(0)}}
 `;
