@@ -30,6 +30,7 @@ export default {
         sans: ['Syne', 'DM Mono', 'system-ui', 'sans-serif'],
         mono: ['DM Mono', 'SF Mono', 'monospace'],
         display: ['Syne', 'system-ui', 'sans-serif'],
+        serif: ['Instrument Serif', 'Georgia', 'serif'],
       },
       borderRadius: {
         'card': '14px',

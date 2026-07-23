@@ -1,0 +1,693 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <div class="bg-card border-b border-border">
+      <div class="max-w-[1400px] mx-auto px-6 py-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-dim rounded-full mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          <span class="font-mono text-xs text-primary font-medium">Interactive Showcase · v3</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">高级动效</h1>
+        <p class="font-mono text-sm text-txt-secondary max-w-2xl">
+          23个高质量交互效果，每个均可实时预览。点击「代码」查看完整 HTML/CSS/JS 实现，点击「Prompt」复制 AI 开发提示词。
+        </p>
+      </div>
+    </div>
+
+    <!-- Category Nav -->
+    <div class="sticky top-[60px] z-50 bg-card/80 backdrop-blur-xl border-b border-border">
+      <div class="max-w-[1400px] mx-auto px-6">
+        <div class="flex gap-2 py-3 overflow-x-auto scrollbar-hide">
+          <button class="adv-cat active" data-cat="all">All (23)</button>
+          <button class="adv-cat" data-cat="cur">🖱️ Cursor</button>
+          <button class="adv-cat" data-cat="scr">📜 Scroll</button>
+          <button class="adv-cat" data-cat="txt">✏️ Text</button>
+          <button class="adv-cat" data-cat="t3d">🔷 3D & Transform</button>
+          <button class="adv-cat" data-cat="atm">🎨 Atmosphere</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Effects Grid -->
+    <div class="max-w-[1400px] mx-auto px-6 py-8">
+      <!-- Cursor Effects -->
+      <section class="adv-section" id="sec-cur" data-cat="cur">
+        <div class="adv-section-title">01 — Cursor Effects / 光标交互</div>
+        <div class="adv-grid" id="grid-cur"></div>
+      </section>
+
+      <!-- Scroll Effects -->
+      <section class="adv-section" id="sec-scr" data-cat="scr">
+        <div class="adv-section-title">02 — Scroll Effects / 滚动驱动</div>
+        <div class="adv-grid" id="grid-scr"></div>
+      </section>
+
+      <!-- Text Effects -->
+      <section class="adv-section" id="sec-txt" data-cat="txt">
+        <div class="adv-section-title">03 — Text Animation / 文字动画</div>
+        <div class="adv-grid" id="grid-txt"></div>
+      </section>
+
+      <!-- 3D Effects -->
+      <section class="adv-section" id="sec-t3d" data-cat="t3d">
+        <div class="adv-section-title">04 — 3D & Transform / 3D与变换</div>
+        <div class="adv-grid" id="grid-t3d"></div>
+      </section>
+
+      <!-- Atmosphere Effects -->
+      <section class="adv-section" id="sec-atm" data-cat="atm">
+        <div class="adv-section-title">05 — Atmosphere / 氛围与质感</div>
+        <div class="adv-grid" id="grid-atm"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Code Modal -->
+  <div class="adv-modal-overlay" id="advModal">
+    <div class="adv-modal">
+      <div class="adv-modal-head">
+        <h3 id="advModalTitle">Code Example</h3>
+        <button class="adv-modal-close" id="advModalClose">&times;</button>
+      </div>
+      <div class="adv-modal-tabs" id="advModalTabs">
+        <button class="adv-mtab active" data-tab="html">HTML</button>
+        <button class="adv-mtab" data-tab="css">CSS</button>
+        <button class="adv-mtab" data-tab="js">JavaScript</button>
+      </div>
+      <div class="adv-modal-body" id="advModalBody">
+        <div class="adv-mcode active" data-tab="html"><button class="adv-mcode-copy" onclick="advCopyCode(this)">Copy</button><pre></pre></div>
+        <div class="adv-mcode" data-tab="css"><button class="adv-mcode-copy" onclick="advCopyCode(this)">Copy</button><pre></pre></div>
+        <div class="adv-mcode" data-tab="js"><button class="adv-mcode-copy" onclick="advCopyCode(this)">Copy</button><pre></pre></div>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  /* Category buttons */
+  .adv-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 100px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .adv-cat:hover { background: var(--surface); color: var(--text); }
+  .adv-cat.active {
+    background: var(--card);
+    color: var(--primary);
+    border-color: var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  /* Sections */
+  .adv-section { margin-bottom: 48px; }
+  .adv-section.hidden { display: none; }
+  .adv-section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+    padding-left: 4px;
+  }
+
+  /* Grid */
+  .adv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+  }
+
+  /* Card */
+  .adv-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .adv-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border-color: var(--primary);
+  }
+  .adv-demo {
+    position: relative;
+    height: 220px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .adv-info { padding: 16px; }
+  .adv-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 100px;
+    margin-bottom: 8px;
+  }
+  .adv-tag-cursor { background: rgba(79,124,255,0.1); color: #4F7CFF; }
+  .adv-tag-scroll { background: rgba(48,164,108,0.1); color: #30A46C; }
+  .adv-tag-text { background: rgba(245,166,35,0.1); color: #F5A623; }
+  .adv-tag-3d { background: rgba(229,72,77,0.1); color: #E5484D; }
+  .adv-tag-atmo { background: rgba(124,92,252,0.1); color: #7C5CFC; }
+
+  .adv-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .adv-info h3 s {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    margin-left: 5px;
+  }
+  .adv-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .adv-btn-row { display: flex; gap: 8px; }
+  .adv-prompt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 10.5px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-height: 64px;
+    overflow: hidden;
+    position: relative;
+    display: none;
+    margin-top: 8px;
+  }
+  .adv-prompt.show { display: block; }
+  .adv-prompt::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 24px;
+    background: linear-gradient(transparent, var(--surface));
+    pointer-events: none;
+  }
+
+  .adv-abtn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .adv-abtn:active { transform: scale(0.97); }
+  .adv-abtn svg { width: 13px; height: 13px; }
+  .adv-abtn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  .adv-abtn-primary:hover { background: var(--primary-hover); }
+  .adv-abtn-secondary {
+    background: var(--surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .adv-abtn-secondary:hover { background: var(--surface-2); color: var(--text); }
+
+  /* Modal */
+  .adv-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .adv-modal-overlay.open { display: flex; opacity: 1; }
+  .adv-modal {
+    background: var(--card);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 720px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+  .adv-modal-overlay.open .adv-modal { transform: translateY(0); }
+  .adv-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .adv-modal-head h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .adv-modal-close {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--text-secondary);
+    transition: background 0.2s;
+  }
+  .adv-modal-close:hover { background: var(--surface-2); }
+  .adv-modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+  }
+  .adv-mtab {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 18px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+  .adv-mtab:hover { color: var(--text); }
+  .adv-mtab.active { color: var(--primary); border-bottom-color: var(--primary); }
+  .adv-modal-body { flex: 1; overflow-y: auto; }
+  .adv-mcode { display: none; position: relative; }
+  .adv-mcode.active { display: block; }
+  .adv-mcode pre {
+    margin: 0; padding: 20px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; line-height: 1.7;
+    color: #cdd6f4; background: #1e1e2e;
+    overflow-x: auto; white-space: pre;
+    tab-size: 2; min-height: 200px;
+  }
+  .adv-mcode-copy {
+    position: absolute; top: 12px; right: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; padding: 5px 12px;
+    background: rgba(255,255,255,0.1);
+    color: #cdd6f4; border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .adv-mcode-copy:hover { background: rgba(255,255,255,0.2); }
+
+  /* Effect-specific demo styles */
+  :global(.mbtn-demo) { position:absolute;top:50%;left:50%;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:100px;cursor:pointer;transition:box-shadow .3s;transform:translate(-50%,-50%); }
+  :global(.mbtn-demo:hover) { box-shadow:0 8px 28px rgba(79,124,255,.35); }
+
+  @media (max-width: 820px) {
+    .adv-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+const SVG = {
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
+};
+
+interface AdvEffect {
+  id: string; cat: string; tag: string; tagClass: string;
+  name: string; nameCn: string; desc: string; prompt: string;
+  demoHtml: string; demoCss: string; demoJs: string;
+  code: { html: string; css: string; js: string };
+}
+
+const effects: AdvEffect[] = [
+  {
+    id: 'magnetic', cat: 'cur', tag: '光标交互', tagClass: 'adv-tag-cursor',
+    name: 'Magnetic Button', nameCn: '磁吸按钮', desc: '鼠标靠近时按钮产生磁吸跟随效果。',
+    prompt: '创建磁吸按钮效果：监听mousemove，计算鼠标与按钮中心距离，距离小于阈值时用transform:translate()偏移按钮(越大偏移越小)，mouseleave时弹性回弹归位。',
+    demoHtml: '<button class="mbtn-demo" id="magBtn">磁吸按钮</button>',
+    demoCss: '', demoJs: `
+(function(){const a=document.getElementById('adv-d-magnetic'),b=document.getElementById('magBtn');if(!a||!b)return;const s=.35,m=150;a.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=Math.sqrt(dx*dx+dy*dy);if(d<m){const f=(1-d/m)*s;b.style.transform='translate(-50%,-50%) translate('+dx*f+'px,'+dy*f+'px)'}else b.style.transform='translate(-50%,-50%)'});a.addEventListener('mouseleave',()=>{b.style.transform='translate(-50%,-50%)'})})();`,
+    code: {
+      html: '<div class="magnetic-wrap">\n  <button class="magnetic-btn">磁吸按钮</button>\n</div>',
+      css: '.magnetic-wrap {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 300px;\n}\n.magnetic-btn {\n  font-size: 16px;\n  font-weight: 700;\n  padding: 14px 32px;\n  background: #4F7CFF;\n  color: #fff;\n  border: none;\n  border-radius: 100px;\n  cursor: pointer;\n  transition: box-shadow 0.3s;\n  will-change: transform;\n}',
+      js: 'const wrap = document.querySelector(\'.magnetic-wrap\');\nconst btn = document.querySelector(\'.magnetic-btn\');\nconst strength = 0.35;\nconst threshold = 150;\nwrap.addEventListener(\'mousemove\', (e) => {\n  const rect = btn.getBoundingClientRect();\n  const cx = rect.left + rect.width / 2;\n  const cy = rect.top + rect.height / 2;\n  const dx = e.clientX - cx;\n  const dy = e.clientY - cy;\n  const dist = Math.sqrt(dx * dx + dy * dy);\n  if (dist < threshold) {\n    const factor = (1 - dist / threshold) * strength;\n    btn.style.transform = `translate(${dx * factor}px, ${dy * factor}px)`;\n  } else { btn.style.transform = \'translate(0, 0)\'; }\n});\nwrap.addEventListener(\'mouseleave\', () => { btn.style.transform = \'translate(0, 0)\'; });'
+    }
+  },
+  {
+    id: 'spotlight', cat: 'cur', tag: '光标交互', tagClass: 'adv-tag-cursor',
+    name: 'Spotlight Reveal', nameCn: '聚光灯揭示', desc: '以鼠标为圆心揭示隐藏内容。',
+    prompt: '创建聚光灯效果：两层结构，mousemove时用CSS mask-image:radial-gradient(circle 80px at X% Y%, transparent, black)动态更新圆心。',
+    demoHtml: '<div class="spw-demo" id="spwDemo"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1a2e,#16213e)"><div style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;color:#fff;text-align:center;line-height:1.3">EFFECT<br>REVEALED</div></div><div class="spo-demo" id="spoDemo">移动鼠标揭示</div></div>',
+    demoCss: '.spw-demo{width:100%;height:100%;position:relative;overflow:hidden}.spo-demo{position:absolute;inset:0;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text-tertiary);font-weight:600;pointer-events:none;-webkit-mask-image:radial-gradient(circle 0px at 50% 50%,transparent 0%,#000 100%);mask-image:radial-gradient(circle 0px at 50% 50%,transparent 0%,#000 100%);transition:-webkit-mask-image .05s,mask-image .05s}',
+    demoJs: `(function(){const w=document.getElementById('spwDemo'),o=document.getElementById('spoDemo');if(!w||!o)return;w.addEventListener('mousemove',e=>{const r=w.getBoundingClientRect();o.style.webkitMaskImage='radial-gradient(circle 80px at '+((e.clientX-r.left)/r.width*100)+'% '+((e.clientY-r.top)/r.height*100)+'%,transparent 0%,#000 100%)';o.style.maskImage=o.style.webkitMaskImage});w.addEventListener('mouseleave',()=>{o.style.webkitMaskImage='radial-gradient(circle 0px at 50% 50%,transparent 0%,#000 100%)';o.style.maskImage=o.style.webkitMaskImage})})();`,
+    code: {
+      html: '<div class="spotlight-wrap">\n  <div class="spotlight-back"><h2>SECRET TEXT</h2></div>\n  <div class="spotlight-mask">Move your mouse to reveal</div>\n</div>',
+      css: '.spotlight-wrap { position: relative; width: 100%; height: 300px; overflow: hidden; }\n.spotlight-back { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, #16213e); }\n.spotlight-back h2 { font-size: 32px; font-weight: 800; color: #fff; }\n.spotlight-mask { position: absolute; inset: 0; background: #f5f6f8; display: flex; align-items: center; justify-content: center; pointer-events: none; }',
+      js: 'const wrap = document.querySelector(\'.spotlight-wrap\');\nconst mask = document.querySelector(\'.spotlight-mask\');\nwrap.addEventListener(\'mousemove\', (e) => {\n  const rect = wrap.getBoundingClientRect();\n  const x = ((e.clientX - rect.left) / rect.width * 100) + \'%\';\n  const y = ((e.clientY - rect.top) / rect.height * 100) + \'%\';\n  mask.style.webkitMaskImage = `radial-gradient(circle 80px at ${x} ${y}, transparent 0%, black 100%)`;\n});'
+    }
+  },
+  {
+    id: 'hoverglow', cat: 'cur', tag: '光标交互', tagClass: 'adv-tag-cursor',
+    name: 'Hover Glow', nameCn: '光晕跟随', desc: '鼠标位置产生柔和光晕。',
+    prompt: '光晕跟随：mousemove计算相对坐标，通过CSS变量传给::before伪元素，radial-gradient实现光晕。',
+    demoHtml: '<div class="hgc-demo" id="hgcDemo"><span style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;color:var(--text-secondary);position:relative;z-index:1">Hover around</span></div>',
+    demoCss: '.hgc-demo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:240px;height:140px;background:var(--card);border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:border-color .3s}.hgc-demo::before{content:"";position:absolute;width:180px;height:180px;background:radial-gradient(circle,rgba(79,124,255,.18) 0%,transparent 70%);border-radius:50%;pointer-events:none;opacity:0;transition:opacity .3s;transform:translate(var(--gx,-300px),var(--gy,-300px))}.hgc-demo:hover::before{opacity:1}',
+    demoJs: `(function(){const c=document.getElementById('hgcDemo');if(!c)return;c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect();c.style.setProperty('--gx',(e.clientX-r.left-90)+'px');c.style.setProperty('--gy',(e.clientY-r.top-90)+'px')})})();`,
+    code: {
+      html: '<div class="glow-card"><span>Hover around</span></div>',
+      css: '.glow-card {\n  position: relative; width: 260px; height: 160px;\n  background: #fff; border-radius: 14px; border: 1px solid #e2e4ea;\n  display: flex; align-items: center; justify-content: center;\n  overflow: hidden; transition: border-color 0.3s;\n}\n.glow-card::before {\n  content: \'\'; position: absolute; width: 200px; height: 200px;\n  background: radial-gradient(circle, rgba(79,124,255,.18) 0%, transparent 70%);\n  border-radius: 50%; pointer-events: none; opacity: 0; transition: opacity 0.3s;\n  transform: translate(var(--gx, -300px), var(--gy, -300px));\n}\n.glow-card:hover::before { opacity: 1; }',
+      js: 'const card = document.querySelector(\'.glow-card\');\ncard.addEventListener(\'mousemove\', (e) => {\n  const rect = card.getBoundingClientRect();\n  card.style.setProperty(\'--gx\', (e.clientX - rect.left - 100) + \'px\');\n  card.style.setProperty(\'--gy\', (e.clientY - rect.top - 100) + \'px\');\n});'
+    }
+  },
+  {
+    id: 'ripple', cat: 'cur', tag: '光标交互', tagClass: 'adv-tag-cursor',
+    name: 'Ripple Click', nameCn: '点击波纹', desc: '点击时从鼠标位置扩散波纹。',
+    prompt: 'click获取鼠标坐标，创建span圆元素从scale(0)到scale(4)，fadeout后移除。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><button class="rip-btn-demo" id="ripBtnDemo" style="position:relative;overflow:hidden;font-family:Syne,sans-serif;font-size:14px;font-weight:700;padding:14px 32px;background:var(--primary);color:#fff;border:none;border-radius:14px;cursor:pointer">Click Ripple</button></div>',
+    demoCss: '',
+    demoJs: `(function(){const b=document.getElementById('ripBtnDemo');if(!b)return;b.addEventListener('click',e=>{const r=b.getBoundingClientRect(),sz=Math.max(r.width,r.height)*2,c=document.createElement('span');c.style.cssText='position:absolute;border-radius:50%;background:rgba(255,255,255,.4);transform:scale(0);animation:ripAnim .6s ease-out forwards;pointer-events:none;width:'+sz+'px;height:'+sz+'px;left:'+(e.clientX-r.left-sz/2)+'px;top:'+(e.clientY-r.top-sz/2)+'px';b.appendChild(c);c.addEventListener('animationend',()=>c.remove())})})();`,
+    code: {
+      html: '<button class="ripple-btn">Click Me</button>',
+      css: '.ripple-btn {\n  position: relative; overflow: hidden;\n  font-size: 16px; font-weight: 700;\n  padding: 14px 36px; background: #4F7CFF;\n  color: #fff; border: none; border-radius: 14px; cursor: pointer;\n}\n.ripple-circle {\n  position: absolute; border-radius: 50%;\n  background: rgba(255,255,255,.4);\n  transform: scale(0); animation: ripple 0.6s ease-out forwards;\n}\n@keyframes ripple { to { transform: scale(4); opacity: 0; } }',
+      js: 'const btn = document.querySelector(\'.ripple-btn\');\nbtn.addEventListener(\'click\', (e) => {\n  const rect = btn.getBoundingClientRect();\n  const size = Math.max(rect.width, rect.height) * 2;\n  const circle = document.createElement(\'span\');\n  circle.className = \'ripple-circle\';\n  circle.style.width = circle.style.height = size + \'px\';\n  circle.style.left = (e.clientX - rect.left - size / 2) + \'px\';\n  circle.style.top = (e.clientY - rect.top - size / 2) + \'px\';\n  btn.appendChild(circle);\n  circle.addEventListener(\'animationend\', () => circle.remove());\n});'
+    }
+  },
+  {
+    id: 'scrollrev', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
+    name: 'Scroll Reveal', nameCn: '滚动显现', desc: '元素进入视口时淡入显现。',
+    prompt: 'IntersectionObserver监听元素，进入视口时添加visible类，CSS transition实现淡入上移。',
+    demoHtml: '<div class="sdi-demo" id="sdiDemo"><div class="ri-demo"><span style="font-family:Syne,sans-serif;font-weight:800;color:var(--primary);margin-right:6px">01</span>Scroll to reveal</div><div class="ri-demo"><span style="font-family:Syne,sans-serif;font-weight:800;color:var(--primary);margin-right:6px">02</span>IntersectionObserver</div><div class="ri-demo"><span style="font-family:Syne,sans-serif;font-weight:800;color:var(--primary);margin-right:6px">03</span>CSS transition</div><div class="ri-demo"><span style="font-family:Syne,sans-serif;font-weight:800;color:var(--primary);margin-right:6px">04</span>opacity + translateY</div><div class="ri-demo"><span style="font-family:Syne,sans-serif;font-weight:800;color:var(--primary);margin-right:6px">05</span>Progressive reveal</div><div class="ri-demo"><span style="font-family:Syne,sans-serif;font-weight:800;color:var(--primary);margin-right:6px">06</span>Last item</div></div>',
+    demoCss: '.sdi-demo{width:100%;height:100%;overflow-y:auto;padding:20px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.sdi-demo::-webkit-scrollbar{width:4px}.sdi-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.ri-demo{padding:14px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:10px;font-size:12px;opacity:0;transform:translateY(20px);transition:all .5s cubic-bezier(.16,1,.3,1)}.ri-demo.vis{opacity:1;transform:translateY(0)}',
+    demoJs: `(function(){const c=document.getElementById('sdiDemo');if(!c)return;const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');o.unobserve(e.target)}})},{root:c,threshold:.15});c.querySelectorAll('.ri-demo').forEach(i=>o.observe(i))})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'parallax', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
+    name: 'Parallax Layers', nameCn: '视差滚动', desc: '不同层以不同速度滚动产生深度感。',
+    prompt: 'scroll时translateY(scrollTop*speed)移动，前景快背景慢营造深度。',
+    demoHtml: '<div class="pd-demo" id="pdDemo"><div style="height:520px;position:relative"><div class="pl2-demo" data-sp=".1" style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:Syne,sans-serif;font-weight:800;font-size:52px;color:rgba(79,124,255,.08);top:30px">BACKGROUND</div><div class="pl2-demo" data-sp=".4" style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:Syne,sans-serif;font-weight:800;font-size:30px;color:rgba(79,124,255,.15);top:100px">MIDDLE LAYER</div><div class="pl2-demo" data-sp=".8" style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--text);top:160px">FOREGROUND</div></div><div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--text-tertiary)">scroll to see parallax</div></div>',
+    demoCss: '.pd-demo{width:100%;height:100%;overflow-y:auto;position:relative;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.pd-demo::-webkit-scrollbar{width:4px}.pd-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}',
+    demoJs: `(function(){const c=document.getElementById('pdDemo');if(!c)return;c.addEventListener('scroll',()=>{const y=c.scrollTop;c.querySelectorAll('.pl2-demo').forEach(l=>{l.style.transform='translateX(-50%) translateY('+y*parseFloat(l.dataset.sp)+'px)'})})})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'progress', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
+    name: 'Scroll Progress', nameCn: '进度条', desc: '实时显示滚动进度百分比。',
+    prompt: 'scroll事件计算scrollTop/(scrollHeight-clientHeight)百分比，更新进度条width。',
+    demoHtml: '<div class="prgd-demo" id="prgDDemo"><div class="prbr-demo" id="prgBarDemo"></div><span class="prpct-demo" id="prgPctDemo">0%</span><div class="prcon-demo"><p>Web effects have transformed digital content. From hover animations to complex scroll-driven narratives.</p><p>Parallax scrolling creates depth by moving background slower than foreground content.</p><p>Intersection Observer provides async observation of element intersection with viewport.</p><p>CSS Custom Properties allow reusable values updated with JavaScript.</p><p>Web Animations API brings CSS animation power to JavaScript.</p><p>requestAnimationFrame syncs animation with display refresh rate.</p></div></div>',
+    demoCss: '.prgd-demo{width:100%;height:100%;position:relative;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.prgd-demo::-webkit-scrollbar{width:4px}.prgd-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.prbr-demo{position:sticky;top:0;height:3px;background:var(--primary);width:0%;z-index:10;transition:width .05s linear}.prcon-demo{padding:18px;padding-top:14px}.prcon-demo p{font-size:11px;color:var(--text-secondary);margin-bottom:12px;line-height:1.7}.prpct-demo{position:sticky;top:10px;float:right;font-size:10px;font-weight:500;color:var(--primary);background:var(--primary-dim);padding:2px 9px;border-radius:100px;z-index:11}',
+    demoJs: `(function(){const c=document.getElementById('prgDDemo'),b=document.getElementById('prgBarDemo'),p=document.getElementById('prgPctDemo');if(!c||!b)return;c.addEventListener('scroll',()=>{const s=c.scrollTop,h=c.scrollHeight-c.clientHeight,pr=h>0?s/h:0;b.style.width=(pr*100)+'%';if(p)p.textContent=Math.round(pr*100)+'%'})})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'counter', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
+    name: 'Counter Animation', nameCn: '数字跳动', desc: '数字从0滚动到目标值。',
+    prompt: 'requestAnimationFrame + easeOutCubic缓动函数逐步递增数值到目标值。',
+    demoHtml: '<div class="cnt-wrap-demo" id="cntWDemo"><div style="text-align:center"><span class="cnt-num-demo" data-target="2048" style="font-family:Syne,sans-serif;font-size:38px;font-weight:800;color:var(--text);display:block;line-height:1.2">0</span><span style="font-size:11px;color:var(--text-secondary)">Components</span></div><div style="text-align:center"><span class="cnt-num-demo" data-target="99" style="font-family:Syne,sans-serif;font-size:38px;font-weight:800;color:var(--text);display:block;line-height:1.2">0</span><span style="font-size:11px;color:var(--text-secondary)">Score %</span></div><div style="text-align:center"><span class="cnt-num-demo" data-target="5680" style="font-family:Syne,sans-serif;font-size:38px;font-weight:800;color:var(--text);display:block;line-height:1.2">0</span><span style="font-size:11px;color:var(--text-secondary)">Users</span></div></div>',
+    demoCss: '.cnt-wrap-demo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:36px}',
+    demoJs: `(function(){const w=document.getElementById('cntWDemo');if(!w)return;let done=false;const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!done){done=true;w.querySelectorAll('.cnt-num-demo').forEach(n=>{const t=parseInt(n.dataset.target),d=2000;let st=null;function step(ts){if(!st)st=ts;const p=Math.min((ts-st)/d,1);n.textContent=Math.floor((1-Math.pow(1-p,3))*t).toLocaleString();if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)})}if(e.isIntersecting)o.unobserve(e.target)})},{threshold:.3});o.observe(w)})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'textwave', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
+    name: 'Text Wave', nameCn: '文字波浪', desc: '拆分为单个字符依次入场。',
+    prompt: '拆为单字符span，每个设animation-delay，@keyframes translateY从100%到0。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px"><div id="twl1" style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;display:flex;overflow:hidden"></div><div id="twl2" style="font-family:Syne,sans-serif;font-size:24px;font-weight:800;display:flex;overflow:hidden"></div><div style="font-size:10px;color:var(--text-tertiary);margin-top:6px">hover to replay</div></div>',
+    demoCss: '',
+    demoJs: `(function(){const l1=document.getElementById('twl1'),l2=document.getElementById('twl2');if(!l1||!l2)return;function build(el,txt){el.innerHTML='';txt.split('').forEach((c,i)=>{const s=document.createElement('span');s.style.cssText='display:inline-block;transform:translateY(100%);animation:chUp .5s cubic-bezier(.16,1,.3,1) forwards;animation-delay:'+(i*.04)+'s';s.textContent=c===' '?'\u00A0':c;el.appendChild(s)})}build(l1,'Web Effects');build(l2,'Showcase');[l1,l2].forEach(l=>{l.addEventListener('mouseenter',()=>{l.querySelectorAll('span').forEach(ch=>{ch.style.animation='none';void ch.offsetWidth;ch.style.animation=''})})})})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'scramble', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
+    name: 'Text Scramble', nameCn: '文字解码', desc: '从随机乱码逐帧解码为目标文本。',
+    prompt: 'setInterval逐帧替换为随机字符，逐步锁定为目标字符。间隔35ms。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px"><div id="sctxDemo" style="font-family:Syne,sans-serif;font-size:22px;font-weight:700;min-height:32px;color:var(--text)">Web Effects</div><button id="scbtnDemo" style="font-family:DM Mono,monospace;font-size:11px;padding:7px 18px;background:var(--primary);color:#fff;border:none;border-radius:100px;cursor:pointer">Decode Again</button></div>',
+    demoCss: '',
+    demoJs: `(function(){const el=document.getElementById('sctxDemo'),btn=document.getElementById('scbtnDemo');if(!el||!btn)return;const tgts=['Web Effects','Decode Text','Scramble FX','Animate UI','Hack Mode'],ch='!@#$%^&*0123456789ABCDEFabcdef';let ci=0,anim=false;function scr(text){if(anim)return;anim=true;const len=text.length;let fr=0,mf=len*4;const iv=setInterval(()=>{fr++;let r='';for(let i=0;i<len;i++){r+=fr>len*2+mf*.3?text[i]:ch[Math.floor(Math.random()*ch.length)]}el.textContent=r;if(fr>=mf){clearInterval(iv);el.textContent=text;anim=false}},35)}scr(tgts[0]);btn.addEventListener('click',()=>{ci=(ci+1)%tgts.length;scr(tgts[ci])})})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'marquee', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
+    name: 'Infinite Marquee', nameCn: '无限跑马灯', desc: '文字无限循环滚动。',
+    prompt: '内容复制一份，CSS animation translateX(0)到translateX(-50%)，linear infinite。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;overflow:hidden"><div style="overflow:hidden"><div style="display:flex;gap:40px;width:max-content;animation:mqL 20s linear infinite"><span class="mqi-demo"><span class="dt-demo"></span>Design</span><span class="mqi-demo"><span class="dt-demo"></span>Develop</span><span class="mqi-demo"><span class="dt-demo"></span>Deploy</span><span class="mqi-demo"><span class="dt-demo"></span>Iterate</span><span class="mqi-demo"><span class="dt-demo"></span>Design</span><span class="mqi-demo"><span class="dt-demo"></span>Develop</span><span class="mqi-demo"><span class="dt-demo"></span>Deploy</span><span class="mqi-demo"><span class="dt-demo"></span>Iterate</span></div></div><div style="overflow:hidden"><div style="display:flex;gap:40px;width:max-content;animation:mqR 24s linear infinite"><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Create</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Inspire</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Build</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Scale</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Create</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Inspire</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Build</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Scale</span></div></div></div>',
+    demoCss: '.mqi-demo{font-family:Syne,sans-serif;font-size:18px;font-weight:700;white-space:nowrap;color:var(--text-secondary);display:flex;align-items:center;gap:10px;flex-shrink:0}.dt-demo{width:7px;height:7px;border-radius:50%;background:var(--primary);flex-shrink:0}',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'typewriter', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
+    name: 'Typewriter', nameCn: '打字机', desc: '文字逐字打出配合闪烁光标。',
+    prompt: 'setInterval逐个追加字符，光标用border-right+step-end blink动画。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px"><div id="typLineDemo" style="font-family:DM Mono,monospace;font-size:14px;color:var(--text);min-height:22px;border-right:2px solid var(--primary);padding-right:6px;white-space:nowrap;overflow:hidden;animation:blink .8s step-end infinite"></div><div style="font-size:10px;color:var(--text-tertiary)">auto-typing loop</div></div>',
+    demoCss: '',
+    demoJs: `(function(){const el=document.getElementById('typLineDemo');if(!el)return;const lines=['const effects = ["parallax", "tilt", "glow"];','effects.map(e => render(e));','// Creating beautiful interactions...'];let li=0,ci=0,del=false;function type(){const cur=lines[li];if(!del){el.textContent=cur.substring(0,ci+1);ci++;if(ci>=cur.length){setTimeout(()=>{del=true;type()},2000);return}setTimeout(type,70)}else{el.textContent=cur.substring(0,ci);ci--;if(ci<0){del=false;li=(li+1)%lines.length;setTimeout(type,500);return}setTimeout(type,30)}}type()})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'tilt3d', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
+    name: '3D Tilt Card', nameCn: '3D倾斜', desc: '鼠标驱动卡片3D旋转+光泽反射。',
+    prompt: 'perspective:800px，mousemove映射为rotateX/Y(±15°)，radial-gradient高光跟随。',
+    demoHtml: '<div class="tlw-demo" id="tlwDemo"><div class="tlc-demo" id="tlcDemo"><span style="font-family:Syne,sans-serif;font-size:15px;font-weight:700;color:#fff;position:relative;z-index:1">Move mouse</span><div class="tls-demo" id="tlsDemo"></div></div></div>',
+    demoCss: '.tlw-demo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;perspective:800px}.tlc-demo{width:220px;height:140px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;display:flex;align-items:center;justify-content:center;transition:transform .1s ease-out,box-shadow .3s;box-shadow:0 10px 28px rgba(102,126,234,.2);position:relative}.tls-demo{position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at var(--sx,50%) var(--sy,50%),rgba(255,255,255,.2) 0%,transparent 60%);pointer-events:none}',
+    demoJs: `(function(){const w=document.getElementById('tlwDemo'),c=document.getElementById('tlcDemo'),s=document.getElementById('tlsDemo');if(!w||!c)return;w.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform='rotateY('+x*20+'deg) rotateX('+-y*20+'deg)';if(s){s.style.setProperty('--sx',(x+.5)*100+'%');s.style.setProperty('--sy',(y+.5)*100+'%')}});w.addEventListener('mouseleave',()=>{c.style.transform=''})})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'flipcard', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
+    name: 'Flip Card', nameCn: '翻转卡片', desc: '悬停翻转展示正反面。',
+    prompt: 'transform-style:preserve-3d，背面rotateY(180deg)+backface-visibility:hidden。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;perspective:800px;cursor:pointer" class="flpw-demo"><div style="width:220px;height:140px;position:relative;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d" class="flpc-demo"><div style="position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:linear-gradient(135deg,var(--primary),#a855f7);color:#fff"><span style="font-family:Syne,sans-serif;font-size:16px;font-weight:700">Hover to Flip</span><span style="font-size:11px;opacity:.7">Front Side</span></div><div style="position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--border);transform:rotateY(180deg)"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700">Hello!</span><span style="font-size:11px;color:var(--text-secondary)">Back Side</span></div></div></div>',
+    demoCss: '.flpw-demo:hover .flpc-demo{transform:rotateY(180deg)}',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'morphing', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
+    name: 'Morphing Shape', nameCn: '形变动画', desc: '形状在多个形态间平滑过渡。',
+    prompt: '@keyframes多段不对称border-radius+rotate，8s ease-in-out infinite。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div style="width:110px;height:110px;background:linear-gradient(135deg,var(--primary),#a855f7,#ec4899);animation:morph 8s ease-in-out infinite"></div></div>',
+    demoCss: '',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'stagger', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
+    name: 'Stagger Grid', nameCn: '瀑布网格', desc: '网格元素依次级联动画入场。',
+    prompt: 'grid布局，每个tile设transition-delay=(行+列)*80ms，IntersectionObserver触发。',
+    demoHtml: '<div id="stgWDemo" style="width:100%;height:100%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:6px;padding:24px"></div>',
+    demoCss: '',
+    demoJs: `(function(){const w=document.getElementById('stgWDemo');if(!w)return;for(let r=0;r<4;r++){for(let c=0;c<5;c++){const d=document.createElement('div');d.className='stg-tile-demo';d.style.cssText='background:var(--primary-dim);border-radius:6px;opacity:0;transform:scale(.6);transition:all .4s cubic-bezier(.16,1,.3,1);transition-delay:'+(r+c)*.08+'s;background:hsl('+(r*5+c)*18+',70%,92%)';w.appendChild(d)}}const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.stg-tile-demo').forEach(t=>{t.style.opacity='1';t.style.transform='scale(1)'});o.unobserve(e.target)}})},{threshold:.3});o.observe(w)})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'trail', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
+    name: 'Cursor Trail', nameCn: '光标拖尾', desc: '鼠标留下彩色粒子轨迹。',
+    prompt: 'Canvas记录mousemove位置到数组，每帧绘制渐变圆点，opacity递减，HSL颜色变化。',
+    demoHtml: '<canvas id="trCvDemo" style="width:100%;height:100%;cursor:crosshair"></canvas>',
+    demoCss: '',
+    demoJs: `(function(){const cv=document.getElementById('trCvDemo');if(!cv)return;const ctx=cv.getContext('2d');let dpr=window.devicePixelRatio||1;function rsz(){dpr=window.devicePixelRatio||1;cv.width=cv.offsetWidth*dpr;cv.height=cv.offsetHeight*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}rsz();window.addEventListener('resize',rsz);const pts=[];cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();pts.push({x:e.clientX-r.left,y:e.clientY-r.top,life:1,hue:Date.now()*.1%360});if(pts.length>60)pts.shift()});(function draw(){const w=cv.offsetWidth,h=cv.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=pts.length-1;i>=0;i--){const p=pts[i];p.life-=.02;if(p.life<=0){pts.splice(i,1);continue}ctx.beginPath();ctx.arc(p.x,p.y,p.life*10,0,Math.PI*2);ctx.fillStyle='hsla('+p.hue+',80%,60%,'+p.life*.7+')';ctx.fill()}requestAnimationFrame(draw)})();})();`,
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'elastic', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
+    name: 'Elastic Scale', nameCn: '弹性缩放', desc: 'hover弹性放大，overshoot回弹。',
+    prompt: 'cubic-bezier(.34,1.56,.64,1)实现overshoot，hover时scale(1.2)。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:16px"><div class="es-box-demo">A</div><div class="es-box-demo" style="border-color:#a855f7;background:rgba(168,85,247,.08);color:#a855f7">B</div><div class="es-box-demo" style="border-color:#ec4899;background:rgba(236,72,153,.08);color:#ec4899">C</div></div>',
+    demoCss: '.es-box-demo{width:72px;height:72px;background:var(--primary-dim);border:1px solid var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-size:12px;font-weight:700;color:var(--primary);cursor:pointer;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}.es-box-demo:hover{transform:scale(1.22)}',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'glowborder', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
+    name: 'Glow Border', nameCn: '旋转发光边框', desc: '渐变色在边框持续旋转。',
+    prompt: 'overflow:hidden容器，::before尺寸160%+conic-gradient+animation:rotate 3s linear infinite，内层inset:3px纯色覆盖中心。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div class="gbw-demo"><div class="gbi-demo"><span style="font-family:Syne,sans-serif;font-size:13px;font-weight:700;color:var(--text-secondary)">旋转发光边框</span></div></div></div>',
+    demoCss: '.gbw-demo{position:relative;width:240px;height:140px;border-radius:14px;overflow:hidden}.gbw-demo::before{content:"";position:absolute;top:50%;left:50%;width:160%;height:160%;transform:translate(-50%,-50%);background:conic-gradient(from 0deg,transparent 0%,var(--primary) 10%,transparent 20%,transparent 45%,#a855f7 55%,transparent 65%,transparent 100%);animation:gspin 3s linear infinite}.gbi-demo{position:absolute;inset:3px;background:var(--card);border-radius:11px;display:flex;align-items:center;justify-content:center;z-index:1}',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'glass', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
+    name: 'Glassmorphism', nameCn: '毛玻璃', desc: '半透明背景配合背景模糊。',
+    prompt: 'rgba(255,255,255,.18)+backdrop-filter:blur(16px)+1px半透明白色边框。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2 50%,#f093fb);position:relative;overflow:hidden"><div class="glbc-demo" style="width:90px;height:90px;background:#ff6b6b;top:15px;left:25px;animation:flA 6s ease-in-out infinite"></div><div class="glbc-demo" style="width:70px;height:70px;background:#ffd93d;bottom:15px;right:35px;animation:flB 5s ease-in-out infinite"></div><div class="glbc-demo" style="width:50px;height:50px;background:#6bcb77;top:50%;left:55%;animation:flA 7s ease-in-out infinite reverse"></div><div style="width:220px;padding:24px;background:rgba(255,255,255,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.25);border-radius:14px;color:#fff"><h4 style="font-family:Syne,sans-serif;font-size:15px;font-weight:700;margin-bottom:4px">Glass Effect</h4><p style="font-size:11px;line-height:1.6;opacity:.8">半透明+模糊+细边框=通透质感</p></div></div>',
+    demoCss: '.glbc-demo{position:absolute;border-radius:50%}',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'orbs', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
+    name: 'Floating Orbs', nameCn: '悬浮光球', desc: '多个渐变光球随机漂浮。',
+    prompt: '多圆形+radial-gradient+translate动画，不同duration和delay。',
+    demoHtml: '<div style="width:100%;height:100%;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--surface),#e8ecf4)"><div class="orb-demo" style="width:55px;height:55px;background:radial-gradient(circle at 30% 30%,rgba(79,124,255,.5),rgba(79,124,255,.05));top:18%;left:12%;animation:oF1 7s ease-in-out infinite"></div><div class="orb-demo" style="width:38px;height:38px;background:radial-gradient(circle at 30% 30%,rgba(168,85,247,.5),rgba(168,85,247,.05));top:48%;left:58%;animation:oF2 9s ease-in-out infinite"></div><div class="orb-demo" style="width:70px;height:70px;background:radial-gradient(circle at 30% 30%,rgba(48,164,108,.4),rgba(48,164,108,.02));top:58%;left:22%;animation:oF3 11s ease-in-out infinite"></div><div class="orb-demo" style="width:32px;height:32px;background:radial-gradient(circle at 30% 30%,rgba(245,166,35,.5),rgba(245,166,35,.05));top:12%;left:68%;animation:oF2 6s ease-in-out infinite reverse"></div></div>',
+    demoCss: '.orb-demo{position:absolute;border-radius:50%;will-change:transform}',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'gradientbg', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
+    name: 'Animated Gradient', nameCn: '流动渐变', desc: '背景渐变色持续平滑过渡。',
+    prompt: 'background-size:400% 400%+@keyframes改变background-position。',
+    demoHtml: '<div style="width:100%;height:100%;background:linear-gradient(-45deg,var(--primary),#a855f7,#ec4899,#f59e0b);background-size:400% 400%;animation:agBG 8s ease infinite;display:flex;align-items:center;justify-content:center"><div style="background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 24px"><span style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;color:#fff">Gradient BG</span></div></div>',
+    demoCss: '',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  },
+  {
+    id: 'neon', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
+    name: 'Neon Pulse', nameCn: '霓虹脉冲', desc: '文字霓虹灯发光脉冲。',
+    prompt: 'text-shadow叠加多层白色+主题色模糊，animation alternate脉冲。',
+    demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0d0d0d"><span style="font-family:Syne,sans-serif;font-size:36px;font-weight:800;color:#fff;animation:neonP 2s ease-in-out infinite alternate">NEON</span></div>',
+    demoCss: '',
+    demoJs: '',
+    code: { html: '', css: '', js: '' }
+  }
+];
+
+// Render effects into grids
+const grids: Record<string, HTMLElement> = {};
+['cur', 'scr', 'txt', 't3d', 'atm'].forEach(cat => {
+  grids[cat] = document.getElementById('grid-' + cat)!;
+});
+
+effects.forEach(fx => {
+  const card = document.createElement('div');
+  card.className = 'adv-card';
+  card.dataset.cat = fx.cat;
+  card.innerHTML = `
+    <div class="adv-demo" id="adv-d-${fx.id}">${fx.demoHtml}</div>
+    <div class="adv-info">
+      <span class="adv-tag ${fx.tagClass}">${fx.tag}</span>
+      <h3>${fx.name} <s>${fx.nameCn}</s></h3>
+      <p>${fx.desc}</p>
+      <div class="adv-btn-row">
+        <button class="adv-abtn adv-abtn-secondary" onclick="showAdvCode('${fx.id}')">${SVG.code} 代码</button>
+        <button class="adv-abtn adv-abtn-primary" onclick="advCpPrompt(this)">${SVG.copy} Prompt</button>
+      </div>
+      <div class="adv-prompt">${fx.prompt}</div>
+    </div>
+  `;
+  grids[fx.cat].appendChild(card);
+});
+
+// Inject demo CSS
+const demoStyles = effects.map(fx => fx.demoCss).filter(Boolean).join('\n');
+if (demoStyles) {
+  const style = document.createElement('style');
+  style.textContent = demoStyles;
+  document.head.appendChild(style);
+}
+
+// Run demo JS
+effects.forEach(fx => {
+  if (fx.demoJs) {
+    try { new Function(fx.demoJs)(); } catch(e) { console.warn('Demo JS error:', fx.id, e); }
+  }
+});
+
+// Category filter
+document.querySelectorAll('.adv-cat').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.adv-cat').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = (btn as HTMLElement).dataset.cat!;
+    document.querySelectorAll('.adv-section').forEach(sec => {
+      (sec as HTMLElement).classList.toggle('hidden', cat !== 'all' && (sec as HTMLElement).dataset.cat !== cat);
+    });
+  });
+});
+
+// Code modal
+const overlay = document.getElementById('advModal')!;
+const modalTitle = document.getElementById('advModalTitle')!;
+
+function showAdvCode(id: string) {
+  const fx = effects.find(e => e.id === id);
+  if (!fx) return;
+  modalTitle.textContent = fx.name + ' Code';
+  const codeData = fx.code;
+  document.querySelectorAll('.adv-mcode').forEach(mc => {
+    const tab = (mc as HTMLElement).dataset.tab!;
+    mc.querySelector('pre')!.textContent = (codeData as any)[tab] || '// Interactive demo — see preview above';
+  });
+  document.querySelectorAll('.adv-mtab').forEach((t, i) => t.classList.toggle('active', i === 0));
+  document.querySelectorAll('.adv-mcode').forEach((c, i) => c.classList.toggle('active', i === 0));
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+(window as any).showAdvCode = showAdvCode;
+
+function closeAdvModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('advModalClose')!.addEventListener('click', closeAdvModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeAdvModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAdvModal(); });
+
+document.querySelectorAll('.adv-mtab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.adv-mtab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.adv-mcode').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelector(`.adv-mcode[data-tab="${(tab as HTMLElement).dataset.tab}"]`)!.classList.add('active');
+  });
+});
+
+function advCopyCode(btn: HTMLElement) {
+  const pre = btn.parentElement!.querySelector('pre')!;
+  navigator.clipboard.writeText(pre.textContent!).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+}
+(window as any).advCopyCode = advCopyCode;
+
+function advCpPrompt(btn: HTMLElement) {
+  const pb = btn.parentElement!.nextElementSibling as HTMLElement;
+  if (!pb) return;
+  pb.classList.toggle('show');
+  if (pb.classList.contains('show')) {
+    navigator.clipboard.writeText(pb.textContent!.trim()).then(() => {
+      btn.textContent = '✓ Copied';
+      setTimeout(() => { btn.innerHTML = SVG.copy + ' Prompt'; }, 1500);
+    });
+  }
+}
+(window as any).advCpPrompt = advCpPrompt;
+</script>

@@ -1,0 +1,589 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+---
+
+<MainLayout>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <div class="bg-card border-b border-border">
+      <div class="max-w-[1400px] mx-auto px-6 py-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-dim rounded-full mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          <span class="font-mono text-xs text-primary font-medium">Design System</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">主题库</h1>
+        <p class="font-mono text-sm text-txt-secondary max-w-2xl">
+          8 套完整的设计主题规范，包含 Light/Dark 双模式、语义化 Token、组件规范与交互设计模式。点击展开查看详细规范，一键复制到项目中。
+        </p>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="max-w-[1400px] mx-auto px-6 py-8">
+      <!-- Sidebar + Main layout -->
+      <div class="flex gap-8">
+        <!-- Sidebar -->
+        <aside class="hidden lg:block w-56 flex-shrink-0">
+          <div class="sticky top-24">
+            <div class="font-mono text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-3 px-3">主题配色</div>
+            <nav id="theme-sidebar" class="space-y-1">
+              <!-- Populated by JS -->
+            </nav>
+            <div class="mt-6 px-3">
+              <div class="font-mono text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-2">数量</div>
+              <div class="font-mono text-xs text-txt-secondary flex items-center gap-2">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface text-[10px] font-bold text-primary">8</span>
+                份主题规范
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="flex-1 min-w-0">
+          <!-- Actions -->
+          <div class="flex items-center justify-between mb-6">
+            <div class="font-mono text-xs text-txt-tertiary">
+              共 <span class="text-primary font-medium">8</span> 套主题
+            </div>
+            <div class="flex gap-2">
+              <button id="expandAllBtn" class="btn-secondary text-xs py-2 px-4">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                展开全部
+              </button>
+              <button id="downloadBtn" class="btn-primary text-xs py-2 px-4">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                下载 HTML
+              </button>
+            </div>
+          </div>
+
+          <!-- Theme Cards Container -->
+          <div id="themes-container" class="space-y-5"></div>
+        </main>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  /* Theme card styles */
+  .theme-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .theme-card:nth-child(2) { animation-delay: 0.05s; }
+  .theme-card:nth-child(3) { animation-delay: 0.1s; }
+  .theme-card:nth-child(4) { animation-delay: 0.15s; }
+  .theme-card:nth-child(5) { animation-delay: 0.2s; }
+  .theme-card:nth-child(6) { animation-delay: 0.25s; }
+  .theme-card:nth-child(7) { animation-delay: 0.3s; }
+  .theme-card:nth-child(8) { animation-delay: 0.35s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .theme-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .theme-card-header:hover {
+    background: var(--surface);
+  }
+
+  .theme-card-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .theme-card-title h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .color-dots {
+    display: flex;
+    gap: 4px;
+  }
+  .color-dots span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(128,128,128,0.15);
+  }
+
+  .theme-card-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .btn-copy, .btn-expand {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-copy:hover, .btn-expand:hover {
+    background: var(--surface);
+    border-color: var(--border-hover);
+    color: var(--text);
+  }
+  .btn-copy.copied {
+    background: rgba(61, 214, 140, 0.1);
+    border-color: rgba(61, 214, 140, 0.3);
+    color: #3dd68c;
+  }
+
+  .theme-card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .theme-card-body.open {
+    max-height: 8000px;
+  }
+
+  .color-preview {
+    padding: 16px 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .color-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 50px;
+  }
+  .swatch {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    border: 1px solid rgba(128,128,128,0.1);
+    transition: transform 0.15s;
+    cursor: pointer;
+  }
+  .swatch:hover {
+    transform: scale(1.12);
+  }
+  .swatch-label {
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+    text-align: center;
+  }
+
+  .theme-spec {
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    white-space: pre-wrap;
+    word-break: break-all;
+    tab-size: 2;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    max-height: 500px;
+    overflow-y: auto;
+  }
+
+  /* Sidebar */
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+  .sidebar-item:hover {
+    color: var(--text);
+    background: var(--surface);
+  }
+  .sidebar-item.active {
+    color: var(--primary);
+    background: var(--primary-dim);
+    border-left-color: var(--primary);
+  }
+  .sidebar-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Toast */
+  .toast-msg {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, var(--primary), #a855f7);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 2000;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+  .toast-msg.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  @media (max-width: 768px) {
+    .theme-card-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .theme-card-actions { width: 100%; }
+    .color-preview { gap: 6px; }
+    .swatch { width: 32px; height: 32px; }
+  }
+</style>
+
+<script>
+const themes = [
+  {
+    name: "Standard Blue",
+    dot: "#4F7CFF",
+    light: {
+      bg: "#F5F6F8", card: "#FFFFFF", sidebar: "#FAFBFC", input: "#F5F6F8",
+      hover: "#F0F1F4", active: "#E8EAFF", border: "#E2E4EA", "border-focus": "#4F7CFF",
+      text: "#1A1D26", "text-secondary": "#6B7084", "text-tertiary": "#9CA0B0",
+      primary: "#4F7CFF", "primary-hover": "#3B6AE8", "primary-light": "#EEF2FF",
+      danger: "#E5484D", "danger-light": "#FEECEE",
+      success: "#30A46C", "success-light": "#E9F9EF",
+      warning: "#F5A623", "warning-light": "#FFF7E6"
+    },
+    dark: {
+      bg: "#111113", card: "#1A1A1F", sidebar: "#151518", input: "#1E1E24",
+      hover: "#222228", active: "#2A2A40", border: "#2A2A32", "border-focus": "#6B8AFF",
+      text: "#E8E8ED", "text-secondary": "#9CA0B0", "text-tertiary": "#6B7084",
+      primary: "#6B8AFF", "primary-hover": "#5A78F0", "primary-light": "#1E2040",
+      danger: "#FF6369", "danger-light": "#2A1A1C",
+      success: "#3DD68C", "success-light": "#1A2A20",
+      warning: "#FFB224", "warning-light": "#2A2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F5F6F8  card=#FFFFFF  sidebar=#FAFBFC  input=#F5F6F8\n交互层：      hover=#F0F1F4  active=#E8EAFF  border=#E2E4EA  border-focus=#4F7CFF\n文字层：      text=#1A1D26  text-secondary=#6B7084  text-tertiary=#9CA0B0\n主色：        primary=#4F7CFF  primary-hover=#3B6AE8  primary-light=#EEF2FF\n语义色：      danger=#E5484D / light=#FEECEE\n              success=#30A46C / light=#E9F9EF\n              warning=#F5A623 / light=#FFF7E6\n\n【Dark主题】\n背景层：      bg=#111113  card=#1A1A1F  sidebar=#151518  input=#1E1E24\n交互层：      hover=#222228  active=#2A2A40  border=#2A2A32  border-focus=#6B8AFF\n文字层：      text=#E8E8ED  text-secondary=#9CA0B0  text-tertiary=#6B7084\n主色：        primary=#6B8AFF  primary-hover=#5A78F0  primary-light=#1E2040\n语义色：      danger=#FF6369 / light=#2A1A1C\n              success=#3DD68C / light=#1A2A20\n              warning=#FFB224 / light=#2A2418\n\n【设计原则】\n- Dark主题不是简单反色，bg用#111113而非纯黑，card比bg亮一个层级\n- primary-light在Dark下是深色调（#1E2040），不是浅色的低透明度\n- 语义色在Dark下提高亮度、降低饱和度，避免刺眼`
+  },
+  {
+    name: "Warm Sunset",
+    dot: "#F97316",
+    light: {
+      bg: "#FDF8F4", card: "#FFFFFF", sidebar: "#FEFAF7", input: "#FDF8F4",
+      hover: "#F7EDE4", active: "#FFEDE2", border: "#E8DDD4", "border-focus": "#F97316",
+      text: "#2D1B0E", "text-secondary": "#8B7355", "text-tertiary": "#B09A7D",
+      primary: "#F97316", "primary-hover": "#EA580C", "primary-light": "#FFF4EB",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#141110", card: "#1E1A17", sidebar: "#191513", input: "#231E1A",
+      hover: "#2A2420", active: "#3A2E22", border: "#332B24", "border-focus": "#FB923C",
+      text: "#F5EDE5", "text-secondary": "#B09A7D", "text-tertiary": "#7A6A55",
+      primary: "#FB923C", "primary-hover": "#F97316", "primary-light": "#2A1E14",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#FDF8F4  card=#FFFFFF  sidebar=#FEFAF7  input=#FDF8F4\n交互层：      hover=#F7EDE4  active=#FFEDE2  border=#E8DDD4  border-focus=#F97316\n文字层：      text=#2D1B0E  text-secondary=#8B7355  text-tertiary=#B09A7D\n主色：        primary=#F97316  primary-hover=#EA580C  primary-light=#FFF4EB\n语义色：      danger=#DC2626 / light=#FEF2F2\n              success=#16A34A / light=#F0FDF4\n              warning=#D97706 / light=#FFFBEB\n\n【Dark主题】\n背景层：      bg=#141110  card=#1E1A17  sidebar=#191513  input=#231E1A\n交互层：      hover=#2A2420  active=#3A2E22  border=#332B24  border-focus=#FB923C\n文字层：      text=#F5EDE5  text-secondary=#B09A7D  text-tertiary=#7A6A55\n主色：        primary=#FB923C  primary-hover=#F97316  primary-light=#2A1E14\n语义色：      danger=#F87171 / light=#2D1A1A\n              success=#4ADE80 / light=#1A2D20\n              warning=#FBBF24 / light=#2D2418\n\n【设计原则】\n- Warm Sunset 以暖橙为主色调，搭配米色/棕色调背景\n- Light 模式使用暖白（#FDF8F4），非冷白\n- Dark 模式背景偏向深棕（#141110），营造温暖的夜间氛围\n- 语义色在 Dark 下保持温暖调性`
+  },
+  {
+    name: "Forest Green",
+    dot: "#10B981",
+    light: {
+      bg: "#F3F7F4", card: "#FFFFFF", sidebar: "#F7FAF8", input: "#F3F7F4",
+      hover: "#E8F0EA", active: "#DCF5E3", border: "#D4E4D8", "border-focus": "#10B981",
+      text: "#0F2418", "text-secondary": "#4A7A5C", "text-tertiary": "#7FA88E",
+      primary: "#10B981", "primary-hover": "#059669", "primary-light": "#ECFDF5",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#0D1410", card: "#141E18", sidebar: "#111916", input: "#182420",
+      hover: "#1E2E26", active: "#1A3A2A", border: "#243830", "border-focus": "#34D399",
+      text: "#E2F0E8", "text-secondary": "#7FA88E", "text-tertiary": "#4A7A5C",
+      primary: "#34D399", "primary-hover": "#10B981", "primary-light": "#14261E",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F3F7F4  card=#FFFFFF  sidebar=#F7FAF8  input=#F3F7F4\n交互层：      hover=#E8F0EA  active=#DCF5E3  border=#D4E4D8  border-focus=#10B981\n文字层：      text=#0F2418  text-secondary=#4A7A5C  text-tertiary=#7FA88E\n主色：        primary=#10B981  primary-hover=#059669  primary-light=#ECFDF5\n\n【Dark主题】\n背景层：      bg=#0D1410  card=#141E18  sidebar=#111916  input=#182420\n交互层：      hover=#1E2E26  active=#1A3A2A  border=#243830  border-focus=#34D399\n文字层：      text=#E2F0E8  text-secondary=#7FA88E  text-tertiary=#4A7A5C\n主色：        primary=#34D399  primary-hover=#10B981  primary-light=#14261E\n\n【设计原则】\n- Forest Green 以自然绿为主色调，适合健康/环保/冥想类产品\n- Light 模式使用淡绿白（#F3F7F4），Dark 模式使用深林绿（#0D1410）\n- 主色饱和度适中，避免荧光感`
+  },
+  {
+    name: "Royal Purple",
+    dot: "#8B5CF6",
+    light: {
+      bg: "#F6F5FA", card: "#FFFFFF", sidebar: "#FAF9FE", input: "#F6F5FA",
+      hover: "#EEEDF5", active: "#EAE5FF", border: "#E0DDEA", "border-focus": "#8B5CF6",
+      text: "#1C1529", "text-secondary": "#6E6486", "text-tertiary": "#A098B0",
+      primary: "#8B5CF6", "primary-hover": "#7C3AED", "primary-light": "#F3F0FF",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#100F18", card: "#1A1824", sidebar: "#141320", input: "#1E1C2C",
+      hover: "#242234", active: "#2E2848", border: "#2C2940", "border-focus": "#A78BFA",
+      text: "#EDEAF5", "text-secondary": "#A098B0", "text-tertiary": "#6E6486",
+      primary: "#A78BFA", "primary-hover": "#8B5CF6", "primary-light": "#1E1838",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F6F5FA  card=#FFFFFF  sidebar=#FAF9FE  input=#F6F5FA\n交互层：      hover=#EEEDF5  active=#EAE5FF  border=#E0DDEA  border-focus=#8B5CF6\n文字层：      text=#1C1529  text-secondary=#6E6486  text-tertiary=#A098B0\n主色：        primary=#8B5CF6  primary-hover=#7C3AED  primary-light=#F3F0FF\n\n【Dark主题】\n背景层：      bg=#100F18  card=#1A1824  sidebar=#141320  input=#1E1C2C\n交互层：      hover=#242234  active=#2E2848  border=#2C2940  border-focus=#A78BFA\n文字层：      text=#EDEAF5  text-secondary=#A098B0  text-tertiary=#6E6486\n主色：        primary=#A78BFA  primary-hover=#8B5CF6  primary-light=#1E1838\n\n【设计原则】\n- Royal Purple 以紫色为主色调，适合创意工具/AI产品\n- Light 模式使用薰衣草白（#F6F5FA），Dark 模式使用深紫黑（#100F18）\n- Dark 模式 active 状态使用更饱和的紫色层级`
+  },
+  {
+    name: "Ocean Teal",
+    dot: "#06B6D4",
+    light: {
+      bg: "#F2F8FA", card: "#FFFFFF", sidebar: "#F6FBFC", input: "#F2F8FA",
+      hover: "#E4F0F5", active: "#D6F0F8", border: "#CDE5ED", "border-focus": "#06B6D4",
+      text: "#0C2A35", "text-secondary": "#4A7A88", "text-tertiary": "#7AA8B5",
+      primary: "#06B6D4", "primary-hover": "#0891B2", "primary-light": "#ECFEFF",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#0C1418", card: "#131E24", sidebar: "#10191E", input: "#172428",
+      hover: "#1C2E36", active: "#1A3848", border: "#243A44", "border-focus": "#22D3EE",
+      text: "#E0F0F5", "text-secondary": "#7AA8B5", "text-tertiary": "#4A7A88",
+      primary: "#22D3EE", "primary-hover": "#06B6D4", "primary-light": "#122830",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F2F8FA  card=#FFFFFF  sidebar=#F6FBFC  input=#F2F8FA\n交互层：      hover=#E4F0F5  active=#D6F0F8  border=#CDE5ED  border-focus=#06B6D4\n文字层：      text=#0C2A35  text-secondary=#4A7A88  text-tertiary=#7AA8B5\n主色：        primary=#06B6D4  primary-hover=#0891B2  primary-light=#ECFEFF\n\n【Dark主题】\n背景层：      bg=#0C1418  card=#131E24  sidebar=#10191E  input=#172428\n交互层：      hover=#1C2E36  active=#1A3848  border=#243A44  border-focus=#22D3EE\n文字层：      text=#E0F0F5  text-secondary=#7AA8B5  text-tertiary=#4A7A88\n主色：        primary=#22D3EE  primary-hover=#06B6D4  primary-light=#122830\n\n【设计原则】\n- Ocean Teal 以海洋青/蓝绿为主色调，适合数据/监控/DevOps类产品\n- Light 模式使用淡海蓝白（#F2F8FA），Dark 模式使用深海蓝（#0C1418）\n- 配色冷静理性，传达技术感和可靠性`
+  },
+  {
+    name: "Crimson Rose",
+    dot: "#E11D48",
+    light: {
+      bg: "#FDF5F7", card: "#FFFFFF", sidebar: "#FEF8FA", input: "#FDF5F7",
+      hover: "#FBE8ED", active: "#FFE0E8", border: "#F0D4DB", "border-focus": "#E11D48",
+      text: "#2D0F1A", "text-secondary": "#8A4A60", "text-tertiary": "#B07A8E",
+      primary: "#E11D48", "primary-hover": "#BE123C", "primary-light": "#FFF1F3",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#150D10", card: "#1F1618", sidebar: "#1A1215", input: "#261C20",
+      hover: "#302226", active: "#402228", border: "#3A2830", "border-focus": "#FB7185",
+      text: "#F5E2E8", "text-secondary": "#B07A8E", "text-tertiary": "#7A4A60",
+      primary: "#FB7185", "primary-hover": "#F43F5E", "primary-light": "#2A1418",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#FDF5F7  card=#FFFFFF  sidebar=#FEF8FA  input=#FDF5F7\n交互层：      hover=#FBE8ED  active=#FFE0E8  border=#F0D4DB  border-focus=#E11D48\n文字层：      text=#2D0F1A  text-secondary=#8A4A60  text-tertiary=#B07A8E\n主色：        primary=#E11D48  primary-hover=#BE123C  primary-light=#FFF1F3\n\n【Dark主题】\n背景层：      bg=#150D10  card=#1F1618  sidebar=#1A1215  input=#261C20\n交互层：      hover=#302226  active=#402228  border=#3A2830  border-focus=#FB7185\n文字层：      text=#F5E2E8  text-secondary=#B07A8E  text-tertiary=#7A4A60\n主色：        primary=#FB7185  primary-hover=#F43F5E  primary-light=#2A1418\n\n【设计原则】\n- Crimson Rose 以玫红/深红为主色调，适合时尚/社交/女性向产品\n- Light 模式使用玫瑰白（#FDF5F7），Dark 模式使用深玫黑（#150D10）\n- 主色与 danger 色相相近，需通过使用场景区分`
+  },
+  {
+    name: "Amber Gold",
+    dot: "#F59E0B",
+    light: {
+      bg: "#FDF9F0", card: "#FFFFFF", sidebar: "#FEFBF5", input: "#FDF9F0",
+      hover: "#FAF0D8", active: "#FFF0C8", border: "#EDE0BF", "border-focus": "#F59E0B",
+      text: "#2A1F0A", "text-secondary": "#8A7040", "text-tertiary": "#B09A68",
+      primary: "#F59E0B", "primary-hover": "#D97706", "primary-light": "#FFFBEB",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#EA580C", "warning-light": "#FFF7ED"
+    },
+    dark: {
+      bg: "#13110C", card: "#1D1A14", sidebar: "#181510", input: "#242018",
+      hover: "#2C2618", active: "#3A3018", border: "#362E20", "border-focus": "#FBBF24",
+      text: "#F5EDE0", "text-secondary": "#B09A68", "text-tertiary": "#7A6A40",
+      primary: "#FBBF24", "primary-hover": "#F59E0B", "primary-light": "#2A2210",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FB923C", "warning-light": "#2D2018"
+    },
+    spec: `【Light主题】\n背景层：      bg=#FDF9F0  card=#FFFFFF  sidebar=#FEFBF5  input=#FDF9F0\n交互层：      hover=#FAF0D8  active=#FFF0C8  border=#EDE0BF  border-focus=#F59E0B\n文字层：      text=#2A1F0A  text-secondary=#8A7040  text-tertiary=#B09A68\n主色：        primary=#F59E0B  primary-hover=#D97706  primary-light=#FFFBEB\n\n【Dark主题】\n背景层：      bg=#13110C  card=#1D1A14  sidebar=#181510  input=#242018\n交互层：      hover=#2C2618  active=#3A3018  border=#362E20  border-focus=#FBBF24\n文字层：      text=#F5EDE0  text-secondary=#B09A68  text-tertiary=#7A6A40\n主色：        primary=#FBBF24  primary-hover=#F59E0B  primary-light=#2A2210\n\n【设计原则】\n- Amber Gold 以琥珀金为主色调，适合金融/商务/高端产品\n- Light 模式使用象牙白（#FDF9F0），Dark 模式使用深琥珀（#13110C）\n- 主色与 warning 色相接近，Dark 模式下 warning 改用橙色区分`
+  },
+  {
+    name: "Slate Mono",
+    dot: "#64748B",
+    light: {
+      bg: "#F5F6F8", card: "#FFFFFF", sidebar: "#F8F9FB", input: "#F5F6F8",
+      hover: "#ECEDF1", active: "#E2E4EA", border: "#DFE1E7", "border-focus": "#64748B",
+      text: "#1A1D26", "text-secondary": "#64748B", "text-tertiary": "#94A3B8",
+      primary: "#64748B", "primary-hover": "#475569", "primary-light": "#F1F5F9",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#0F1114", card: "#181B20", sidebar: "#131619", input: "#1C2028",
+      hover: "#22262E", active: "#2A3040", border: "#2A2F38", "border-focus": "#94A3B8",
+      text: "#E2E8F0", "text-secondary": "#94A3B8", "text-tertiary": "#64748B",
+      primary: "#94A3B8", "primary-hover": "#CBD5E1", "primary-light": "#1E2430",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F5F6F8  card=#FFFFFF  sidebar=#F8F9FB  input=#F5F6F8\n交互层：      hover=#ECEDF1  active=#E2E4EA  border=#DFE1E7  border-focus=#64748B\n文字层：      text=#1A1D26  text-secondary=#64748B  text-tertiary=#94A3B8\n主色：        primary=#64748B  primary-hover=#475569  primary-light=#F1F5F9\n\n【Dark主题】\n背景层：      bg=#0F1114  card=#181B20  sidebar=#131619  input=#1C2028\n交互层：      hover=#22262E  active=#2A3040  border=#2A2F38  border-focus=#94A3B8\n文字层：      text=#E2E8F0  text-secondary=#94A3B8  text-tertiary=#64748B\n主色：        primary=#94A3B8  primary-hover=#CBD5E1  primary-light=#1E2430\n\n【设计原则】\n- Slate Mono 以灰色为主色调，适合开发者工具/代码编辑器/文档类产品\n- 无彩色系降低视觉噪音，让内容本身成为焦点\n- Dark 模式接近经典 IDE 配色（VS Code Dark+）\n- primary 色饱和度极低，通过语义色提供必要区分度`
+  }
+];
+
+// Render
+const container = document.getElementById('themes-container')!;
+const sidebar = document.getElementById('theme-sidebar')!;
+
+// Sidebar
+themes.forEach((theme, idx) => {
+  const item = document.createElement('div');
+  item.className = 'sidebar-item' + (idx === 0 ? ' active' : '');
+  item.innerHTML = `<span class="sidebar-dot" style="background:${theme.dot}"></span>${theme.name}`;
+  item.onclick = () => {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('theme-' + idx)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  sidebar.appendChild(item);
+});
+
+// Cards
+themes.forEach((theme, idx) => {
+  const card = document.createElement('div');
+  card.className = 'theme-card';
+  card.id = 'theme-' + idx;
+
+  const l = theme.light;
+  const d = theme.dark;
+
+  card.innerHTML = `
+    <div class="theme-card-header" onclick="toggleThemeCard(${idx})">
+      <div class="theme-card-title">
+        <h3>${theme.name}</h3>
+        <div class="color-dots">
+          <span style="background:${l.primary}"></span>
+          <span style="background:${l.bg}"></span>
+          <span style="background:${d.bg}"></span>
+          <span style="background:${d.primary}"></span>
+        </div>
+      </div>
+      <div class="theme-card-actions">
+        <button class="btn-copy" onclick="event.stopPropagation(); copyThemeSpec(${idx}, this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          复制规范
+        </button>
+        <button class="btn-expand" onclick="event.stopPropagation(); toggleThemeCard(${idx})">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          展开
+        </button>
+      </div>
+    </div>
+    <div class="color-preview">
+      <div class="color-swatch"><div class="swatch" style="background:${l.bg}"></div><span class="swatch-label">Light BG</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.card}"></div><span class="swatch-label">Card</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.primary}"></div><span class="swatch-label">Primary</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.primary}80"></div><span class="swatch-label">Hover</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.primary}20"></div><span class="swatch-label">Light</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.danger}"></div><span class="swatch-label">Danger</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.success}"></div><span class="swatch-label">Success</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${l.warning}"></div><span class="swatch-label">Warning</span></div>
+      <div class="color-swatch" style="margin-left:12px"><div class="swatch" style="background:${d.bg}"></div><span class="swatch-label">Dark BG</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.card}"></div><span class="swatch-label">Card</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.primary}"></div><span class="swatch-label">Primary</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.primary}80"></div><span class="swatch-label">Hover</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.primary}20"></div><span class="swatch-label">Light</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.danger}"></div><span class="swatch-label">Danger</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.success}"></div><span class="swatch-label">Success</span></div>
+      <div class="color-swatch"><div class="swatch" style="background:${d.warning}"></div><span class="swatch-label">Warning</span></div>
+    </div>
+    <div class="theme-card-body" id="theme-body-${idx}">
+      <pre class="theme-spec">${theme.spec}</pre>
+    </div>
+  `;
+  container.appendChild(card);
+});
+
+// Interactions
+function toggleThemeCard(idx: number) {
+  document.getElementById('theme-body-' + idx)?.classList.toggle('open');
+}
+(window as any).toggleThemeCard = toggleThemeCard;
+
+function copyThemeSpec(idx: number, btn: HTMLElement) {
+  navigator.clipboard.writeText(themes[idx].spec).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 已复制`;
+    showToast(themes[idx].name + ' 规范已复制');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制规范`;
+    }, 2000);
+  });
+}
+(window as any).copyThemeSpec = copyThemeSpec;
+
+// Expand all
+document.getElementById('expandAllBtn')?.addEventListener('click', () => {
+  const bodies = document.querySelectorAll('.theme-card-body');
+  const allOpen = [...bodies].every(b => b.classList.contains('open'));
+  bodies.forEach(b => b.classList.toggle('open', !allOpen));
+});
+
+// Download
+document.getElementById('downloadBtn')?.addEventListener('click', () => {
+  const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'design-system-themes.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('HTML 文件已开始下载');
+});
+
+// Toast
+function showToast(msg: string) {
+  let toast = document.querySelector('.toast-msg') as HTMLElement;
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'toast-msg';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+</script>

@@ -1,17 +1,18 @@
 <template>
-  <div class="flex flex-wrap gap-2 justify-center">
-    <button
-      v-for="cat in categories"
-      :key="cat.id"
-      @click="$emit('select', cat.id)"
-      class="font-mono text-xs px-4 py-2 rounded-full border transition-all duration-200 whitespace-nowrap"
-      :class="active === cat.id
-        ? 'bg-gradient-to-r from-[#4F7CFF] to-[#a855f7] border-transparent text-white font-medium'
-        : 'bg-surface border-border text-txt-secondary hover:border-border-hover hover:text-txt'"
-    >
-      {{ cat.icon }} {{ cat.name }}
-      <span class="ml-1 opacity-60">{{ cat.count }}</span>
-    </button>
+  <div class="cat-nav-wrap">
+    <div class="cat-nav-inner">
+      <button
+        v-for="cat in categories"
+        :key="cat.id"
+        @click="$emit('select', cat.id)"
+        class="cat-btn"
+        :class="{ active: active === cat.id }"
+      >
+        <span class="cat-icon">{{ cat.icon }}</span>
+        <span class="cat-name">{{ cat.name }}</span>
+        <span class="cat-count">{{ cat.count }}</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -25,3 +26,81 @@ defineProps<{
 
 defineEmits<{ select: [id: string] }>();
 </script>
+
+<style scoped>
+.cat-nav-wrap {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cat-nav-wrap::-webkit-scrollbar { display: none; }
+
+.cat-nav-inner {
+  display: flex;
+  gap: 6px;
+  padding: 2px;
+}
+
+.cat-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  position: relative;
+}
+.cat-btn:hover {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.cat-btn.active {
+  background: var(--card);
+  color: var(--primary);
+  border-color: var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  font-weight: 600;
+}
+.cat-btn.active::before {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background: var(--primary);
+  border-radius: 1px;
+}
+
+.cat-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+.cat-name {
+  letter-spacing: -0.01em;
+}
+.cat-count {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  background: var(--surface-2);
+  padding: 1px 6px;
+  border-radius: 8px;
+  min-width: 18px;
+  text-align: center;
+}
+.cat-btn.active .cat-count {
+  background: var(--primary-dim);
+  color: var(--primary);
+}
+</style>

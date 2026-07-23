@@ -14,9 +14,16 @@ import { previewKeyframes } from '../data/effects';
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
     <title>CSS Design Plus</title>
     <style set:html={previewKeyframes}></style>
+    <style>
+      /* Prevent content from being hidden under sticky header */
+      html { scroll-padding-top: 70px; }
+      /* Ensure proper stacking */
+      body { display: flex; flex-direction: column; min-height: 100vh; }
+      main { flex: 1; }
+    </style>
     <script>
       // Apply theme before paint
       (function() {
@@ -28,7 +35,7 @@ import { previewKeyframes } from '../data/effects';
   </head>
   <body>
     <Header client:load />
-    <main class="flex-1">
+    <main>
       <slot />
     </main>
     <Footer />

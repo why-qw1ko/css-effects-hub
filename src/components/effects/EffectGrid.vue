@@ -23,7 +23,7 @@
       <a
         v-for="effect in filteredEffects"
         :key="effect.id"
-        :href="`/effect/${effect.id}`"
+        :href="`${base}effect/${effect.id}`"
         class="block no-underline"
       >
         <EffectCard :effect="effect" />
@@ -47,6 +47,7 @@ import EffectCard from './EffectCard.vue';
 import CategoryNav from '../ui/CategoryNav.vue';
 import SearchBar from '../ui/SearchBar.vue';
 
+const base = import.meta.env.BASE_URL;
 const store = useEffectsStore();
 
 const searchQuery = computed(() => store.searchQuery);
