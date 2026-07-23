@@ -339,8 +339,6 @@ import MainLayout from '../layouts/MainLayout.astro';
   .adv-mcode-copy:hover { background: rgba(255,255,255,0.2); }
 
   /* Effect-specific demo styles */
-  :global(.mbtn-demo) { position:absolute;top:50%;left:50%;font-family:var(--font-display);font-size:14px;font-weight:700;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:100px;cursor:pointer;transition:box-shadow .3s;transform:translate(-50%,-50%); }
-  :global(.mbtn-demo:hover) { box-shadow:0 8px 28px rgba(79,124,255,.35); }
 
   @media (max-width: 820px) {
     .adv-grid { grid-template-columns: 1fr; }
@@ -366,7 +364,7 @@ const effects: AdvEffect[] = [
     name: 'Magnetic Button', nameCn: '磁吸按钮', desc: '鼠标靠近时按钮产生磁吸跟随效果。',
     prompt: '创建磁吸按钮效果：监听mousemove，计算鼠标与按钮中心距离，距离小于阈值时用transform:translate()偏移按钮(越大偏移越小)，mouseleave时弹性回弹归位。',
     demoHtml: '<button class="mbtn-demo" id="magBtn">磁吸按钮</button>',
-    demoCss: '', demoJs: `
+    demoCss: '.mbtn-demo{position:absolute;top:50%;left:50%;font-family:var(--font-display);font-size:14px;font-weight:700;padding:12px 28px;background:var(--primary);color:#fff;border:none;border-radius:100px;cursor:pointer;transition:box-shadow .3s;transform:translate(-50%,-50%)}.mbtn-demo:hover{box-shadow:0 8px 28px rgba(79,124,255,.35)}', demoJs: `
 (function(){const a=document.getElementById('adv-d-magnetic'),b=document.getElementById('magBtn');if(!a||!b)return;const s=.35,m=150;a.addEventListener('mousemove',e=>{const r=b.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=e.clientX-cx,dy=e.clientY-cy,d=Math.sqrt(dx*dx+dy*dy);if(d<m){const f=(1-d/m)*s;b.style.transform='translate(-50%,-50%) translate('+dx*f+'px,'+dy*f+'px)'}else b.style.transform='translate(-50%,-50%)'});a.addEventListener('mouseleave',()=>{b.style.transform='translate(-50%,-50%)'})})();`,
     code: {
       html: '<div class="magnetic-wrap">\n  <button class="magnetic-btn">磁吸按钮</button>\n</div>',
@@ -420,7 +418,37 @@ const effects: AdvEffect[] = [
     demoHtml: '<div class="sdi-demo" id="sdiDemo"><div class="ri-demo"><span style="font-family:var(--font-display);font-weight:800;color:var(--primary);margin-right:6px">01</span>Scroll to reveal</div><div class="ri-demo"><span style="font-family:var(--font-display);font-weight:800;color:var(--primary);margin-right:6px">02</span>IntersectionObserver</div><div class="ri-demo"><span style="font-family:var(--font-display);font-weight:800;color:var(--primary);margin-right:6px">03</span>CSS transition</div><div class="ri-demo"><span style="font-family:var(--font-display);font-weight:800;color:var(--primary);margin-right:6px">04</span>opacity + translateY</div><div class="ri-demo"><span style="font-family:var(--font-display);font-weight:800;color:var(--primary);margin-right:6px">05</span>Progressive reveal</div><div class="ri-demo"><span style="font-family:var(--font-display);font-weight:800;color:var(--primary);margin-right:6px">06</span>Last item</div></div>',
     demoCss: '.sdi-demo{width:100%;height:100%;overflow-y:auto;padding:20px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.sdi-demo::-webkit-scrollbar{width:4px}.sdi-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.ri-demo{padding:14px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:10px;font-size:12px;opacity:0;transform:translateY(20px);transition:all .5s cubic-bezier(.16,1,.3,1)}.ri-demo.vis{opacity:1;transform:translateY(0)}',
     demoJs: `(function(){const c=document.getElementById('sdiDemo');if(!c)return;const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');o.unobserve(e.target)}})},{root:c,threshold:.15});c.querySelectorAll('.ri-demo').forEach(i=>o.observe(i))})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="reveal-list">
+  <div class="reveal-item">01 — Scroll to reveal</div>
+  <div class="reveal-item">02 — IntersectionObserver</div>
+  <div class="reveal-item">03 — CSS transition</div>
+  <div class="reveal-item">04 — opacity + translateY</div>
+</div>`,
+      css: `.reveal-item {
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #fff;
+  border: 1px solid #e2e4ea;
+  border-radius: 8px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .5s cubic-bezier(.16,1,.3,1), transform .5s cubic-bezier(.16,1,.3,1);
+}
+.reveal-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}`,
+      js: `const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal-item').forEach((el) => io.observe(el));`
+    }
   },
   {
     id: 'parallax', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
@@ -429,7 +457,34 @@ const effects: AdvEffect[] = [
     demoHtml: '<div class="pd-demo" id="pdDemo"><div style="height:520px;position:relative"><div class="pl2-demo" data-sp=".1" style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--font-display);font-weight:800;font-size:52px;color:rgba(79,124,255,.08);top:30px">BACKGROUND</div><div class="pl2-demo" data-sp=".4" style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--font-display);font-weight:800;font-size:30px;color:rgba(79,124,255,.15);top:100px">MIDDLE LAYER</div><div class="pl2-demo" data-sp=".8" style="position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--font-display);font-weight:800;font-size:18px;color:var(--text);top:160px">FOREGROUND</div></div><div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--text-tertiary)">scroll to see parallax</div></div>',
     demoCss: '.pd-demo{width:100%;height:100%;overflow-y:auto;position:relative;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.pd-demo::-webkit-scrollbar{width:4px}.pd-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}',
     demoJs: `(function(){const c=document.getElementById('pdDemo');if(!c)return;c.addEventListener('scroll',()=>{const y=c.scrollTop;c.querySelectorAll('.pl2-demo').forEach(l=>{l.style.transform='translateX(-50%) translateY('+y*parseFloat(l.dataset.sp)+'px)'})})})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="parallax-scene">
+  <span class="layer" data-speed="0.1">BACKGROUND</span>
+  <span class="layer" data-speed="0.4">MIDDLE LAYER</span>
+  <span class="layer" data-speed="0.8">FOREGROUND</span>
+</div>`,
+      css: `.parallax-scene {
+  position: relative;
+  height: 400px;
+  overflow-y: auto;
+}
+.layer {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-weight: 800;
+  will-change: transform;
+}`,
+      js: `const scene = document.querySelector('.parallax-scene');
+scene.addEventListener('scroll', () => {
+  const y = scene.scrollTop;
+  scene.querySelectorAll('.layer').forEach((layer) => {
+    const speed = parseFloat(layer.dataset.speed);
+    layer.style.transform = 'translateX(-50%) translateY(' + (y * speed) + 'px)';
+  });
+});`
+    }
   },
   {
     id: 'progress', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
@@ -438,7 +493,32 @@ const effects: AdvEffect[] = [
     demoHtml: '<div class="prgd-demo" id="prgDDemo"><div class="prbr-demo" id="prgBarDemo"></div><span class="prpct-demo" id="prgPctDemo">0%</span><div class="prcon-demo"><p>Web effects have transformed digital content. From hover animations to complex scroll-driven narratives.</p><p>Parallax scrolling creates depth by moving background slower than foreground content.</p><p>Intersection Observer provides async observation of element intersection with viewport.</p><p>CSS Custom Properties allow reusable values updated with JavaScript.</p><p>Web Animations API brings CSS animation power to JavaScript.</p><p>requestAnimationFrame syncs animation with display refresh rate.</p></div></div>',
     demoCss: '.prgd-demo{width:100%;height:100%;position:relative;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.prgd-demo::-webkit-scrollbar{width:4px}.prgd-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.prbr-demo{position:sticky;top:0;height:3px;background:var(--primary);width:0%;z-index:10;transition:width .05s linear}.prcon-demo{padding:18px;padding-top:14px}.prcon-demo p{font-size:11px;color:var(--text-secondary);margin-bottom:12px;line-height:1.7}.prpct-demo{position:sticky;top:10px;float:right;font-size:10px;font-weight:500;color:var(--primary);background:var(--primary-dim);padding:2px 9px;border-radius:100px;z-index:11}',
     demoJs: `(function(){const c=document.getElementById('prgDDemo'),b=document.getElementById('prgBarDemo'),p=document.getElementById('prgPctDemo');if(!c||!b)return;c.addEventListener('scroll',()=>{const s=c.scrollTop,h=c.scrollHeight-c.clientHeight,pr=h>0?s/h:0;b.style.width=(pr*100)+'%';if(p)p.textContent=Math.round(pr*100)+'%'})})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="progress-bar" id="bar"></div>
+<article class="article">
+  <p>Long content paragraph 1...</p>
+  <p>Long content paragraph 2...</p>
+  <p>Long content paragraph 3...</p>
+</article>`,
+      css: `.progress-bar {
+  position: sticky;
+  top: 0;
+  height: 4px;
+  width: 0%;
+  background: #4F7CFF;
+  z-index: 10;
+  transition: width .05s linear;
+}
+.article p { margin-bottom: 16px; line-height: 1.8; }`,
+      js: `const bar = document.getElementById('bar');
+const el = document.scrollingElement || document.documentElement;
+window.addEventListener('scroll', () => {
+  const scrolled = el.scrollTop;
+  const height = el.scrollHeight - el.clientHeight;
+  const progress = height > 0 ? scrolled / height : 0;
+  bar.style.width = (progress * 100) + '%';
+});`
+    }
   },
   {
     id: 'counter', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
@@ -447,7 +527,37 @@ const effects: AdvEffect[] = [
     demoHtml: '<div class="cnt-wrap-demo" id="cntWDemo"><div style="text-align:center"><span class="cnt-num-demo" data-target="2048" style="font-family:var(--font-display);font-size:38px;font-weight:800;color:var(--text);display:block;line-height:1.2">0</span><span style="font-size:11px;color:var(--text-secondary)">Components</span></div><div style="text-align:center"><span class="cnt-num-demo" data-target="99" style="font-family:var(--font-display);font-size:38px;font-weight:800;color:var(--text);display:block;line-height:1.2">0</span><span style="font-size:11px;color:var(--text-secondary)">Score %</span></div><div style="text-align:center"><span class="cnt-num-demo" data-target="5680" style="font-family:var(--font-display);font-size:38px;font-weight:800;color:var(--text);display:block;line-height:1.2">0</span><span style="font-size:11px;color:var(--text-secondary)">Users</span></div></div>',
     demoCss: '.cnt-wrap-demo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:36px}',
     demoJs: `(function(){const w=document.getElementById('cntWDemo');if(!w)return;let done=false;const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!done){done=true;w.querySelectorAll('.cnt-num-demo').forEach(n=>{const t=parseInt(n.dataset.target),d=2000;let st=null;function step(ts){if(!st)st=ts;const p=Math.min((ts-st)/d,1);n.textContent=Math.floor((1-Math.pow(1-p,3))*t).toLocaleString();if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step)})}if(e.isIntersecting)o.unobserve(e.target)})},{threshold:.3});o.observe(w)})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="counter" data-target="2048">0</div>`,
+      css: `.counter {
+  font-size: 48px;
+  font-weight: 800;
+  color: #1a1d26;
+}`,
+      js: `function animateCounter(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 2000;
+  let startTime = null;
+  function step(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target).toLocaleString();
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      animateCounter(entry.target);
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.counter').forEach((el) => io.observe(el));`
+    }
   },
   {
     id: 'textwave', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
@@ -456,7 +566,31 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px"><div id="twl1" style="font-family:var(--font-display);font-size:24px;font-weight:800;display:flex;overflow:hidden"></div><div id="twl2" style="font-family:var(--font-display);font-size:24px;font-weight:800;display:flex;overflow:hidden"></div><div style="font-size:10px;color:var(--text-tertiary);margin-top:6px">hover to replay</div></div>',
     demoCss: '',
     demoJs: `(function(){const l1=document.getElementById('twl1'),l2=document.getElementById('twl2');if(!l1||!l2)return;function build(el,txt){el.innerHTML='';txt.split('').forEach((c,i)=>{const s=document.createElement('span');s.style.cssText='display:inline-block;transform:translateY(100%);animation:chUp .5s cubic-bezier(.16,1,.3,1) forwards;animation-delay:'+(i*.04)+'s';s.textContent=c===' '?'\u00A0':c;el.appendChild(s)})}build(l1,'Web Effects');build(l2,'Showcase');[l1,l2].forEach(l=>{l.addEventListener('mouseenter',()=>{l.querySelectorAll('span').forEach(ch=>{ch.style.animation='none';void ch.offsetWidth;ch.style.animation=''})})})})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<h1 class="wave-text" data-text="Web Effects"></h1>`,
+      css: `.wave-text {
+  display: flex;
+  overflow: hidden;
+  font-size: 32px;
+  font-weight: 800;
+}
+.wave-text span {
+  display: inline-block;
+  transform: translateY(100%);
+  animation: charUp .5s cubic-bezier(.16,1,.3,1) forwards;
+}
+@keyframes charUp {
+  to { transform: translateY(0); }
+}`,
+      js: `const el = document.querySelector('.wave-text');
+const text = el.dataset.text;
+text.split('').forEach((char, i) => {
+  const span = document.createElement('span');
+  span.textContent = char === ' ' ? '\u00A0' : char;
+  span.style.animationDelay = (i * 0.04) + 's';
+  el.appendChild(span);
+});`
+    }
   },
   {
     id: 'scramble', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
@@ -465,7 +599,31 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px"><div id="sctxDemo" style="font-family:var(--font-display);font-size:22px;font-weight:700;min-height:32px;color:var(--text)">Web Effects</div><button id="scbtnDemo" style="font-family:var(--font-sans);font-size:11px;padding:7px 18px;background:var(--primary);color:#fff;border:none;border-radius:100px;cursor:pointer">Decode Again</button></div>',
     demoCss: '',
     demoJs: `(function(){const el=document.getElementById('sctxDemo'),btn=document.getElementById('scbtnDemo');if(!el||!btn)return;const tgts=['Web Effects','Decode Text','Scramble FX','Animate UI','Hack Mode'],ch='!@#$%^&*0123456789ABCDEFabcdef';let ci=0,anim=false;function scr(text){if(anim)return;anim=true;const len=text.length;let fr=0,mf=len*4;const iv=setInterval(()=>{fr++;let r='';for(let i=0;i<len;i++){r+=fr>len*2+mf*.3?text[i]:ch[Math.floor(Math.random()*ch.length)]}el.textContent=r;if(fr>=mf){clearInterval(iv);el.textContent=text;anim=false}},35)}scr(tgts[0]);btn.addEventListener('click',()=>{ci=(ci+1)%tgts.length;scr(tgts[ci])})})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="scramble" data-text="Web Effects">Web Effects</div>`,
+      css: `.scramble {
+  font-family: monospace;
+  font-size: 24px;
+  font-weight: 700;
+}`,
+      js: `const el = document.querySelector('.scramble');
+const chars = '!@#$%^&*0123456789ABCDEF';
+function scramble(text) {
+  const len = text.length;
+  let frame = 0;
+  const maxFrame = len * 4;
+  const interval = setInterval(() => {
+    frame++;
+    let result = '';
+    for (let i = 0; i < len; i++) {
+      result += frame > len * 2 ? text[i] : chars[Math.floor(Math.random() * chars.length)];
+    }
+    el.textContent = result;
+    if (frame >= maxFrame) { clearInterval(interval); el.textContent = text; }
+  }, 35);
+}
+scramble(el.dataset.text);`
+    }
   },
   {
     id: 'marquee', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
@@ -474,7 +632,28 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;overflow:hidden"><div style="overflow:hidden"><div style="display:flex;gap:40px;width:max-content;animation:mqL 20s linear infinite"><span class="mqi-demo"><span class="dt-demo"></span>Design</span><span class="mqi-demo"><span class="dt-demo"></span>Develop</span><span class="mqi-demo"><span class="dt-demo"></span>Deploy</span><span class="mqi-demo"><span class="dt-demo"></span>Iterate</span><span class="mqi-demo"><span class="dt-demo"></span>Design</span><span class="mqi-demo"><span class="dt-demo"></span>Develop</span><span class="mqi-demo"><span class="dt-demo"></span>Deploy</span><span class="mqi-demo"><span class="dt-demo"></span>Iterate</span></div></div><div style="overflow:hidden"><div style="display:flex;gap:40px;width:max-content;animation:mqR 24s linear infinite"><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Create</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Inspire</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Build</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Scale</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Create</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Inspire</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Build</span><span class="mqi-demo"><span class="dt-demo" style="background:#F5A623"></span>Scale</span></div></div></div>',
     demoCss: '.mqi-demo{font-family:var(--font-display);font-size:18px;font-weight:700;white-space:nowrap;color:var(--text-secondary);display:flex;align-items:center;gap:10px;flex-shrink:0}.dt-demo{width:7px;height:7px;border-radius:50%;background:var(--primary);flex-shrink:0}',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="marquee">
+  <div class="marquee-track">
+    <span>Design</span><span>Develop</span><span>Deploy</span><span>Iterate</span>
+    <span>Design</span><span>Develop</span><span>Deploy</span><span>Iterate</span>
+  </div>
+</div>`,
+      css: `.marquee { overflow: hidden; }
+.marquee-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: marquee 20s linear infinite;
+}
+.marquee-track span { font-size: 20px; font-weight: 700; white-space: nowrap; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}`,
+      js: `// 纯 CSS 实现，无需 JavaScript
+// 内容需复制一份以实现无缝循环`
+    }
   },
   {
     id: 'typewriter', cat: 'txt', tag: '文字动画', tagClass: 'adv-tag-text',
@@ -483,7 +662,36 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:20px"><div id="typLineDemo" style="font-family:var(--font-mono);font-size:14px;color:var(--text);min-height:22px;border-right:2px solid var(--primary);padding-right:6px;white-space:nowrap;overflow:hidden;animation:blink .8s step-end infinite"></div><div style="font-size:10px;color:var(--text-tertiary)">auto-typing loop</div></div>',
     demoCss: '',
     demoJs: `(function(){const el=document.getElementById('typLineDemo');if(!el)return;const lines=['const effects = ["parallax", "tilt", "glow"];','effects.map(e => render(e));','// Creating beautiful interactions...'];let li=0,ci=0,del=false;function type(){const cur=lines[li];if(!del){el.textContent=cur.substring(0,ci+1);ci++;if(ci>=cur.length){setTimeout(()=>{del=true;type()},2000);return}setTimeout(type,70)}else{el.textContent=cur.substring(0,ci);ci--;if(ci<0){del=false;li=(li+1)%lines.length;setTimeout(type,500);return}setTimeout(type,30)}}type()})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="typewriter" id="type"></div>`,
+      css: `.typewriter {
+  font-family: monospace;
+  font-size: 16px;
+  border-right: 2px solid #4F7CFF;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: blink .8s step-end infinite;
+}
+@keyframes blink {
+  50% { border-color: transparent; }
+}`,
+      js: `const el = document.getElementById('type');
+const lines = ['const effects = ["parallax", "tilt"];', 'effects.map(e => render(e));'];
+let lineIndex = 0, charIndex = 0, deleting = false;
+function type() {
+  const current = lines[lineIndex];
+  if (!deleting) {
+    el.textContent = current.substring(0, ++charIndex);
+    if (charIndex >= current.length) { setTimeout(() => { deleting = true; type(); }, 2000); return; }
+    setTimeout(type, 70);
+  } else {
+    el.textContent = current.substring(0, --charIndex);
+    if (charIndex <= 0) { deleting = false; lineIndex = (lineIndex + 1) % lines.length; setTimeout(type, 500); return; }
+    setTimeout(type, 30);
+  }
+}
+type();`
+    }
   },
   {
     id: 'tilt3d', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
@@ -492,7 +700,39 @@ const effects: AdvEffect[] = [
     demoHtml: '<div class="tlw-demo" id="tlwDemo"><div class="tlc-demo" id="tlcDemo"><span style="font-family:var(--font-display);font-size:15px;font-weight:700;color:#fff;position:relative;z-index:1">Move mouse</span><div class="tls-demo" id="tlsDemo"></div></div></div>',
     demoCss: '.tlw-demo{width:100%;height:100%;display:flex;align-items:center;justify-content:center;perspective:800px}.tlc-demo{width:220px;height:140px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:14px;display:flex;align-items:center;justify-content:center;transition:transform .1s ease-out,box-shadow .3s;box-shadow:0 10px 28px rgba(102,126,234,.2);position:relative}.tls-demo{position:absolute;inset:0;border-radius:14px;background:radial-gradient(circle at var(--sx,50%) var(--sy,50%),rgba(255,255,255,.2) 0%,transparent 60%);pointer-events:none}',
     demoJs: `(function(){const w=document.getElementById('tlwDemo'),c=document.getElementById('tlcDemo'),s=document.getElementById('tlsDemo');if(!w||!c)return;w.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform='rotateY('+x*20+'deg) rotateX('+-y*20+'deg)';if(s){s.style.setProperty('--sx',(x+.5)*100+'%');s.style.setProperty('--sy',(y+.5)*100+'%')}});w.addEventListener('mouseleave',()=>{c.style.transform=''})})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="tilt-scene">
+  <div class="tilt-card">
+    <span>Move mouse</span>
+    <div class="tilt-shine"></div>
+  </div>
+</div>`,
+      css: `.tilt-scene { perspective: 800px; }
+.tilt-card {
+  position: relative;
+  width: 260px; height: 160px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 14px;
+  transition: transform .1s ease-out;
+  transform-style: preserve-3d;
+}
+.tilt-shine {
+  position: absolute; inset: 0; border-radius: 14px; pointer-events: none;
+  background: radial-gradient(circle at var(--sx,50%) var(--sy,50%), rgba(255,255,255,.25), transparent 60%);
+}`,
+      js: `const scene = document.querySelector('.tilt-scene');
+const card = scene.querySelector('.tilt-card');
+const shine = scene.querySelector('.tilt-shine');
+scene.addEventListener('mousemove', (e) => {
+  const rect = card.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width - 0.5;
+  const y = (e.clientY - rect.top) / rect.height - 0.5;
+  card.style.transform = 'rotateY(' + (x * 20) + 'deg) rotateX(' + (-y * 20) + 'deg)';
+  shine.style.setProperty('--sx', (x + 0.5) * 100 + '%');
+  shine.style.setProperty('--sy', (y + 0.5) * 100 + '%');
+});
+scene.addEventListener('mouseleave', () => { card.style.transform = ''; });`
+    }
   },
   {
     id: 'flipcard', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
@@ -501,7 +741,30 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;perspective:800px;cursor:pointer" class="flpw-demo"><div style="width:220px;height:140px;position:relative;transition:transform .6s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d" class="flpc-demo"><div style="position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:linear-gradient(135deg,var(--primary),#a855f7);color:#fff"><span style="font-family:var(--font-display);font-size:16px;font-weight:700">Hover to Flip</span><span style="font-size:11px;opacity:.7">Front Side</span></div><div style="position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--border);transform:rotateY(180deg)"><span style="font-family:var(--font-display);font-size:14px;font-weight:700">Hello!</span><span style="font-size:11px;color:var(--text-secondary)">Back Side</span></div></div></div>',
     demoCss: '.flpw-demo:hover .flpc-demo{transform:rotateY(180deg)}',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="flip-scene">
+  <div class="flip-card">
+    <div class="flip-face flip-front">Hover to Flip</div>
+    <div class="flip-face flip-back">Hello!</div>
+  </div>
+</div>`,
+      css: `.flip-scene { perspective: 800px; }
+.flip-card {
+  position: relative; width: 260px; height: 160px;
+  transform-style: preserve-3d;
+  transition: transform .6s cubic-bezier(.4,0,.2,1);
+}
+.flip-scene:hover .flip-card { transform: rotateY(180deg); }
+.flip-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 14px;
+}
+.flip-front { background: linear-gradient(135deg, #4F7CFF, #a855f7); color: #fff; }
+.flip-back { background: #fff; border: 1px solid #e2e4ea; transform: rotateY(180deg); }`,
+      js: `// 纯 CSS 实现，无需 JavaScript`
+    }
   },
   {
     id: 'morphing', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
@@ -510,7 +773,20 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div style="width:110px;height:110px;background:linear-gradient(135deg,var(--primary),#a855f7,#ec4899);animation:morph 8s ease-in-out infinite"></div></div>',
     demoCss: '',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="morph-shape"></div>`,
+      css: `.morph-shape {
+  width: 120px; height: 120px;
+  background: linear-gradient(135deg, #4F7CFF, #a855f7, #ec4899);
+  animation: morph 8s ease-in-out infinite;
+}
+@keyframes morph {
+  0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: rotate(0deg); }
+  33% { border-radius: 70% 30% 46% 54% / 30% 60% 40% 70%; transform: rotate(120deg); }
+  66% { border-radius: 30% 70% 70% 30% / 53% 30% 70% 47%; transform: rotate(240deg); }
+}`,
+      js: `// 纯 CSS 实现，无需 JavaScript`
+    }
   },
   {
     id: 'stagger', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
@@ -519,7 +795,42 @@ const effects: AdvEffect[] = [
     demoHtml: '<div id="stgWDemo" style="width:100%;height:100%;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:6px;padding:24px"></div>',
     demoCss: '',
     demoJs: `(function(){const w=document.getElementById('stgWDemo');if(!w)return;for(let r=0;r<4;r++){for(let c=0;c<5;c++){const d=document.createElement('div');d.className='stg-tile-demo';d.style.cssText='background:var(--primary-dim);border-radius:6px;opacity:0;transform:scale(.6);transition:all .4s cubic-bezier(.16,1,.3,1);transition-delay:'+(r+c)*.08+'s;background:hsl('+(r*5+c)*18+',70%,92%)';w.appendChild(d)}}const o=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.stg-tile-demo').forEach(t=>{t.style.opacity='1';t.style.transform='scale(1)'});o.unobserve(e.target)}})},{threshold:.3});o.observe(w)})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="stagger-grid" id="grid"></div>`,
+      css: `.stagger-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.stagger-tile {
+  aspect-ratio: 1;
+  background: #4F7CFF;
+  border-radius: 6px;
+  opacity: 0;
+  transform: scale(.6);
+  transition: opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
+}
+.stagger-tile.visible { opacity: 1; transform: scale(1); }`,
+      js: `const grid = document.getElementById('grid');
+const cols = 5, rows = 4;
+for (let r = 0; r < rows; r++) {
+  for (let c = 0; c < cols; c++) {
+    const tile = document.createElement('div');
+    tile.className = 'stagger-tile';
+    tile.style.transitionDelay = (r + c) * 0.08 + 's';
+    grid.appendChild(tile);
+  }
+}
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      grid.querySelectorAll('.stagger-tile').forEach((t) => t.classList.add('visible'));
+      io.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+io.observe(grid);`
+    }
   },
   {
     id: 'trail', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
@@ -528,7 +839,44 @@ const effects: AdvEffect[] = [
     demoHtml: '<canvas id="trCvDemo" style="width:100%;height:100%;cursor:crosshair"></canvas>',
     demoCss: '',
     demoJs: `(function(){const cv=document.getElementById('trCvDemo');if(!cv)return;const ctx=cv.getContext('2d');let dpr=window.devicePixelRatio||1;function rsz(){dpr=window.devicePixelRatio||1;cv.width=cv.offsetWidth*dpr;cv.height=cv.offsetHeight*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}rsz();window.addEventListener('resize',rsz);const pts=[];cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();pts.push({x:e.clientX-r.left,y:e.clientY-r.top,life:1,hue:Date.now()*.1%360});if(pts.length>60)pts.shift()});(function draw(){const w=cv.offsetWidth,h=cv.offsetHeight;ctx.clearRect(0,0,w,h);for(let i=pts.length-1;i>=0;i--){const p=pts[i];p.life-=.02;if(p.life<=0){pts.splice(i,1);continue}ctx.beginPath();ctx.arc(p.x,p.y,p.life*10,0,Math.PI*2);ctx.fillStyle='hsla('+p.hue+',80%,60%,'+p.life*.7+')';ctx.fill()}requestAnimationFrame(draw)})();})();`,
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<canvas id="trail" class="trail-canvas"></canvas>`,
+      css: `.trail-canvas {
+  width: 100%;
+  height: 300px;
+  cursor: crosshair;
+  display: block;
+}`,
+      js: `const canvas = document.getElementById('trail');
+const ctx = canvas.getContext('2d');
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = canvas.offsetWidth * dpr;
+  canvas.height = canvas.offsetHeight * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+const points = [];
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  points.push({ x: e.clientX - rect.left, y: e.clientY - rect.top, life: 1, hue: Date.now() * 0.1 % 360 });
+  if (points.length > 60) points.shift();
+});
+(function draw() {
+  ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+  for (let i = points.length - 1; i >= 0; i--) {
+    const p = points[i];
+    p.life -= 0.02;
+    if (p.life <= 0) { points.splice(i, 1); continue; }
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.life * 10, 0, Math.PI * 2);
+    ctx.fillStyle = 'hsla(' + p.hue + ', 80%, 60%, ' + (p.life * 0.7) + ')';
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+})();`
+    }
   },
   {
     id: 'elastic', cat: 't3d', tag: '3D变换', tagClass: 'adv-tag-3d',
@@ -537,7 +885,21 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:16px"><div class="es-box-demo">A</div><div class="es-box-demo" style="border-color:#a855f7;background:rgba(168,85,247,.08);color:#a855f7">B</div><div class="es-box-demo" style="border-color:#ec4899;background:rgba(236,72,153,.08);color:#ec4899">C</div></div>',
     demoCss: '.es-box-demo{width:72px;height:72px;background:var(--primary-dim);border:1px solid var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:12px;font-weight:700;color:var(--primary);cursor:pointer;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}.es-box-demo:hover{transform:scale(1.22)}',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="elastic-box">A</div>`,
+      css: `.elastic-box {
+  width: 80px; height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(79,124,255,.1);
+  border: 1px solid #4F7CFF;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.elastic-box:hover { transform: scale(1.22); }`,
+      js: `// 纯 CSS 实现，关键在于 cubic-bezier(.34,1.56,.64,1) 的回弹 overshoot`
+    }
   },
   {
     id: 'glowborder', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
@@ -546,7 +908,36 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div class="gbw-demo"><div class="gbi-demo"><span style="font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text-secondary)">旋转发光边框</span></div></div></div>',
     demoCss: '.gbw-demo{position:relative;width:240px;height:140px;border-radius:14px;overflow:hidden}.gbw-demo::before{content:"";position:absolute;top:50%;left:50%;width:160%;height:160%;transform:translate(-50%,-50%);background:conic-gradient(from 0deg,transparent 0%,var(--primary) 10%,transparent 20%,transparent 45%,#a855f7 55%,transparent 65%,transparent 100%);animation:gspin 3s linear infinite}.gbi-demo{position:absolute;inset:3px;background:var(--card);border-radius:11px;display:flex;align-items:center;justify-content:center;z-index:1}',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="glow-wrap">
+  <div class="glow-inner">旋转发光边框</div>
+</div>`,
+      css: `.glow-wrap {
+  position: relative;
+  width: 260px; height: 160px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.glow-wrap::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 160%; height: 160%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(from 0deg, transparent 0%, #4F7CFF 10%, transparent 20%, transparent 45%, #a855f7 55%, transparent 65%);
+  animation: glowspin 3s linear infinite;
+}
+.glow-inner {
+  position: absolute; inset: 3px;
+  background: #fff;
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1;
+}
+@keyframes glowspin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}`,
+      js: `// 纯 CSS 实现，无需 JavaScript`
+    }
   },
   {
     id: 'glass', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
@@ -555,7 +946,29 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2 50%,#f093fb);position:relative;overflow:hidden"><div class="glbc-demo" style="width:90px;height:90px;background:#ff6b6b;top:15px;left:25px;animation:flA 6s ease-in-out infinite"></div><div class="glbc-demo" style="width:70px;height:70px;background:#ffd93d;bottom:15px;right:35px;animation:flB 5s ease-in-out infinite"></div><div class="glbc-demo" style="width:50px;height:50px;background:#6bcb77;top:50%;left:55%;animation:flA 7s ease-in-out infinite reverse"></div><div style="width:220px;padding:24px;background:rgba(255,255,255,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.25);border-radius:14px;color:#fff"><h4 style="font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:4px">Glass Effect</h4><p style="font-size:11px;line-height:1.6;opacity:.8">半透明+模糊+细边框=通透质感</p></div></div>',
     demoCss: '.glbc-demo{position:absolute;border-radius:50%}',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="glass-scene">
+  <div class="glass-card">
+    <h4>Glass Effect</h4>
+    <p>半透明 + 模糊 + 细边框</p>
+  </div>
+</div>`,
+      css: `.glass-scene {
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px;
+  background: linear-gradient(135deg, #667eea, #764ba2 50%, #f093fb);
+}
+.glass-card {
+  padding: 24px;
+  background: rgba(255,255,255,.18);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 14px;
+  color: #fff;
+}`,
+      js: `// 纯 CSS 实现，核心是 backdrop-filter: blur()`
+    }
   },
   {
     id: 'orbs', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
@@ -564,7 +977,32 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--surface),#e8ecf4)"><div class="orb-demo" style="width:55px;height:55px;background:radial-gradient(circle at 30% 30%,rgba(79,124,255,.5),rgba(79,124,255,.05));top:18%;left:12%;animation:oF1 7s ease-in-out infinite"></div><div class="orb-demo" style="width:38px;height:38px;background:radial-gradient(circle at 30% 30%,rgba(168,85,247,.5),rgba(168,85,247,.05));top:48%;left:58%;animation:oF2 9s ease-in-out infinite"></div><div class="orb-demo" style="width:70px;height:70px;background:radial-gradient(circle at 30% 30%,rgba(48,164,108,.4),rgba(48,164,108,.02));top:58%;left:22%;animation:oF3 11s ease-in-out infinite"></div><div class="orb-demo" style="width:32px;height:32px;background:radial-gradient(circle at 30% 30%,rgba(245,166,35,.5),rgba(245,166,35,.05));top:12%;left:68%;animation:oF2 6s ease-in-out infinite reverse"></div></div>',
     demoCss: '.orb-demo{position:absolute;border-radius:50%;will-change:transform}',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="orb-scene">
+  <div class="orb" style="--size:60px; --x:12%; --y:18%; animation-duration:7s;"></div>
+  <div class="orb" style="--size:40px; --x:58%; --y:48%; animation-duration:9s;"></div>
+  <div class="orb" style="--size:70px; --x:22%; --y:60%; animation-duration:11s;"></div>
+</div>`,
+      css: `.orb-scene {
+  position: relative;
+  height: 300px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f5f6f8, #e8ecf4);
+}
+.orb {
+  position: absolute;
+  width: var(--size); height: var(--size);
+  left: var(--x); top: var(--y);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(79,124,255,.5), rgba(79,124,255,.05));
+  animation: float ease-in-out infinite;
+}
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -30px); }
+}`,
+      js: `// 纯 CSS 实现，不同光球设置不同的 animation-duration 与位置`
+    }
   },
   {
     id: 'gradientbg', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
@@ -573,7 +1011,24 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;background:linear-gradient(-45deg,var(--primary),#a855f7,#ec4899,#f59e0b);background-size:400% 400%;animation:agBG 8s ease infinite;display:flex;align-items:center;justify-content:center"><div style="background:rgba(255,255,255,.15);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:16px 24px"><span style="font-family:var(--font-display);font-size:14px;font-weight:700;color:#fff">Gradient BG</span></div></div>',
     demoCss: '',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="gradient-bg">
+  <span>Gradient BG</span>
+</div>`,
+      css: `.gradient-bg {
+  display: flex; align-items: center; justify-content: center;
+  height: 300px;
+  background: linear-gradient(-45deg, #4F7CFF, #a855f7, #ec4899, #f59e0b);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease infinite;
+}
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}`,
+      js: `// 纯 CSS 实现，关键是 background-size:400% + 移动 background-position`
+    }
   },
   {
     id: 'neon', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
@@ -582,7 +1037,31 @@ const effects: AdvEffect[] = [
     demoHtml: '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0d0d0d"><span style="font-family:var(--font-display);font-size:36px;font-weight:800;color:#fff;animation:neonP 2s ease-in-out infinite alternate">NEON</span></div>',
     demoCss: '',
     demoJs: '',
-    code: { html: '', css: '', js: '' }
+    code: {
+      html: `<div class="neon-scene">
+  <span class="neon-text">NEON</span>
+</div>`,
+      css: `.neon-scene {
+  display: flex; align-items: center; justify-content: center;
+  height: 300px;
+  background: #0d0d0d;
+}
+.neon-text {
+  font-size: 48px;
+  font-weight: 800;
+  color: #fff;
+  animation: neonPulse 2s ease-in-out infinite alternate;
+}
+@keyframes neonPulse {
+  from {
+    text-shadow: 0 0 6px #fff, 0 0 12px #fff, 0 0 24px #4F7CFF, 0 0 36px #4F7CFF;
+  }
+  to {
+    text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 12px #4F7CFF, 0 0 18px #4F7CFF;
+  }
+}`,
+      js: `// 纯 CSS 实现，通过多层 text-shadow 模拟霓虹光晕`
+    }
   }
 ];
 

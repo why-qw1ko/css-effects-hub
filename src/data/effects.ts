@@ -2249,7 +2249,7 @@ btn.addEventListener("click", (e) => {
     css: '@keyframes smoke { 0% { opacity: 1; filter: blur(0); transform: translateY(0); } 100% { opacity: 0; filter: blur(10px); transform: translateY(-30px) scale(1.5); } } .smoke-text { font-size: 24px; font-weight: bold; color: #00e5a0; animation: smoke 2s ease forwards; }',
     js: '',
     prompt: '实现烟雾消散效果：文字元素在向上移动的同时，逐渐增加blur模糊度、降低透明度并放大，模拟烟雾升腾消散的视觉效果。纯CSS animation+filter实现。',
-    previewHtml: '<div style="font-size:16px;font-weight:bold;color:#00e5a0;animation:smk_ 2s ease forwards">SMOKE</div>'
+    previewHtml: '<div style="font-size:16px;font-weight:bold;color:#00e5a0;animation:smk_ 2s ease infinite">SMOKE</div>'
   },
   {
     id: 'unfold',
@@ -2533,7 +2533,7 @@ btn.addEventListener("click", (e) => {
     css: '@keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } } .animated-gradient { background: linear-gradient(-45deg, #00e5a0, #0ea5e9, #f43f5e, #f59e0b); background-size: 400% 400%; animation: gradientFlow 6s ease infinite; }',
     js: '',
     prompt: '实现流动渐变效果：元素使用多色linear-gradient背景，设置background-size为400% 400%，通过@keyframes改变background-position在四个角点间循环移动，产生渐变色流动效果。纯CSS实现。',
-    previewHtml: '<div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(-45deg,#00e5a0,#0ea5e9,#f43f5e,#f59e0b);background-size:400% 400%;animation:prog_ 6s ease infinite"></div>'
+    previewHtml: '<div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(-45deg,#00e5a0,#0ea5e9,#f43f5e,#f59e0b);background-size:400% 400%;animation:agBG_ 6s ease infinite"></div>'
   },
   {
     id: 'elastic-hover',
