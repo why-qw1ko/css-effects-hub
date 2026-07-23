@@ -4,10 +4,10 @@
     class="preview-frame relative w-full flex items-center justify-center overflow-hidden"
     :style="{ height: height + 'px', background: bg }"
   >
-    <div v-html="html" class="preview-content"></div>
+    <div v-html="html" class="preview-content relative z-10"></div>
     <div
       v-if="showOverlay"
-      class="absolute inset-0 pointer-events-none"
+      class="absolute inset-0 pointer-events-none z-0"
       style="background: radial-gradient(ellipse at center, transparent 60%, var(--surface) 100%)"
     ></div>
   </div>

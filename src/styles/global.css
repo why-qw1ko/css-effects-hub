@@ -17,6 +17,7 @@
   --text: #1A1D26;
   --text-secondary: #6B7084;
   --text-tertiary: #9CA0B0;
+  --text-muted: var(--text-secondary);
   --border: #E2E4EA;
   --border-hover: #D0D3DC;
   color-scheme: light;
@@ -33,6 +34,7 @@
   --text: #e8e8ed;
   --text-secondary: #8b8b9e;
   --text-tertiary: #55556a;
+  --text-muted: var(--text-secondary);
   --border: #2a2a33;
   --border-hover: #3a3a46;
   color-scheme: dark;
@@ -131,6 +133,13 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  isolation: isolate;
+}
+
+.preview-content {
+  position: relative;
+  z-index: 1;
+  color: var(--text);
 }
 
 /* ── Code Block ── */

@@ -37,7 +37,9 @@
       <div class="flex-1 overflow-y-auto">
         <!-- Preview Tab -->
         <div v-if="activeTab === 'preview'" class="p-6">
-          <div class="preview-container rounded-card border border-border" style="height: 260px" v-html="effect.previewHtml"></div>
+          <div class="preview-container rounded-card border border-border" style="height: 260px">
+            <div class="preview-content relative z-10" v-html="effect.previewHtml"></div>
+          </div>
           <p class="mt-4 font-mono text-xs text-txt-secondary">{{ effect.description }}</p>
         </div>
 

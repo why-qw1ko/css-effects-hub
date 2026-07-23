@@ -13,7 +13,7 @@
         @focus="focused = true"
         @blur="focused = false"
         placeholder="搜索动效..."
-        class="w-full bg-transparent border-none outline-none font-mono text-sm text-txt placeholder:text-txt-tertiary"
+        class="w-full bg-transparent border-none outline-none font-sans text-sm text-txt placeholder:text-txt-tertiary"
       />
     </div>
   </div>

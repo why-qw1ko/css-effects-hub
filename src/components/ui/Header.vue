@@ -80,13 +80,13 @@ const currentPage = computed(() => {
   position: sticky;
   top: 0;
   z-index: 9999;
-  background: rgba(245, 246, 248, 0.85);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
   backdrop-filter: blur(20px) saturate(1.3);
   -webkit-backdrop-filter: blur(20px) saturate(1.3);
   border-bottom: 1px solid var(--border);
 }
 :global(.dark) .site-header {
-  background: rgba(10, 10, 12, 0.85);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
 }
 
 .header-inner {

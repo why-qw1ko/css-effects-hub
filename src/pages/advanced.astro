@@ -19,7 +19,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     </div>
 
     <!-- Category Nav -->
-    <div class="sticky top-[60px] z-50 bg-card/80 backdrop-blur-xl border-b border-border">
+    <div class="adv-cat-nav sticky top-[60px] z-50 backdrop-blur-xl border-b border-border">
       <div class="max-w-[1400px] mx-auto px-6">
         <div class="flex gap-2 py-3 overflow-x-auto scrollbar-hide">
           <button class="adv-cat active" data-cat="all">All (23)</button>
@@ -89,6 +89,10 @@ import MainLayout from '../layouts/MainLayout.astro';
 
 <style is:global>
   /* Category buttons */
+  .adv-cat-nav {
+    background: color-mix(in srgb, var(--card) 88%, transparent);
+  }
+
   .adv-cat {
     font-family: var(--font-sans);
     font-size: 12px;

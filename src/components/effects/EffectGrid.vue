@@ -11,7 +11,7 @@
     </div>
 
     <!-- Count -->
-    <div class="font-mono text-xs text-txt-tertiary mb-4">
+    <div class="font-sans text-xs text-txt-tertiary mb-4">
       显示 <span class="text-primary font-medium">{{ filteredCount }}</span> / {{ totalCount }}
     </div>
 
@@ -34,7 +34,7 @@
     <div v-else class="text-center py-20">
       <div class="text-4xl mb-4">🔍</div>
       <p class="font-display font-bold text-lg text-txt mb-2">未找到匹配的动效</p>
-      <p class="font-mono text-sm text-txt-secondary">试试其他关键词或分类</p>
+      <p class="font-sans text-sm text-txt-secondary">试试其他关键词或分类</p>
     </div>
   </div>
 </template>
