@@ -49,7 +49,7 @@ defineEmits<{ select: [id: string] }>();
   border-radius: 10px;
   border: 1px solid transparent;
   background: transparent;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -87,7 +87,7 @@ defineEmits<{ select: [id: string] }>();
   line-height: 1;
 }
 .cat-name {
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 .cat-count {
   font-size: 10px;

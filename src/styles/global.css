@@ -4,6 +4,9 @@
 
 /* ── CSS Variables ── */
 :root {
+  --font-sans: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'SFMono-Regular', 'Consolas', 'Liberation Mono', 'Courier New', 'Noto Sans SC', monospace;
   --bg: #F5F6F8;
   --card: #FFFFFF;
   --surface: #F5F6F8;
@@ -40,7 +43,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: 'DM Mono', 'SF Mono', monospace;
+    font-family: var(--font-sans);
     background: var(--bg);
     color: var(--text);
     line-height: 1.65;
@@ -48,6 +51,10 @@
     overflow-x: hidden;
     min-height: 100vh;
     transition: background-color 0.3s, color 0.3s;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: 0;
   }
   ::selection {
     background: var(--primary-dim);
@@ -62,12 +69,12 @@
 /* ── Components ── */
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-btn font-mono text-sm font-medium
+    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-btn font-sans text-sm font-medium
            bg-primary text-white hover:bg-primary-hover transition-all duration-200
            active:scale-[0.97];
   }
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-btn font-mono text-sm font-medium
+    @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-btn font-sans text-sm font-medium
            bg-surface border border-border text-txt-secondary
            hover:border-border-hover hover:text-txt transition-all duration-200
            active:scale-[0.97];

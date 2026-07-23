@@ -12,7 +12,7 @@ import MainLayout from '../layouts/MainLayout.astro';
           <span class="font-mono text-xs text-primary font-medium">Design System</span>
         </div>
         <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">主题库</h1>
-        <p class="font-mono text-sm text-txt-secondary max-w-2xl">
+        <p class="font-sans text-sm text-txt-secondary max-w-2xl">
           8 套完整的设计主题规范，包含 Light/Dark 双模式、语义化 Token、组件规范与交互设计模式。点击展开查看详细规范，一键复制到项目中。
         </p>
       </div>
@@ -42,11 +42,11 @@ import MainLayout from '../layouts/MainLayout.astro';
         <!-- Main -->
         <main class="flex-1 min-w-0">
           <!-- Actions -->
-          <div class="flex items-center justify-between mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
             <div class="font-mono text-xs text-txt-tertiary">
               共 <span class="text-primary font-medium">8</span> 套主题
             </div>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
               <button id="expandAllBtn" class="btn-secondary text-xs py-2 px-4">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
                 展开全部
@@ -66,7 +66,7 @@ import MainLayout from '../layouts/MainLayout.astro';
   </div>
 </MainLayout>
 
-<style>
+<style is:global>
   /* Theme card styles */
   .theme-card {
     background: var(--card);
@@ -108,7 +108,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     gap: 12px;
   }
   .theme-card-title h3 {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-display);
     font-size: 15px;
     font-weight: 700;
     color: var(--text);
@@ -134,7 +134,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     border: 1px solid var(--border);
     background: transparent;
     color: var(--text-secondary);
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-sans);
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
@@ -198,7 +198,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 
   .theme-spec {
     padding: 20px;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-sans);
     font-size: 11.5px;
     line-height: 1.8;
     color: var(--text-secondary);
@@ -219,7 +219,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     padding: 8px 12px;
     border-radius: 8px;
     color: var(--text-secondary);
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-sans);
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
@@ -252,7 +252,7 @@ import MainLayout from '../layouts/MainLayout.astro';
     color: #fff;
     padding: 10px 24px;
     border-radius: 100px;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 500;
     z-index: 2000;
@@ -270,6 +270,7 @@ import MainLayout from '../layouts/MainLayout.astro';
       gap: 10px;
     }
     .theme-card-actions { width: 100%; }
+    .theme-card-actions button { flex: 1; justify-content: center; }
     .color-preview { gap: 6px; }
     .swatch { width: 32px; height: 32px; }
   }

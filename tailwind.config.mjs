@@ -27,10 +27,10 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Syne', 'DM Mono', 'system-ui', 'sans-serif'],
-        mono: ['DM Mono', 'SF Mono', 'monospace'],
-        display: ['Syne', 'system-ui', 'sans-serif'],
-        serif: ['Instrument Serif', 'Georgia', 'serif'],
+        sans: ['Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', 'system-ui', 'sans-serif'],
+        mono: ['SFMono-Regular', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+        display: ['Inter', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', 'system-ui', 'sans-serif'],
+        serif: ['Instrument Serif', 'Noto Serif SC', 'Georgia', 'serif'],
       },
       borderRadius: {
         'card': '14px',

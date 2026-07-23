@@ -116,16 +116,16 @@ const currentPage = computed(() => {
   align-items: center;
   justify-content: center;
   color: #fff;
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-display);
   font-size: 14px;
   font-weight: 800;
 }
 .logo-text {
-  font-family: 'Syne', sans-serif;
+  font-family: var(--font-display);
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 /* Nav */
@@ -140,7 +140,7 @@ const currentPage = computed(() => {
   gap: 6px;
   padding: 8px 16px;
   border-radius: 10px;
-  font-family: 'DM Mono', monospace;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
