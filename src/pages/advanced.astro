@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <MainLayout>
@@ -13,21 +14,28 @@ import MainLayout from '../layouts/MainLayout.astro';
         </div>
         <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">高级动效</h1>
         <p class="font-sans text-sm text-txt-secondary max-w-2xl">
-          23个高质量交互效果，每个均可实时预览。点击「代码」查看完整 HTML/CSS/JS 实现，点击「Prompt」复制 AI 开发提示词。
+          26个高质量交互效果，每个均可实时预览。点击「代码」查看完整 HTML/CSS/JS 实现，点击「Prompt」复制 AI 开发提示词。
         </p>
       </div>
+    </div>
+
+    <!-- 图标模板：JS 拼接卡片时无法直接使用 astro-icon 组件，
+         故在此预渲染 lucide 图标供脚本取用，保证图标来源统一 -->
+    <div id="advIconDefs" hidden aria-hidden="true">
+      <span data-icon="code"><Icon name="lucide:code" /></span>
+      <span data-icon="copy"><Icon name="lucide:copy" /></span>
     </div>
 
     <!-- Category Nav -->
     <div class="adv-cat-nav sticky top-[60px] z-50 backdrop-blur-xl border-b border-border">
       <div class="max-w-[1400px] mx-auto px-6">
         <div class="flex gap-2 py-3 overflow-x-auto scrollbar-hide">
-          <button class="adv-cat active" data-cat="all">All (23)</button>
-          <button class="adv-cat" data-cat="cur">🖱️ Cursor</button>
-          <button class="adv-cat" data-cat="scr">📜 Scroll</button>
-          <button class="adv-cat" data-cat="txt">✏️ Text</button>
-          <button class="adv-cat" data-cat="t3d">🔷 3D & Transform</button>
-          <button class="adv-cat" data-cat="atm">🎨 Atmosphere</button>
+          <button class="adv-cat active" data-cat="all">All (26)</button>
+          <button class="adv-cat" data-cat="cur"><Icon name="lucide:mouse-pointer" /> Cursor</button>
+          <button class="adv-cat" data-cat="scr"><Icon name="lucide:move-vertical" /> Scroll</button>
+          <button class="adv-cat" data-cat="txt"><Icon name="lucide:type" /> Text</button>
+          <button class="adv-cat" data-cat="t3d"><Icon name="lucide:box" /> 3D & Transform</button>
+          <button class="adv-cat" data-cat="atm"><Icon name="lucide:palette" /> Atmosphere</button>
         </div>
       </div>
     </div>
@@ -104,7 +112,11 @@ import MainLayout from '../layouts/MainLayout.astro';
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
+  .adv-cat svg { width: 13px; height: 13px; }
   .adv-cat:hover { background: var(--surface); color: var(--text); }
   .adv-cat.active {
     background: var(--card);
@@ -346,9 +358,13 @@ import MainLayout from '../layouts/MainLayout.astro';
 </style>
 
 <script>
+// UI 图标统一取自页面预渲染的 lucide 图标模板（#advIconDefs）
+const advIconDefs = document.getElementById('advIconDefs');
+const advIcon = (name: string) =>
+  advIconDefs?.querySelector(`[data-icon="${name}"]`)?.innerHTML ?? '';
 const SVG = {
-  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
-  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'
+  code: advIcon('code'),
+  copy: advIcon('copy')
 };
 
 interface AdvEffect {
@@ -1061,6 +1077,45 @@ canvas.addEventListener('mousemove', (e) => {
   }
 }`,
       js: `// 纯 CSS 实现，通过多层 text-shadow 模拟霓虹光晕`
+    }
+  },
+  {
+    id: 'cursorring', cat: 'cur', tag: '光标交互', tagClass: 'adv-tag-cursor',
+    name: 'Cursor Follower', nameCn: '光标跟随环', desc: '小圆点即时跟随，外环惯性延迟追随。',
+    prompt: '自定义光标：小圆点即时跟随鼠标，外圈圆环用requestAnimationFrame线性插值(lerp系数0.15)延迟跟随，产生弹性拖尾感；mouseleave时淡出隐藏。',
+    demoHtml: '<div class="cfw-demo" id="cfwDemo"><span style="font-family:var(--font-sans);font-size:13px;color:var(--text-tertiary);font-weight:600">在此区域移动鼠标</span><div class="cfd-demo" id="cfdDemo"></div><div class="cfr-demo" id="cfrDemo"></div></div>',
+    demoCss: '.cfw-demo{position:relative;width:100%;height:100%;overflow:hidden;cursor:none;display:flex;align-items:center;justify-content:center}.cfd-demo{position:absolute;left:0;top:0;width:6px;height:6px;border-radius:50%;background:var(--primary);pointer-events:none;transform:translate(-50%,-50%);opacity:0;transition:opacity .2s;z-index:2}.cfr-demo{position:absolute;left:0;top:0;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--primary);pointer-events:none;transform:translate(-50%,-50%);opacity:0;transition:opacity .2s;z-index:1}',
+    demoJs: `(function(){const w=document.getElementById('cfwDemo'),d=document.getElementById('cfdDemo'),r=document.getElementById('cfrDemo');if(!w||!d||!r)return;let tx=0,ty=0,rx=0,ry=0;w.addEventListener('mousemove',e=>{const b=w.getBoundingClientRect();tx=e.clientX-b.left;ty=e.clientY-b.top;if(d.style.opacity!=='1'){rx=tx;ry=ty;d.style.opacity='1';r.style.opacity='1'}d.style.left=tx+'px';d.style.top=ty+'px'});w.addEventListener('mouseleave',()=>{d.style.opacity='0';r.style.opacity='0'});(function loop(){rx+=(tx-rx)*.15;ry+=(ty-ry)*.15;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(loop)})()})();`,
+    code: {
+      html: '<div class="cursor-area">\n  <div class="cursor-dot"></div>\n  <div class="cursor-ring"></div>\n</div>',
+      css: '.cursor-area {\n  position: relative;\n  height: 300px;\n  cursor: none;\n  overflow: hidden;\n}\n.cursor-dot, .cursor-ring {\n  position: absolute;\n  left: 0; top: 0;\n  border-radius: 50%;\n  pointer-events: none;\n  transform: translate(-50%, -50%);\n}\n.cursor-dot {\n  width: 8px; height: 8px;\n  background: #4F7CFF;\n}\n.cursor-ring {\n  width: 40px; height: 40px;\n  border: 2px solid #4F7CFF;\n}',
+      js: 'const area = document.querySelector(\'.cursor-area\');\nconst dot = document.querySelector(\'.cursor-dot\');\nconst ring = document.querySelector(\'.cursor-ring\');\nlet tx = 0, ty = 0, rx = 0, ry = 0;\narea.addEventListener(\'mousemove\', (e) => {\n  const rect = area.getBoundingClientRect();\n  tx = e.clientX - rect.left;\n  ty = e.clientY - rect.top;\n  dot.style.left = tx + \'px\';\n  dot.style.top = ty + \'px\';\n});\nfunction loop() {\n  rx += (tx - rx) * 0.15; // lerp 惯性追随\n  ry += (ty - ry) * 0.15;\n  ring.style.left = rx + \'px\';\n  ring.style.top = ry + \'px\';\n  requestAnimationFrame(loop);\n}\nloop();'
+    }
+  },
+  {
+    id: 'scrollhl', cat: 'scr', tag: '滚动驱动', tagClass: 'adv-tag-scroll',
+    name: 'Scroll Highlight', nameCn: '逐词高亮', desc: '文字随滚动进度逐词点亮。',
+    prompt: '滚动逐词高亮：段落拆分为span单词，监听容器scroll计算进度scrollTop/(scrollHeight-clientHeight)，按进度比例给前N个单词添加高亮类，color过渡实现阅读进度可视化。',
+    demoHtml: '<div class="shl-demo" id="shlDemo"><div style="height:70px;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-tertiary)">↓ 向下滚动</div><p class="shl-p" id="shlText"></p><div style="height:90px"></div></div>',
+    demoCss: '.shl-demo{width:100%;height:100%;overflow-y:auto;padding:20px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}.shl-demo::-webkit-scrollbar{width:4px}.shl-demo::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}.shl-p{font-family:var(--font-display);font-size:17px;font-weight:700;line-height:2}.shl-p span{color:var(--border-hover);transition:color .3s}.shl-p span.on{color:var(--primary)}',
+    demoJs: `(function(){const c=document.getElementById('shlDemo'),p=document.getElementById('shlText');if(!c||!p)return;const words='滚动 这个 容器 时 文字 会 随着 进度 被 逐词 点亮 就像 阅读 进度 被 可视化 一样'.split(' ');p.innerHTML=words.map(w=>'<span>'+w+'</span>').join(' ');const sp=p.querySelectorAll('span');c.addEventListener('scroll',()=>{const pr=c.scrollTop/(c.scrollHeight-c.clientHeight);const n=Math.round(pr*sp.length);sp.forEach((s,i)=>s.classList.toggle('on',i<n))})})();`,
+    code: {
+      html: '<div class="hl-scroll">\n  <p class="hl-text">滚动时文字逐词点亮 阅读进度可视化</p>\n</div>',
+      css: '.hl-scroll {\n  height: 300px;\n  overflow-y: auto;\n  padding: 40px 24px;\n}\n.hl-text {\n  font-size: 24px;\n  font-weight: 700;\n  line-height: 2;\n}\n.hl-text span {\n  color: #d0d3dc;\n  transition: color 0.3s;\n}\n.hl-text span.on {\n  color: #4F7CFF;\n}',
+      js: 'const box = document.querySelector(\'.hl-scroll\');\nconst p = document.querySelector(\'.hl-text\');\n// 拆分为单词span\np.innerHTML = p.textContent.split(\' \').map(w => `<span>${w}</span>`).join(\' \');\nconst spans = p.querySelectorAll(\'span\');\nbox.addEventListener(\'scroll\', () => {\n  const progress = box.scrollTop / (box.scrollHeight - box.clientHeight);\n  const n = Math.round(progress * spans.length);\n  spans.forEach((s, i) => s.classList.toggle(\'on\', i < n));\n});'
+    }
+  },
+  {
+    id: 'dotwave', cat: 'atm', tag: '氛围质感', tagClass: 'adv-tag-atmo',
+    name: 'Dot Matrix Wave', nameCn: '点阵波浪', desc: 'Canvas点阵从中心扩散涟漪波。',
+    prompt: 'Canvas点阵波浪：绘制等距圆点网格，每个点的半径与透明度由sin(与中心距离-时间)驱动，形成从中心向外扩散的涟漪波，requestAnimationFrame循环绘制。',
+    demoHtml: '<canvas id="dwCanvas" style="width:100%;height:100%;display:block"></canvas>',
+    demoCss: '',
+    demoJs: `(function(){const cv=document.getElementById('dwCanvas');if(!cv)return;const ctx=cv.getContext('2d');function size(){cv.width=cv.clientWidth*2;cv.height=cv.clientHeight*2}size();window.addEventListener('resize',size);function draw(t){const w=cv.width,h=cv.height,gap=34;const color=getComputedStyle(document.documentElement).getPropertyValue('--primary').trim()||'#4F7CFF';ctx.clearRect(0,0,w,h);ctx.fillStyle=color;const cx=w/2,cy=h/2;for(let x=gap/2;x<w;x+=gap){for(let y=gap/2;y<h;y+=gap){const d=Math.sqrt((x-cx)*(x-cx)+(y-cy)*(y-cy));const s=Math.sin(d*.02-t*.0028);ctx.globalAlpha=.2+.55*(s*.5+.5);ctx.beginPath();ctx.arc(x,y,Math.max(2.4+2.2*s,.4),0,Math.PI*2);ctx.fill()}}requestAnimationFrame(draw)}requestAnimationFrame(draw)})();`,
+    code: {
+      html: '<canvas id="wave" class="dot-wave"></canvas>',
+      css: '.dot-wave {\n  width: 100%;\n  height: 300px;\n  display: block;\n  background: transparent;\n}',
+      js: 'const canvas = document.getElementById(\'wave\');\nconst ctx = canvas.getContext(\'2d\');\nfunction resize() {\n  canvas.width = canvas.clientWidth * 2; // 2x 适配高分屏\n  canvas.height = canvas.clientHeight * 2;\n}\nresize();\nwindow.addEventListener(\'resize\', resize);\nfunction draw(t) {\n  const { width: w, height: h } = canvas;\n  const gap = 34;\n  const cx = w / 2, cy = h / 2;\n  ctx.clearRect(0, 0, w, h);\n  ctx.fillStyle = \'#4F7CFF\';\n  for (let x = gap / 2; x < w; x += gap) {\n    for (let y = gap / 2; y < h; y += gap) {\n      const d = Math.hypot(x - cx, y - cy);\n      const s = Math.sin(d * 0.02 - t * 0.0028); // 距离-时间相位差形成波\n      ctx.globalAlpha = 0.2 + 0.55 * (s * 0.5 + 0.5);\n      ctx.beginPath();\n      ctx.arc(x, y, Math.max(2.4 + 2.2 * s, 0.4), 0, Math.PI * 2);\n      ctx.fill();\n    }\n  }\n  requestAnimationFrame(draw);\n}\nrequestAnimationFrame(draw);'
     }
   }
 ];

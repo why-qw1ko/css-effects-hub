@@ -5,12 +5,16 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "gen:index": "node scripts/generate-effects-index.mjs"
   },
   "dependencies": {
     "@astrojs/tailwind": "^5.0.0",
     "@astrojs/vue": "^5.0.0",
+    "@iconify-json/lucide": "^1.2.120",
     "astro": "^5.16.5",
+    "astro-icon": "^1.1.5",
+    "lucide-vue-next": "^0.577.0",
     "pinia": "^2.1.0",
     "prismjs": "^1.29.0",
     "vue": "^3.4.0"

@@ -1,39 +1,200 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import { Icon } from 'astro-icon/components';
+import { effects, categories } from '../data/effects';
+
+const totalEffects = effects.length;
+const totalCategories = categories.length;
+const advancedCount = 26;
+
+const features = [
+  { icon: 'lucide:eye', title: '实时预览', desc: '每个动效都可以直接查看运行效果，无需离开页面。' },
+  { icon: 'lucide:code-2', title: '代码示例', desc: '提供完整的 HTML / CSS / JS 代码，一键复制即可使用。' },
+  { icon: 'lucide:bot', title: 'AI Prompt', desc: '一键复制提示词，交给 AI 助手快速生成类似效果。' },
+  { icon: 'lucide:layout-grid', title: '分类清晰', desc: `${totalCategories} 个分类覆盖常见 UI 动效场景，检索高效。` },
+  { icon: 'lucide:sparkles', title: '高级动效', desc: `${advancedCount} 个高级交互效果：光标、滚动、文字、3D 与氛围。` },
+  { icon: 'lucide:moon', title: '主题切换', desc: '支持亮色 / 暗色模式，跟随系统或手动切换。' },
+];
+
+const techStack = [
+  { name: 'Astro 5', desc: '静态站点生成' },
+  { name: 'Vue 3', desc: '交互组件' },
+  { name: 'Tailwind CSS', desc: '样式系统' },
+  { name: 'TypeScript', desc: '类型安全' },
+];
 ---
 
 <MainLayout>
-  <div class="max-w-[800px] mx-auto px-6 py-16">
-    <h1 class="font-display text-3xl font-extrabold text-txt mb-6">关于 CSS Design Plus</h1>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <div class="bg-card border-b border-border">
+      <div class="max-w-[800px] mx-auto px-6 py-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-dim rounded-full mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          <span class="font-mono text-xs text-primary font-medium">About</span>
+        </div>
+        <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">关于 CSS Design Plus</h1>
+        <p class="font-sans text-sm text-txt-secondary max-w-2xl leading-relaxed">
+          一个专注于 CSS 动效展示与学习的平台，收录 {totalEffects} 个可复用动效与 {advancedCount} 个高级交互效果，
+          每个都提供实时预览、完整代码示例和 AI Prompt。
+        </p>
+      </div>
+    </div>
 
-    <div class="font-sans text-sm text-txt-secondary leading-relaxed space-y-6">
-      <p>
-        CSS Design Plus 是一个专注于 CSS 动效展示与学习的平台。每个动效都提供实时预览、
-        完整代码示例和 AI Prompt，帮助开发者快速理解和应用各种 CSS 动画效果。
-      </p>
+    <div class="max-w-[800px] mx-auto px-6 py-12 space-y-12">
+      <!-- 特色功能 -->
+      <section class="about-reveal">
+        <h2 class="font-display text-xl font-bold text-txt flex items-center gap-2 mb-5">
+          <Icon name="lucide:sparkles" class="w-5 h-5 text-primary" /> 特色功能
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 auto-rows-fr gap-4">
+          {features.map((f) => (
+            <div class="about-card">
+              <div class="about-card-icon">
+                <Icon name={f.icon} />
+              </div>
+              <div>
+                <h3 class="font-display text-sm font-bold text-txt mb-1">{f.title}</h3>
+                <p class="font-sans text-xs text-txt-secondary leading-relaxed">{f.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <h2 class="font-display text-xl font-bold text-txt">✨ 特色功能</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>实时预览 — 每个动效都可以直接查看效果</li>
-        <li>代码示例 — 提供完整的 HTML/CSS/JS 代码</li>
-        <li>AI Prompt — 一键复制提示词，快速生成类似效果</li>
-        <li>分类清晰 — 11 个分类，覆盖常见 UI 动效场景</li>
-        <li>主题切换 — 支持亮色/暗色模式</li>
-      </ul>
+      <!-- 技术栈 -->
+      <section class="about-reveal">
+        <h2 class="font-display text-xl font-bold text-txt flex items-center gap-2 mb-5">
+          <Icon name="lucide:wrench" class="w-5 h-5 text-primary" /> 技术栈
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 auto-rows-fr gap-4">
+          {techStack.map((t) => (
+            <div class="about-card about-card-center">
+              <h3 class="font-display text-sm font-bold text-txt mb-1">{t.name}</h3>
+              <p class="font-sans text-xs text-txt-secondary">{t.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <h2 class="font-display text-xl font-bold text-txt">🛠 技术栈</h2>
-      <ul class="list-disc list-inside space-y-2">
-        <li>Astro 5 — 静态站点生成</li>
-        <li>Vue 3 — 交互组件</li>
-        <li>Tailwind CSS — 样式系统</li>
-        <li>TypeScript — 类型安全</li>
-      </ul>
-
-      <h2 class="font-display text-xl font-bold text-txt">📝 使用方式</h2>
-      <p>
-        浏览动效库，点击感兴趣的动效卡片查看详情。你可以直接复制代码到项目中使用，
-        也可以复制 AI Prompt 交给 AI 助手生成类似效果。
-      </p>
+      <!-- 使用方式 -->
+      <section class="about-reveal">
+        <h2 class="font-display text-xl font-bold text-txt flex items-center gap-2 mb-5">
+          <Icon name="lucide:book-open" class="w-5 h-5 text-primary" /> 使用方式
+        </h2>
+        <p class="font-sans text-sm text-txt-secondary leading-relaxed mb-6">
+          浏览动效库，点击感兴趣的动效卡片查看详情。你可以直接复制代码到项目中使用，
+          也可以复制 AI Prompt 交给 AI 助手生成类似效果。
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={`${import.meta.env.BASE_URL}effects`} class="about-link-btn about-link-primary font-sans">
+            浏览动效库
+            <Icon name="lucide:arrow-right" />
+          </a>
+          <a href={`${import.meta.env.BASE_URL}advanced`} class="about-link-btn font-sans">
+            <Icon name="lucide:sparkles" />
+            高级动效
+          </a>
+        </div>
+      </section>
     </div>
   </div>
 </MainLayout>
+
+<style>
+  .about-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    height: 100%; /* 卡片等高：配合 auto-rows-fr，不随文字多少变化 */
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .about-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  }
+  .about-card-center {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 2px;
+  }
+  .about-card-icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-dim);
+    color: var(--primary);
+    border-radius: 10px;
+  }
+  .about-card-icon svg { width: 16px; height: 16px; }
+
+  .about-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+  .about-link-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .about-link-btn svg { width: 15px; height: 15px; }
+  .about-link-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+  }
+  .about-link-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    color: #fff;
+  }
+
+  /* 轻量滚动显现 */
+  .about-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .about-reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .about-reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+
+<script>
+  const reveals = document.querySelectorAll('.about-reveal');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    reveals.forEach((el) => el.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    reveals.forEach((el) => io.observe(el));
+  }
+</script>

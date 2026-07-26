@@ -1,5 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <MainLayout>
@@ -13,7 +14,7 @@ import MainLayout from '../layouts/MainLayout.astro';
         </div>
         <h1 class="font-display text-3xl md:text-4xl font-extrabold text-txt mb-3">主题库</h1>
         <p class="font-sans text-sm text-txt-secondary max-w-2xl">
-          8 套完整的设计主题规范，包含 Light/Dark 双模式、语义化 Token、组件规范与交互设计模式。点击展开查看详细规范，一键复制到项目中。
+          10 套完整的设计主题规范，包含 Light/Dark 双模式、语义化 Token、组件规范与交互设计模式。点击展开查看详细规范，一键复制到项目中。
         </p>
       </div>
     </div>
@@ -32,7 +33,7 @@ import MainLayout from '../layouts/MainLayout.astro';
             <div class="mt-6 px-3">
               <div class="font-mono text-[10px] font-bold uppercase tracking-widest text-txt-tertiary mb-2">数量</div>
               <div class="font-mono text-xs text-txt-secondary flex items-center gap-2">
-                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface text-[10px] font-bold text-primary">8</span>
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface text-[10px] font-bold text-primary">10</span>
                 份主题规范
               </div>
             </div>
@@ -44,11 +45,11 @@ import MainLayout from '../layouts/MainLayout.astro';
           <!-- Actions -->
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
             <div class="font-mono text-xs text-txt-tertiary">
-              共 <span class="text-primary font-medium">8</span> 套主题
+              共 <span class="text-primary font-medium">10</span> 套主题
             </div>
             <div class="flex flex-wrap gap-2">
               <button id="expandAllBtn" class="btn-secondary text-xs py-2 px-4">
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                <Icon name="lucide:maximize-2" class="w-3.5 h-3.5" />
                 展开全部
               </button>
             </div>
@@ -56,6 +57,14 @@ import MainLayout from '../layouts/MainLayout.astro';
 
           <!-- Theme Cards Container -->
           <div id="themes-container" class="space-y-5"></div>
+
+          <!-- 图标模板：JS 拼接卡片时无法直接使用 astro-icon 组件，
+               故在此预渲染 lucide 图标供脚本取用，保证图标来源统一 -->
+          <div id="themeIconDefs" hidden aria-hidden="true">
+            <span data-icon="copy"><Icon name="lucide:copy" size={12} /></span>
+            <span data-icon="chevron-down"><Icon name="lucide:chevron-down" size={12} /></span>
+            <span data-icon="check"><Icon name="lucide:check" size={12} /></span>
+          </div>
         </main>
       </div>
     </div>
@@ -79,6 +88,8 @@ import MainLayout from '../layouts/MainLayout.astro';
   .theme-card:nth-child(6) { animation-delay: 0.25s; }
   .theme-card:nth-child(7) { animation-delay: 0.3s; }
   .theme-card:nth-child(8) { animation-delay: 0.35s; }
+  .theme-card:nth-child(9) { animation-delay: 0.4s; }
+  .theme-card:nth-child(10) { animation-delay: 0.45s; }
 
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
@@ -138,6 +149,10 @@ import MainLayout from '../layouts/MainLayout.astro';
     display: flex;
     align-items: center;
     gap: 5px;
+  }
+  .btn-copy svg, .btn-expand svg {
+    width: 12px;
+    height: 12px;
   }
   .btn-copy:hover, .btn-expand:hover {
     background: var(--surface);
@@ -244,14 +259,15 @@ import MainLayout from '../layouts/MainLayout.astro';
     bottom: 28px;
     left: 50%;
     transform: translateX(-50%) translateY(80px);
-    background: linear-gradient(135deg, var(--primary), #a855f7);
-    color: #fff;
+    background: var(--text);
+    color: var(--bg);
     padding: 10px 24px;
-    border-radius: 100px;
+    border-radius: 10px;
     font-family: var(--font-sans);
     font-size: 13px;
     font-weight: 500;
     z-index: 2000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
   }
@@ -457,6 +473,52 @@ const themes = [
       warning: "#FBBF24", "warning-light": "#2D2418"
     },
     spec: `【Light主题】\n背景层：      bg=#F5F6F8  card=#FFFFFF  sidebar=#F8F9FB  input=#F5F6F8\n交互层：      hover=#ECEDF1  active=#E2E4EA  border=#DFE1E7  border-focus=#64748B\n文字层：      text=#1A1D26  text-secondary=#64748B  text-tertiary=#94A3B8\n主色：        primary=#64748B  primary-hover=#475569  primary-light=#F1F5F9\n\n【Dark主题】\n背景层：      bg=#0F1114  card=#181B20  sidebar=#131619  input=#1C2028\n交互层：      hover=#22262E  active=#2A3040  border=#2A2F38  border-focus=#94A3B8\n文字层：      text=#E2E8F0  text-secondary=#94A3B8  text-tertiary=#64748B\n主色：        primary=#94A3B8  primary-hover=#CBD5E1  primary-light=#1E2430\n\n【设计原则】\n- Slate Mono 以灰色为主色调，适合开发者工具/代码编辑器/文档类产品\n- 无彩色系降低视觉噪音，让内容本身成为焦点\n- Dark 模式接近经典 IDE 配色（VS Code Dark+）\n- primary 色饱和度极低，通过语义色提供必要区分度`
+  },
+  {
+    name: "Lime Zest",
+    dot: "#84CC16",
+    light: {
+      bg: "#F6F8F0", card: "#FFFFFF", sidebar: "#F9FBF4", input: "#F6F8F0",
+      hover: "#EDF2E0", active: "#E4F2C8", border: "#DDE6C8", "border-focus": "#84CC16",
+      text: "#1A2408", "text-secondary": "#6B7A4A", "text-tertiary": "#9AAB78",
+      primary: "#84CC16", "primary-hover": "#65A30D", "primary-light": "#F4FCE3",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#101408", card: "#181E10", sidebar: "#141A0C", input: "#1E2614",
+      hover: "#26301A", active: "#32421C", border: "#2C381E", "border-focus": "#A3E635",
+      text: "#ECF2E0", "text-secondary": "#9AAB78", "text-tertiary": "#6B7A4A",
+      primary: "#A3E635", "primary-hover": "#84CC16", "primary-light": "#202E10",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F6F8F0  card=#FFFFFF  sidebar=#F9FBF4  input=#F6F8F0\n交互层：      hover=#EDF2E0  active=#E4F2C8  border=#DDE6C8  border-focus=#84CC16\n文字层：      text=#1A2408  text-secondary=#6B7A4A  text-tertiary=#9AAB78\n主色：        primary=#84CC16  primary-hover=#65A30D  primary-light=#F4FCE3\n语义色：      danger=#DC2626 / light=#FEF2F2\n              success=#16A34A / light=#F0FDF4\n              warning=#D97706 / light=#FFFBEB\n\n【Dark主题】\n背景层：      bg=#101408  card=#181E10  sidebar=#141A0C  input=#1E2614\n交互层：      hover=#26301A  active=#32421C  border=#2C381E  border-focus=#A3E635\n文字层：      text=#ECF2E0  text-secondary=#9AAB78  text-tertiary=#6B7A4A\n主色：        primary=#A3E635  primary-hover=#84CC16  primary-light=#202E10\n语义色：      danger=#F87171 / light=#2D1A1A\n              success=#4ADE80 / light=#1A2D20\n              warning=#FBBF24 / light=#2D2418\n\n【设计原则】\n- Lime Zest 以青柠绿为主色调，适合运动/健康/年轻化活力产品\n- 主色明度高，Light 模式下按钮文字建议用深色（#1A2408）保证对比度\n- Dark 模式背景带微弱绿调（#101408），主色提亮为 #A3E635\n- success 与主色色相接近，状态反馈需配合图标区分`
+  },
+  {
+    name: "Coffee Mocha",
+    dot: "#A47148",
+    light: {
+      bg: "#F9F5F1", card: "#FFFFFF", sidebar: "#FBF8F5", input: "#F9F5F1",
+      hover: "#F0E8E0", active: "#EEDFD2", border: "#E4D8CC", "border-focus": "#A47148",
+      text: "#2A201A", "text-secondary": "#7D6A5B", "text-tertiary": "#A99685",
+      primary: "#A47148", "primary-hover": "#8A5A38", "primary-light": "#F6EDE4",
+      danger: "#DC2626", "danger-light": "#FEF2F2",
+      success: "#16A34A", "success-light": "#F0FDF4",
+      warning: "#D97706", "warning-light": "#FFFBEB"
+    },
+    dark: {
+      bg: "#14100D", card: "#1D1814", sidebar: "#181310", input: "#241E19",
+      hover: "#2C251F", active: "#3A2E24", border: "#342B23", "border-focus": "#C08B5F",
+      text: "#F0E8E0", "text-secondary": "#A99685", "text-tertiary": "#6E5D4E",
+      primary: "#C08B5F", "primary-hover": "#A47148", "primary-light": "#2A2016",
+      danger: "#F87171", "danger-light": "#2D1A1A",
+      success: "#4ADE80", "success-light": "#1A2D20",
+      warning: "#FBBF24", "warning-light": "#2D2418"
+    },
+    spec: `【Light主题】\n背景层：      bg=#F9F5F1  card=#FFFFFF  sidebar=#FBF8F5  input=#F9F5F1\n交互层：      hover=#F0E8E0  active=#EEDFD2  border=#E4D8CC  border-focus=#A47148\n文字层：      text=#2A201A  text-secondary=#7D6A5B  text-tertiary=#A99685\n主色：        primary=#A47148  primary-hover=#8A5A38  primary-light=#F6EDE4\n语义色：      danger=#DC2626 / light=#FEF2F2\n              success=#16A34A / light=#F0FDF4\n              warning=#D97706 / light=#FFFBEB\n\n【Dark主题】\n背景层：      bg=#14100D  card=#1D1814  sidebar=#181310  input=#241E19\n交互层：      hover=#2C251F  active=#3A2E24  border=#342B23  border-focus=#C08B5F\n文字层：      text=#F0E8E0  text-secondary=#A99685  text-tertiary=#6E5D4E\n主色：        primary=#C08B5F  primary-hover=#A47148  primary-light=#2A2016\n语义色：      danger=#F87171 / light=#2D1A1A\n              success=#4ADE80 / light=#1A2D20\n              warning=#FBBF24 / light=#2D2418\n\n【设计原则】\n- Coffee Mocha 以咖啡棕/大地色为主色调，适合阅读/笔记/播客类产品\n- 低饱和主色营造温润质感，长时间阅读不疲劳\n- Light 模式用米咖白（#F9F5F1），Dark 模式用深烘焙棕（#14100D）\n- 与 Warm Sunset 区分：本主题主色饱和度更低、更偏棕色，氛围更安静`
   }
 ];
 
@@ -476,6 +538,16 @@ themes.forEach((theme, idx) => {
   };
   sidebar.appendChild(item);
 });
+
+// UI 图标统一取自页面预渲染的 lucide 图标模板（#themeIconDefs）
+const themeIconDefs = document.getElementById('themeIconDefs');
+const themeIcon = (name: string) =>
+  themeIconDefs?.querySelector(`[data-icon="${name}"]`)?.innerHTML ?? '';
+const ICONS = {
+  copy: themeIcon('copy'),
+  chevronDown: themeIcon('chevron-down'),
+  check: themeIcon('check'),
+};
 
 // Cards
 themes.forEach((theme, idx) => {
@@ -499,11 +571,11 @@ themes.forEach((theme, idx) => {
       </div>
       <div class="theme-card-actions">
         <button class="btn-copy" onclick="event.stopPropagation(); copyThemeSpec(${idx}, this)">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          ${ICONS.copy}
           复制规范
         </button>
         <button class="btn-expand" onclick="event.stopPropagation(); toggleThemeCard(${idx})">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          ${ICONS.chevronDown}
           展开
         </button>
       </div>
@@ -542,11 +614,11 @@ function toggleThemeCard(idx: number) {
 function copyThemeSpec(idx: number, btn: HTMLElement) {
   navigator.clipboard.writeText(themes[idx].spec).then(() => {
     btn.classList.add('copied');
-    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 已复制`;
+    btn.innerHTML = `${ICONS.check} 已复制`;
     showToast(themes[idx].name + ' 规范已复制');
     setTimeout(() => {
       btn.classList.remove('copied');
-      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制规范`;
+      btn.innerHTML = `${ICONS.copy} 复制规范`;
     }, 2000);
   });
 }

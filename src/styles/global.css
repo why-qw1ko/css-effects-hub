@@ -108,13 +108,14 @@
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%) translateY(80px);
-  background: linear-gradient(135deg, var(--primary), #a855f7);
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
   padding: 10px 24px;
-  border-radius: 100px;
+  border-radius: 10px;
   font-size: 13px;
   font-weight: 500;
   z-index: 2000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
@@ -163,6 +164,7 @@
   border-bottom: 1px solid var(--border);
 }
 .code-label {
+  font-family: var(--font-mono);
   font-size: 11px;
   color: var(--text-tertiary);
   text-transform: uppercase;

@@ -3,75 +3,96 @@
     <div class="header-inner">
       <!-- Logo -->
       <a :href="base" class="logo-link">
-        <div class="logo-icon">C</div>
+        <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect width="32" height="32" rx="9" fill="url(#logoGrad)" />
+          <path d="M12.5 8.5 C9.8 8.5 9.8 10 9.8 12 C9.8 14 9.8 15 7.5 16 C9.8 17 9.8 18 9.8 20 C9.8 22 9.8 23.5 12.5 23.5" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+          <path d="M19.5 8.5 C22.2 8.5 22.2 10 22.2 12 C22.2 14 22.2 15 24.5 16 C22.2 17 22.2 18 22.2 20 C22.2 22 22.2 23.5 19.5 23.5" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none" />
+          <path d="M16 11.5 L17 14.8 L20.3 16 L17 17.2 L16 20.5 L15 17.2 L11.7 16 L15 14.8 Z" fill="#fff" />
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#4F7CFF" />
+              <stop offset="0.55" stop-color="#8b5cf6" />
+              <stop offset="1" stop-color="#ec4899" />
+            </linearGradient>
+          </defs>
+        </svg>
         <span class="logo-text">CSS Design Plus</span>
       </a>
 
       <!-- Nav Tabs -->
       <nav class="header-nav">
         <a
-          :href="base + 'effects'"
+          v-for="link in navLinks"
+          :key="link.page"
+          :href="base + link.path"
           class="nav-tab"
-          :class="{ active: currentPage === 'effects' }"
+          :class="{ active: currentPage === link.page }"
         >
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7" rx="1.5"/>
-            <rect x="14" y="3" width="7" height="7" rx="1.5"/>
-            <rect x="3" y="14" width="7" height="7" rx="1.5"/>
-            <rect x="14" y="14" width="7" height="7" rx="1.5"/>
-          </svg>
-          动效库
-        </a>
-        <a
-          :href="base + 'themes'"
-          class="nav-tab"
-          :class="{ active: currentPage === 'themes' }"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="5"/>
-            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-          主题库
-        </a>
-        <a
-          :href="base + 'advanced'"
-          class="nav-tab"
-          :class="{ active: currentPage === 'advanced' }"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-          </svg>
-          高级动效
+          <component :is="link.icon" class="nav-icon" />
+          {{ link.label }}
         </a>
       </nav>
 
       <!-- Actions -->
       <div class="header-actions">
         <ThemeToggle />
+        <button class="menu-btn" aria-label="菜单" @click="menuOpen = !menuOpen">
+          <Menu v-if="!menuOpen" />
+          <X v-else />
+        </button>
       </div>
     </div>
+
+    <!-- Mobile Menu -->
+    <transition name="menu-fade">
+      <nav v-if="menuOpen" class="mobile-menu">
+        <a
+          v-for="link in navLinks"
+          :key="link.page"
+          :href="base + link.path"
+          class="mobile-menu-item"
+          :class="{ active: currentPage === link.page }"
+          @click="menuOpen = false"
+        >
+          <component :is="link.icon" class="nav-icon" />
+          {{ link.label }}
+        </a>
+      </nav>
+    </transition>
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { ref, onMounted, markRaw } from 'vue';
+import { LayoutGrid, Palette, Sparkles, Info, Home, Menu, X } from 'lucide-vue-next';
 import ThemeToggle from './ThemeToggle.vue';
 import { useThemeStore } from '../../stores/theme';
 
 const base = import.meta.env.BASE_URL;
+const menuOpen = ref(false);
+
+const navLinks = [
+  { page: 'home', path: '', label: '首页', icon: markRaw(Home) },
+  { page: 'effects', path: 'effects', label: '动效库', icon: markRaw(LayoutGrid) },
+  { page: 'themes', path: 'themes', label: '主题库', icon: markRaw(Palette) },
+  { page: 'advanced', path: 'advanced', label: '高级动效', icon: markRaw(Sparkles) },
+  { page: 'about', path: 'about', label: '关于', icon: markRaw(Info) },
+];
 
 const theme = useThemeStore();
 if (typeof window !== 'undefined') {
   theme.init();
 }
 
-const currentPage = computed(() => {
-  if (typeof window === 'undefined') return '';
+// Computed after mount to avoid SSR/client hydration class mismatch
+const currentPage = ref('');
+onMounted(() => {
   const path = window.location.pathname;
-  if (path.includes('/themes')) return 'themes';
-  if (path.includes('/advanced')) return 'advanced';
-  if (path.includes('/effects') || path.includes('/effect/')) return 'effects';
-  return '';
+  if (path.includes('/themes')) currentPage.value = 'themes';
+  else if (path.includes('/advanced')) currentPage.value = 'advanced';
+  else if (path.includes('/about')) currentPage.value = 'about';
+  else if (path.includes('/effects') || path.includes('/effect/')) currentPage.value = 'effects';
+  else currentPage.value = 'home';
 });
 </script>
 
@@ -107,18 +128,16 @@ const currentPage = computed(() => {
   text-decoration: none;
   flex-shrink: 0;
 }
-.logo-icon {
+.logo-mark {
   width: 30px;
   height: 30px;
-  background: linear-gradient(135deg, #4F7CFF, #a855f7);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
+  border-radius: 9px;
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.logo-link:hover .logo-mark {
+  transform: rotate(-6deg) scale(1.06);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.5);
 }
 .logo-text {
   font-family: var(--font-display);
@@ -183,6 +202,71 @@ const currentPage = computed(() => {
   flex-shrink: 0;
 }
 
+/* Hamburger (mobile only) */
+.menu-btn {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.menu-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.menu-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+/* Mobile dropdown menu */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px 12px;
+  border-top: 1px solid var(--border);
+}
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.mobile-menu-item:active,
+.mobile-menu-item:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.mobile-menu-item.active {
+  color: var(--primary);
+  background: var(--primary-dim);
+  font-weight: 600;
+}
+.menu-fade-enter-active,
+.menu-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.menu-fade-enter-from,
+.menu-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
 @media (max-width: 768px) {
   .header-inner {
     padding: 0 16px;
@@ -190,13 +274,14 @@ const currentPage = computed(() => {
   .logo-text {
     display: none;
   }
-  .nav-tab {
-    padding: 6px 10px;
-    font-size: 12px;
+  .header-nav {
+    display: none;
   }
-  .nav-icon {
-    width: 14px;
-    height: 14px;
+  .menu-btn {
+    display: flex;
+  }
+  .mobile-menu {
+    display: flex;
   }
 }
 </style>

@@ -1,17 +1,17 @@
 import type { Effect, Category } from '../types';
 
 export const categories: Category[] = [
-  { id: 'basic', name: '基础动画', nameEn: 'Basic', icon: '✨', count: 12 },
-  { id: 'text', name: '文字效果', nameEn: 'Text', icon: '✏️', count: 15 },
-  { id: 'color', name: '颜色效果', nameEn: 'Color', icon: '🎨', count: 10 },
-  { id: 'geometry', name: '几何变换', nameEn: 'Geometry', icon: '🔷', count: 10 },
-  { id: 'loading', name: '加载动画', nameEn: 'Loading', icon: '⏳', count: 12 },
+  { id: 'basic', name: '基础动画', nameEn: 'Basic', icon: '✨', count: 13 },
+  { id: 'text', name: '文字效果', nameEn: 'Text', icon: '✏️', count: 16 },
+  { id: 'color', name: '颜色效果', nameEn: 'Color', icon: '🎨', count: 9 },
+  { id: 'geometry', name: '几何变换', nameEn: 'Geometry', icon: '🔷', count: 9 },
+  { id: 'loading', name: '加载动画', nameEn: 'Loading', icon: '⏳', count: 13 },
   { id: 'hover', name: '悬停交互', nameEn: 'Hover', icon: '🖱️', count: 10 },
   { id: 'scroll', name: '滚动效果', nameEn: 'Scroll', icon: '📜', count: 10 },
-  { id: 'button', name: '按钮交互', nameEn: 'Button', icon: '🔘', count: 10 },
+  { id: 'button', name: '按钮交互', nameEn: 'Button', icon: '🔘', count: 11 },
   { id: 'transition', name: '过渡转场', nameEn: 'Transition', icon: '🔀', count: 8 },
-  { id: 'advanced', name: '高级效果', nameEn: 'Advanced', icon: '🚀', count: 16 },
-  { id: 'micro', name: '微交互', nameEn: 'Micro', icon: '⚡', count: 10 },
+  { id: 'advanced', name: '高级效果', nameEn: 'Advanced', icon: '🚀', count: 12 },
+  { id: 'micro', name: '微交互', nameEn: 'Micro', icon: '⚡', count: 11 },
 ];
 
 export const effects: Effect[] = [
@@ -779,34 +779,7 @@ el.addEventListener('mousemove', (e) => {
   );
 }`,
     prompt: '请用纯CSS实现暗角渐变效果。要求：使用radial-gradient从中心透明向外渐变到半透明黑色，形成四周暗中间亮的聚焦效果。',
-    previewHtml: '<div style="width:100%;height:100%;background:radial-gradient(ellipse at center,transparent 35%,rgba(0,0,0,.8) 100%);display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;border-radius:50%;background:var(--primary)"></div></div>'
-  },
-  {
-    id: 'neon-glow',
-    name: '霓虹灯',
-    nameEn: 'Neon Glow',
-    category: 'color',
-    difficulty: 'easy',
-    tags: ['霓虹', '发光', '赛博朋克', '复古'],
-    description: '模拟霓虹灯管发光效果，复古赛博朋克风格。',
-    html: '<div class="neon">NEON</div>',
-    css: `@keyframes neonGlow {
-  0%,100% {
-    text-shadow: 0 0 7px #fff, 0 0 10px #fff,
-      0 0 21px #fff, 0 0 42px #00e5a0;
-  }
-  50% {
-    text-shadow: 0 0 4px #fff, 0 0 7px #fff,
-      0 0 14px #fff, 0 0 30px #00e5a0,
-      0 0 60px #00e5a0;
-  }
-}
-.neon {
-  color: #fff;
-  animation: neonGlow 2s ease-in-out infinite alternate;
-}`,
-    prompt: '请用纯CSS实现霓虹灯发光效果。要求：使用text-shadow叠加多层白色和主题色模糊阴影，在两个亮度级别之间交替变化，模拟霓虹灯的脉冲发光。',
-    previewHtml: '<div style="font-family:monospace;font-size:18px;font-weight:bold;color:#fff;text-shadow:0 0 7px #fff,0 0 10px var(--primary),0 0 20px var(--primary);animation:neonF_ 2s ease infinite">NEON</div>'
+    previewHtml: '<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;border-radius:50%;background:var(--primary)"></div><div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,.85) 100%);animation:vgn_ 3s ease-in-out infinite"></div></div>'
   },
   {
     id: 'sat-pulse',
@@ -904,27 +877,6 @@ el.addEventListener('mousemove', (e) => {
     previewHtml: '<div style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;perspective:200px;animation:flipX_ 2s ease infinite"></div>'
   },
   {
-    id: 'elastic-s',
-    name: '弹性缩放',
-    nameEn: 'Elastic Scale Geo',
-    category: 'geometry',
-    difficulty: 'medium',
-    tags: ['弹性', '缩放', '物理', '反馈'],
-    description: '元素先放大再缩小的弹性效果，活泼且有反馈感。',
-    html: '<div class="element"></div>',
-    css: `@keyframes elasticScale {
-  0% { transform: scale(0); }
-  50% { transform: scale(1.2); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-.element {
-  animation: elasticScale 0.6s ease forwards;
-}`,
-    prompt: '请用纯CSS实现弹性缩放效果。要求：使用@keyframes，0%时scale(0)，50%时scale(1.2)过度放大，70%时scale(0.9)回弹，100%时scale(1)归位。',
-    previewHtml: '<div style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;animation:elaS_ 1.5s ease infinite"></div>'
-  },
-  {
     id: 'shake',
     name: '摇晃',
     nameEn: 'Shake',
@@ -1008,28 +960,6 @@ el.addEventListener('mousemove', (e) => {
 }`,
     prompt: '请用纯CSS实现浮动效果。要求：使用@keyframes在translateY(0)和translateY(-15px)之间做正弦运动，缓动函数ease-in-out，营造轻柔悬浮感。',
     previewHtml: '<div style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;animation:float_ 3s ease-in-out infinite"></div>'
-  },
-  {
-    id: 'drop-b',
-    name: '弹性掉落',
-    nameEn: 'Drop Bounce Geo',
-    category: 'geometry',
-    difficulty: 'medium',
-    tags: ['掉落', '弹跳', '物理', '重力'],
-    description: '元素从上方掉落并弹跳数次后静止。',
-    html: '<div class="element">Drop</div>',
-    css: `@keyframes dropBounce {
-  0% { transform: translateY(-80px); opacity: 0; }
-  60% { transform: translateY(8px); opacity: 1; }
-  75% { transform: translateY(-4px); }
-  90% { transform: translateY(2px); }
-  100% { transform: translateY(0); }
-}
-.element {
-  animation: dropBounce 0.8s ease forwards;
-}`,
-    prompt: '请用纯CSS实现弹性掉落效果。要求：使用@keyframes，元素从translateY(-80px)掉落，60%落到translateY(8px)，75%弹起translateY(-4px)，90%再落translateY(2px)，100%归位。',
-    previewHtml: '<div style="width:36px;height:36px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;animation:dropB_ 2s ease infinite"></div>'
   },
 {
     id: 'spinner',
@@ -1330,7 +1260,7 @@ el.addEventListener('mousemove', (e) => {
   transform: scale(1.05);
 }`,
     prompt: '请用纯CSS实现悬停放大效果。要求：使用transition:transform 0.3s ease，hover时transform:scale(1.05)轻微放大。',
-    previewHtml: '<div style="width:44px;height:44px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;animation:hS_ 2s ease infinite"></div>'
+    previewHtml: '<div class="pvh-scale" style="width:56px;height:56px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold">Hover</div>'
   },
   {
     id: 'hover-lift',
@@ -1350,7 +1280,7 @@ el.addEventListener('mousemove', (e) => {
   box-shadow: 0 12px 40px rgba(0,0,0,0.3);
 }`,
     prompt: '请用纯CSS实现悬停提升效果。要求：默认box-shadow轻微，hover时translateY(-4px)上移并增大box-shadow，transition平滑过渡。',
-    previewHtml: '<div style="width:44px;height:44px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;animation:hL_ 2s ease infinite"></div>'
+    previewHtml: '<div class="pvh-lift" style="width:56px;height:56px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold">Hover</div>'
   },
   {
     id: 'hover-glow-border',
@@ -1369,7 +1299,7 @@ el.addEventListener('mousemove', (e) => {
   box-shadow: 0 0 15px rgba(0,229,160,0.25);
 }`,
     prompt: '请用纯CSS实现悬停发光边框效果。要求：使用transition平滑过渡，hover时改变border-color为主题色并添加box-shadow光晕。',
-    previewHtml: '<div style="width:40px;height:40px;border:2px solid var(--border);border-radius:6px;animation:bG_ 2s ease infinite"></div>'
+    previewHtml: '<div class="pvh-glow" style="width:56px;height:56px;border:2px solid var(--border);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:10px;font-weight:bold">Hover</div>'
   },
   {
     id: 'hover-color',
@@ -1388,7 +1318,7 @@ el.addEventListener('mousemove', (e) => {
   color: #00e5a0;
 }`,
     prompt: '请用纯CSS实现悬停色变效果。要求：使用transition:color 0.3s ease，hover时将color从灰色变为主题色。',
-    previewHtml: '<div style="font-family:monospace;font-size:14px;color:var(--text-muted);animation:tCH_ 2s ease infinite">Hover Me</div>'
+    previewHtml: '<div class="pvh-color" style="font-family:monospace;font-size:14px;color:var(--text-muted);cursor:pointer">Hover Me</div>'
   },
   {
     id: 'hover-rotate',
@@ -1406,7 +1336,7 @@ el.addEventListener('mousemove', (e) => {
   transform: rotate(90deg);
 }`,
     prompt: '请用纯CSS实现悬停旋转图标效果。要求：使用transition:transform 0.4s ease，hover时transform:rotate(90deg)旋转90度。',
-    previewHtml: '<div style="font-size:20px;cursor:pointer;animation:hSp_ 2s ease infinite">⚙</div>'
+    previewHtml: '<div class="pvh-rotate" style="font-size:22px;cursor:pointer">⚙</div>'
   },
   {
     id: 'fill-bg',
@@ -1435,7 +1365,7 @@ el.addEventListener('mousemove', (e) => {
   transform: scaleX(1);
 }`,
     prompt: '请用纯CSS实现背景色填充效果。要求：使用::before伪元素作为背景层，默认scaleX(0)隐藏，hover时通过transition从左向右scaleX(1)填满。',
-    previewHtml: '<div style="width:44px;height:44px;position:relative;overflow:hidden;background:transparent;border:2px solid var(--primary);border-radius:8px"><div style="position:absolute;inset:0;background:linear-gradient(135deg,var(--primary),#a855f7);transform:scaleX(0);transform-origin:left;animation:fillB_ 2s ease infinite;z-index:-1"></div></div>'
+    previewHtml: '<div class="pvh-fill" style="width:64px;height:32px;position:relative;overflow:hidden;border:2px solid var(--primary);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center"><div class="pvh-fill-bar" style="position:absolute;inset:0;background:linear-gradient(135deg,var(--primary),#a855f7)"></div><span style="position:relative;font-size:10px;font-weight:bold;color:var(--text)">Hover</span></div>'
   },
   {
     id: 'hover-flip',
@@ -1463,7 +1393,7 @@ el.addEventListener('mousemove', (e) => {
   transform: rotateY(180deg);
 }`,
     prompt: '请用纯CSS实现悬停翻转卡片效果。要求：外层perspective:1000px，内层transform-style:preserve-3d，hover时rotateY(180deg)，正反面backface-visibility:hidden。',
-    previewHtml: '<div style="perspective:200px;width:55px;height:55px;animation:cardF_ 3s ease infinite"><div style="width:100%;height:100%;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold">A</div></div>'
+    previewHtml: '<div class="pvh-flip" style="perspective:300px;width:56px;height:56px;cursor:pointer"><div class="pvh-flip-inner" style="position:relative;width:100%;height:100%"><div style="position:absolute;inset:0;backface-visibility:hidden;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold">A</div><div style="position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(135deg,#a855f7,var(--primary));border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold">B</div></div></div>'
   },
   {
     id: 'hover-ripple',
@@ -1493,7 +1423,7 @@ el.addEventListener('mousemove', (e) => {
   to { transform: scale(4); opacity: 0; }
 }`,
     prompt: '请用纯CSS实现悬停涟漪效果。要求：使用::after伪元素创建圆形，hover时通过@keyframes从scale(0)扩散到scale(4)同时opacity归零。',
-    previewHtml: '<div style="position:relative;width:36px;height:36px;border-radius:50%;overflow:hidden;background:var(--primary);display:flex;align-items:center;justify-content:center"><div style="position:absolute;width:20px;height:20px;background:rgba(255,255,255,.2);border-radius:50%;animation:rpH_ 1.5s ease infinite;left:50%;top:50%;transform:translate(-50%,-50%)"></div></div>'
+    previewHtml: '<div class="pvh-ripple" style="position:relative;width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--primary);cursor:pointer"><div class="pvh-ripple-c" style="position:absolute;width:20px;height:20px;background:rgba(255,255,255,.35);border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%) scale(0)"></div></div>'
   },
   {
     id: 'hover-tilt',
@@ -1511,7 +1441,7 @@ el.addEventListener('mousemove', (e) => {
   transform: perspective(500px) rotateY(10deg) rotateX(-5deg);
 }`,
     prompt: '请用纯CSS实现悬停倾斜效果。要求：使用transition:transform 0.3s ease，hover时配合perspective(500px)做rotateY(10deg)和rotateX(-5deg)的3D倾斜。',
-    previewHtml: '<div style="width:44px;height:44px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:8px;perspective:300px;animation:tiltH_ 2s ease infinite"></div>'
+    previewHtml: '<div class="pvh-tilt" style="width:56px;height:56px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold">Hover</div>'
   },
   {
     id: 'draw-border',
@@ -1530,7 +1460,7 @@ el.addEventListener('mousemove', (e) => {
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 }`,
     prompt: '请用纯CSS实现边框绘制效果。要求：使用clip-path:polygon从全隐藏到全显示的过渡，hover时通过transition逐步揭示元素的四个边。',
-    previewHtml: '<div style="width:44px;height:44px;border:2px solid var(--primary);border-radius:4px;animation:bDr_ 2s ease infinite"></div>'
+    previewHtml: '<div class="pvh-draw" style="position:relative;width:56px;height:56px;cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border);border-radius:6px;color:var(--text-secondary);font-size:10px;font-weight:bold">Hover<div class="pvh-draw-b" style="position:absolute;inset:-1px;border:2px solid var(--primary);border-radius:6px"></div></div>'
   },
   {
     id: 'scroll-fade',
@@ -1690,7 +1620,7 @@ window.addEventListener("scroll", () => {
   bg.style.transform = 'translateY(' + scrolled * 0.5 + 'px)';
 });`,
     prompt: '请用JavaScript实现视差滚动效果。要求：监听scroll事件，背景元素以scrollY*0.5的速度移动，前景以正常速度滚动，形成景深差。',
-    previewHtml: '<div style="position:relative;width:100%;height:100%;overflow:hidden"><div style="position:absolute;width:120%;height:120%;top:-10%;left:-10%;background:linear-gradient(135deg,#0a2030,#0e1a25);animation:par_ 3s ease infinite alternate"></div><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"><div style="width:24px;height:24px;border-radius:50%;background:var(--primary)"></div></div></div>'
+    previewHtml: '<div style="position:relative;width:100%;height:100%;overflow:hidden"><div style="position:absolute;inset:-20%;background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--primary) 22%,transparent) 0 10px,transparent 10px 24px);animation:parB_ 4s ease-in-out infinite"></div><div style="position:absolute;top:50%;left:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#a855f7);animation:parF_ 4s ease-in-out infinite"></div></div>'
   },
   {
     id: 'scroll-progress',
@@ -1743,7 +1673,8 @@ window.addEventListener("scroll", () => {
     tags: ['滚动', '计数', '数字', '视口'],
     description: '数字在滚入视口时从0递增到目标值。',
     html: '<div data-target="999">0</div>',
-    css: `const obs = new IntersectionObserver((entries) => {
+    css: `// JS 驱动
+const obs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
       countUp(e.target, e.target.dataset.target, 2000);
@@ -1761,7 +1692,7 @@ window.addEventListener("scroll", () => {
 });
 document.querySelectorAll('[data-target]').forEach(el => obs.observe(el));`,
     prompt: '请用JavaScript实现滚动计数效果。要求：IntersectionObserver监听数字元素进入视口时触发countUp函数，从0递增到data-target属性值，只触发一次。',
-    previewHtml: '<div style="font-family:monospace;font-size:20px;color:var(--primary)">0 → 999</div>'
+    previewHtml: '<div style="display:flex;align-items:center;font-family:monospace;font-size:22px;font-weight:bold;color:var(--primary)"><span style="display:block;height:26px;overflow:hidden"><span style="display:block;line-height:26px;animation:cnt_ 20s steps(10) infinite">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</span></span><span style="display:block;height:26px;overflow:hidden"><span style="display:block;line-height:26px;animation:cnt_ 2s steps(10) infinite">0<br>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</span></span><span style="line-height:26px">+</span></div>'
   },
   {
     id: 'scroll-morph',
@@ -1953,7 +1884,7 @@ btn.addEventListener("click", (e) => {
   transform: translateX(4px);
 }`,
     prompt: '请用纯CSS实现箭头滑动效果。要求：箭头元素使用transition:transform 0.3s ease，hover时translateX(4px)向右滑动。',
-    previewHtml: '<div style="display:flex;align-items:center;gap:3px;font-family:monospace;font-size:12px;color:var(--text)">Next<span style="animation:arrS_ 1s ease infinite;color:var(--primary)">→</span></div>'
+    previewHtml: '<div class="pvh-arrow" style="display:flex;align-items:center;gap:4px;font-family:monospace;font-size:13px;color:var(--text);cursor:pointer;padding:8px 14px;border:1px solid var(--border);border-radius:8px">Next<span class="pvh-arrow-i" style="color:var(--primary)">→</span></div>'
   },
   {
     id: 'submit-success',
@@ -2062,7 +1993,7 @@ btn.addEventListener("click", (e) => {
   to { transform: translateX(0); }
 }`,
     prompt: '请用纯CSS实现滑动切换过渡效果。要求：旧页面@keyframes到translateX(-100%)滑出，新页面从translateX(100%)滑入到translateX(0)。',
-    previewHtml: '<div style="width:100%;height:100%;position:relative;overflow:hidden"><div style="position:absolute;inset:0;background:var(--surface);animation:slPg_ 2s ease infinite"></div></div>'
+    previewHtml: '<div style="width:100%;height:100%;position:relative;overflow:hidden"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><div style="width:24px;height:24px;border-radius:50%;background:var(--border)"></div></div><div style="position:absolute;inset:0;background:linear-gradient(135deg,var(--primary),#a855f7);animation:slPg_ 2.5s ease infinite"></div></div>'
   },
   {
     id: 'zoom-transition',
@@ -2100,7 +2031,7 @@ btn.addEventListener("click", (e) => {
   animation: wipe 0.8s ease forwards;
 }`,
     prompt: '请用纯CSS实现擦除过渡效果。要求：使用clip-path:inset从inset(0 100% 0 0)到inset(0 0 0 0)，实现从右到左的擦除揭示。',
-    previewHtml: '<div style="width:100%;height:100%;background:linear-gradient(90deg,var(--primary),#a855f7);animation:wipeT_ 2s ease infinite"></div>'
+    previewHtml: '<div style="width:72px;height:44px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden;position:relative"><div style="position:absolute;inset:0;background:linear-gradient(135deg,var(--primary),#a855f7);animation:wipeT_ 2.4s ease infinite"></div></div>'
   },
   {
     id: 'blur-transition',
@@ -2238,34 +2169,6 @@ btn.addEventListener("click", (e) => {
     previewHtml: '<div style="position:relative;width:48px;height:48px"><div style="position:absolute;width:12px;height:12px;left:18px;top:18px;border:2px solid #00e5a0;border-radius:50%;animation:wW_ 2s ease infinite"></div><div style="position:absolute;width:12px;height:12px;left:18px;top:18px;border:2px solid #00e5a0;border-radius:50%;animation:wW_ 2s ease .5s infinite"></div><div style="position:absolute;width:12px;height:12px;left:18px;top:18px;border:2px solid #00e5a0;border-radius:50%;animation:wW_ 2s ease 1s infinite"></div></div>'
   },
   {
-    id: 'smoke-fx',
-    name: '烟雾消散',
-    nameEn: 'Smoke',
-    category: 'advanced',
-    difficulty: 'easy',
-    tags: ['smoke', 'blur', 'fade', 'text'],
-    description: '文字像烟雾一样向上飘散消失',
-    html: '<div class="smoke-text">SMOKE</div>',
-    css: '@keyframes smoke { 0% { opacity: 1; filter: blur(0); transform: translateY(0); } 100% { opacity: 0; filter: blur(10px); transform: translateY(-30px) scale(1.5); } } .smoke-text { font-size: 24px; font-weight: bold; color: #00e5a0; animation: smoke 2s ease forwards; }',
-    js: '',
-    prompt: '实现烟雾消散效果：文字元素在向上移动的同时，逐渐增加blur模糊度、降低透明度并放大，模拟烟雾升腾消散的视觉效果。纯CSS animation+filter实现。',
-    previewHtml: '<div style="font-size:16px;font-weight:bold;color:#00e5a0;animation:smk_ 2s ease infinite">SMOKE</div>'
-  },
-  {
-    id: 'unfold',
-    name: '折叠展开',
-    nameEn: 'Unfold',
-    category: 'advanced',
-    difficulty: 'easy',
-    tags: ['fold', 'unfold', '3d', 'perspective'],
-    description: '元素从顶部折叠状态展开，带有3D透视效果',
-    html: '<div class="unfold">\n  <div style="background:#00e5a0;padding:16px;border-radius:8px">Content Unfolded</div>\n</div>',
-    css: '@keyframes unfold { from { transform: perspective(400px) rotateX(-90deg); opacity: 0; } to { transform: perspective(400px) rotateX(0); opacity: 1; } } .unfold { transform-origin: top; animation: unfold 0.6s ease forwards; }',
-    js: '',
-    prompt: '实现折叠展开效果：元素从顶部轴心以rotateX从-90度翻转到0度，配合perspective创建3D透视，同时opacity从0到1。transform-origin设为top。纯CSS实现。',
-    previewHtml: '<div style="transform-origin:top;animation:unfld_ .6s ease forwards"><div style="background:#00e5a0;padding:8px;border-radius:4px;font-size:11px;color:#000">Unfold</div></div>'
-  },
-  {
     id: 'squash-stretch',
     name: '拉伸形变',
     nameEn: 'Squash Stretch',
@@ -2292,20 +2195,6 @@ btn.addEventListener("click", (e) => {
     js: '',
     prompt: '实现散射碎裂效果：将一个完整元素拆分成多个碎片，每个碎片向不同方向飞出并旋转，同时透明度递减至消失。每个碎片有不同的运动轨迹和旋转角度。纯CSS多组@keyframes实现。',
     previewHtml: '<div style="position:relative;width:48px;height:48px"><div style="position:absolute;left:16px;top:16px;width:14px;height:14px;background:#00e5a0;border-radius:2px;animation:br1_ .6s ease infinite"></div><div style="position:absolute;left:20px;top:20px;width:10px;height:10px;background:#0ea5e9;border-radius:2px;animation:br2_ .6s ease .05s infinite"></div><div style="position:absolute;left:18px;top:18px;width:8px;height:12px;background:#00e5a0;border-radius:2px;animation:br3_ .6s ease .1s infinite"></div></div>'
-  },
-  {
-    id: 'wave-chars',
-    name: '波浪文字',
-    nameEn: 'Wave Chars',
-    category: 'advanced',
-    difficulty: 'medium',
-    tags: ['wave', 'text', 'chars', 'stagger'],
-    description: '每个字符依次上下波动，形成波浪传播效果',
-    html: '<div class="wave-text">\n  <span class="char" style="animation-delay:0s">W</span>\n  <span class="char" style="animation-delay:0.1s">A</span>\n  <span class="char" style="animation-delay:0.2s">V</span>\n  <span class="char" style="animation-delay:0.3s">E</span>\n</div>',
-    css: '@keyframes wave { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } } .char { display: inline-block; animation: wave 1s ease infinite; } .wave-text { font-size: 20px; font-weight: bold; color: #00e5a0; }',
-    js: '',
-    prompt: '实现波浪文字效果：将文字拆分为单个字符，每个字符执行translateY上下运动的动画，通过递增的animation-delay形成波浪传播的视觉效果。每个字符display:inline-block。',
-    previewHtml: '<div style="font-size:16px;font-weight:bold;color:#00e5a0"><span style="display:inline-block;animation:wave_ 1s ease infinite">W</span><span style="display:inline-block;animation:wave_ 1s ease .1s infinite">A</span><span style="display:inline-block;animation:wave_ 1s ease .2s infinite">V</span><span style="display:inline-block;animation:wave_ 1s ease .3s infinite">E</span></div>'
   },
   {
     id: 'breathe-glow',
@@ -2335,7 +2224,7 @@ btn.addEventListener("click", (e) => {
     css: '@keyframes checkDraw { 0% { height: 0; width: 0; } 50% { height: 0; width: 6px; } 100% { height: 12px; width: 6px; } } .checkmark { position: absolute; left: 7px; top: 6px; border-right: 2px solid #00e5a0; border-bottom: 2px solid #00e5a0; transform: rotate(45deg); animation: checkDraw 0.4s ease forwards; }',
     js: '',
     prompt: '实现选中勾勒动画：在方框内，勾选标记(对勾)通过两阶段动画绘制出现——先扩展宽度画横线，再扩展高度画竖线，模拟手写勾选的效果。纯CSS border+animation实现。',
-    previewHtml: '<div style="width:24px;height:24px;border:2px solid #00e5a0;border-radius:4px;position:relative"><div style="position:absolute;left:7px;top:6px;border-right:2px solid #00e5a0;border-bottom:2px solid #00e5a0;transform:rotate(45deg);animation:chkD_ .4s ease forwards"></div></div>'
+    previewHtml: '<div style="width:32px;height:32px;border:2px solid var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12.5L10 17.5L19 7" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:23;stroke-dashoffset:23;animation:chkD_ 1.8s ease infinite"/></svg></div>'
   },
   {
     id: 'badge-in',
@@ -2363,7 +2252,7 @@ btn.addEventListener("click", (e) => {
     css: '@keyframes flyToCart { 0% { transform: translate(0,0) scale(1); opacity: 1; } 50% { transform: translate(80px,-60px) scale(0.5); opacity: 0.8; } 100% { transform: translate(160px,0) scale(0); opacity: 0; } } .fly-item { animation: flyToCart 0.8s ease forwards; }',
     js: '',
     prompt: '实现飞入购物车效果：商品小图从起始位置沿抛物线轨迹飞向购物车图标，过程中同时缩小并降低透明度。使用两段translate模拟弧线路径，最终scale(0)消失。纯CSS animation实现。',
-    previewHtml: '<div style="position:relative;width:48px;height:48px"><div style="width:12px;height:12px;background:#00e5a0;border-radius:3px;position:absolute;left:0;top:18px;animation:flyC_ .8s ease infinite"></div><div style="position:absolute;right:2px;bottom:2px;font-size:16px">🛒</div></div>'
+    previewHtml: '<div style="position:relative;width:76px;height:54px"><div style="width:14px;height:14px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:4px;position:absolute;left:2px;top:24px;animation:flyC_ 1.8s ease-in infinite"></div><div style="position:absolute;right:0;bottom:2px;font-size:18px">🛒</div></div>'
   },
   {
     id: 'like-burst',
@@ -2522,20 +2411,6 @@ btn.addEventListener("click", (e) => {
     previewHtml: '<div style="position:relative;width:48px;height:48px;background:#111;border-radius:8px;overflow:hidden"><div style="position:absolute;width:24px;height:24px;background:radial-gradient(circle,#00e5a0,transparent);filter:blur(8px);opacity:.7;top:20%;left:20%;animation:float1_ 4s ease-in-out infinite"></div><div style="position:absolute;width:18px;height:18px;background:radial-gradient(circle,#0ea5e9,transparent);filter:blur(8px);opacity:.7;top:50%;left:60%;animation:float2_ 5s ease-in-out 1s infinite"></div><div style="position:absolute;width:20px;height:20px;background:radial-gradient(circle,#f43f5e,transparent);filter:blur(8px);opacity:.7;top:30%;left:40%;animation:float3_ 6s ease-in-out .5s infinite"></div></div>'
   },
   {
-    id: 'animated-gradient',
-    name: '流动渐变',
-    nameEn: 'Animated Gradient',
-    category: 'advanced',
-    difficulty: 'easy',
-    tags: ['gradient', 'flow', 'background', 'color'],
-    description: '背景渐变色持续流动变化，色彩斑斓',
-    html: '<div class="animated-gradient" style="width:160px;height:80px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;font-size:14px">Gradient Flow</div>',
-    css: '@keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } } .animated-gradient { background: linear-gradient(-45deg, #00e5a0, #0ea5e9, #f43f5e, #f59e0b); background-size: 400% 400%; animation: gradientFlow 6s ease infinite; }',
-    js: '',
-    prompt: '实现流动渐变效果：元素使用多色linear-gradient背景，设置background-size为400% 400%，通过@keyframes改变background-position在四个角点间循环移动，产生渐变色流动效果。纯CSS实现。',
-    previewHtml: '<div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(-45deg,#00e5a0,#0ea5e9,#f43f5e,#f59e0b);background-size:400% 400%;animation:agBG_ 6s ease infinite"></div>'
-  },
-  {
     id: 'elastic-hover',
     name: '弹性缩放悬停',
     nameEn: 'Elastic Scale Hover',
@@ -2547,7 +2422,151 @@ btn.addEventListener("click", (e) => {
     css: '.elastic-box { transition: transform 0.4s cubic-bezier(.34,1.56,.64,1); } .elastic-box:hover { transform: scale(1.2); }',
     js: '',
     prompt: '实现弹性缩放悬停效果：元素在hover时scale(1.2)放大，使用cubic-bezier(.34,1.56,.64,1)缓动函数产生超过目标值再回弹的overshoot效果。transition时长0.4秒。纯CSS transition实现。',
-    previewHtml: '<div style="width:48px;height:48px;background:#00e5a0;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#000;font-size:10px;font-weight:bold;cursor:pointer;transition:transform .4s cubic-bezier(.34,1.56,.64,1);transform:scale(1.2)">Hover</div>'
+    previewHtml: '<div class="pvh-elastic" style="width:52px;height:52px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:bold;cursor:pointer">Hover</div>'
+  },
+
+  // ==================== 2026-07 新增动效 - 6个 ====================
+  {
+    id: 'roll-in',
+    name: '滚动翻入',
+    nameEn: 'Roll In',
+    category: 'basic',
+    difficulty: 'medium',
+    tags: ['滚动', '旋转', '入场', '位移'],
+    description: '元素像车轮一样边旋转边从左侧滚入原位。',
+    html: '<div class="element">Roll</div>',
+    css: `@keyframes rollIn {
+  from { transform: translateX(-120px) rotate(-360deg); opacity: 0; }
+  to { transform: translateX(0) rotate(0); opacity: 1; }
+}
+.element {
+  animation: rollIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}`,
+    prompt: '请用纯CSS实现一个滚动翻入动画。要求：使用@keyframes，元素从translateX(-120px)且rotate(-360deg)、opacity:0，过渡到原位rotate(0)、opacity:1，时长0.7秒，缓动cubic-bezier(0.25,0.46,0.45,0.94)，像车轮滚入的效果。',
+    previewHtml: '<div style="width:40px;height:40px;background:linear-gradient(135deg,var(--primary),#a855f7);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:bold;animation:rollI_ 1.6s cubic-bezier(.25,.46,.45,.94) infinite">Roll</div>'
+  },
+  {
+    id: 'blur-focus',
+    name: '模糊聚焦文字',
+    nameEn: 'Blur Focus Text',
+    category: 'text',
+    difficulty: 'easy',
+    tags: ['模糊', '聚焦', '文字', '入场'],
+    description: '文字从模糊松散状态逐渐聚焦清晰，像镜头对焦。',
+    html: '<h2 class="blur-focus">FOCUS</h2>',
+    css: `@keyframes blurFocus {
+  from { filter: blur(8px); opacity: 0; letter-spacing: 10px; }
+  to { filter: blur(0); opacity: 1; letter-spacing: 3px; }
+}
+.blur-focus {
+  font-size: 32px;
+  font-weight: 800;
+  animation: blurFocus 1.2s ease forwards;
+}`,
+    prompt: '请用纯CSS实现文字模糊聚焦效果。要求：使用@keyframes，从filter:blur(8px)、opacity:0、letter-spacing:10px过渡到blur(0)、opacity:1、letter-spacing:3px，时长1.2秒，模拟相机对焦的过程。',
+    previewHtml: '<div style="font-size:16px;font-weight:800;color:var(--text);animation:blurF_ 2s ease infinite alternate">FOCUS</div>'
+  },
+  {
+    id: 'pendulum',
+    name: '钟摆摆动',
+    nameEn: 'Pendulum',
+    category: 'geometry',
+    difficulty: 'easy',
+    tags: ['钟摆', '摆动', '物理', '循环'],
+    description: '元素以顶部为轴心像钟摆一样左右往复摆动。',
+    html: '<div class="pendulum">\n  <div class="rope"></div>\n  <div class="ball"></div>\n</div>',
+    css: `@keyframes pendulum {
+  0%, 100% { transform: rotate(24deg); }
+  50% { transform: rotate(-24deg); }
+}
+.pendulum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+  animation: pendulum 1.6s ease-in-out infinite;
+}
+.rope { width: 2px; height: 60px; background: #999; }
+.ball { width: 28px; height: 28px; border-radius: 50%; background: #4F7CFF; }`,
+    prompt: '请用纯CSS实现钟摆摆动效果。要求：容器设置transform-origin:top center，使用@keyframes在rotate(24deg)和rotate(-24deg)之间往复，缓动ease-in-out模拟重力加减速，时长1.6秒无限循环。',
+    previewHtml: '<div style="display:flex;flex-direction:column;align-items:center;transform-origin:top center;animation:pend_ 1.6s ease-in-out infinite"><div style="width:2px;height:26px;background:var(--text-tertiary)"></div><div style="width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--primary),#a855f7)"></div></div>'
+  },
+  {
+    id: 'hourglass',
+    name: '沙漏加载',
+    nameEn: 'Hourglass Loader',
+    category: 'loading',
+    difficulty: 'medium',
+    tags: ['沙漏', '加载', '翻转', '等待'],
+    description: '沙漏形状周期性翻转180度，模拟沙漏计时。',
+    html: '<div class="hourglass"></div>',
+    css: `@keyframes hourglassFlip {
+  0% { transform: rotate(0); }
+  80%, 100% { transform: rotate(180deg); }
+}
+.hourglass {
+  width: 0;
+  height: 0;
+  border: 26px solid #4F7CFF;
+  border-color: #4F7CFF transparent;
+  border-radius: 50%;
+  animation: hourglassFlip 1.2s ease-in-out infinite;
+}`,
+    prompt: '请用纯CSS实现沙漏加载动画。要求：宽高为0的元素，上下border着色、左右透明，配合border-radius:50%形成沙漏剪影；@keyframes在0%到80%之间rotate(0)转到rotate(180deg)并停顿，1.2秒无限循环，模拟沙漏翻转。',
+    previewHtml: '<div style="width:0;height:0;border:16px solid var(--primary);border-color:var(--primary) transparent;border-radius:50%;animation:hg_ 1.2s ease-in-out infinite"></div>'
+  },
+  {
+    id: 'btn-3d',
+    name: '3D按压按钮',
+    nameEn: '3D Push Button',
+    category: 'button',
+    difficulty: 'easy',
+    tags: ['3D', '按压', '按钮', '立体'],
+    description: '按钮带厚重底边阴影，按下时整体下沉贴地，立体感强。',
+    html: '<button class="btn-3d">Press Me</button>',
+    css: `.btn-3d {
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: #4F7CFF;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #2F56C9;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.btn-3d:active {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 #2F56C9;
+}`,
+    prompt: '请用纯CSS实现3D按压按钮。要求：按钮用box-shadow:0 6px 0 深色实心阴影模拟厚度，:active时translateY(6px)下沉且阴影归零，transition 0.1秒，产生真实的物理按压感。',
+    previewHtml: '<div style="padding:8px 20px;font-size:11px;font-weight:700;color:#fff;background:var(--primary);border-radius:8px;animation:btn3d_ 1.4s ease-in-out infinite">Press</div>'
+  },
+  {
+    id: 'bell-ring',
+    name: '铃铛摇晃',
+    nameEn: 'Bell Ring',
+    category: 'micro',
+    difficulty: 'easy',
+    tags: ['铃铛', '通知', '摇晃', '提醒'],
+    description: '铃铛图标以顶部为轴左右摇晃并逐渐停止，提示新消息。',
+    html: '<div class="bell">🔔</div>',
+    css: `@keyframes bellRing {
+  0%, 60%, 100% { transform: rotate(0); }
+  10% { transform: rotate(24deg); }
+  20% { transform: rotate(-20deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-10deg); }
+  50% { transform: rotate(5deg); }
+}
+.bell {
+  font-size: 32px;
+  transform-origin: top center;
+  animation: bellRing 1.5s ease-in-out infinite;
+}`,
+    prompt: '请用纯CSS实现铃铛摇晃效果。要求：元素transform-origin:top center，@keyframes模拟阻尼衰减：rotate依次为24deg、-20deg、14deg、-10deg、5deg、0，在60%后静止，1.5秒无限循环，用于新消息提醒。',
+    previewHtml: '<div style="font-size:22px;transform-origin:top center;animation:bell_ 1.5s ease-in-out infinite">🔔</div>'
   }
 ];
 
@@ -2600,30 +2619,35 @@ export const previewKeyframes = `
 @keyframes ltF_{0%,100%{opacity:.2}50%{opacity:1}}
 @keyframes spSc_{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.8)}100%{transform:rotate(360deg) scale(1)}}
 @keyframes waveLoad_{0%,100%{height:8px}50%{height:24px}}
-@keyframes hS_{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-@keyframes hL_{0%,100%{transform:translateY(0);box-shadow:0 2px 8px rgba(0,0,0,.2)}50%{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,.4)}}
-@keyframes bG_{0%,100%{box-shadow:none}50%{box-shadow:0 0 15px rgba(79,124,255,.3)}}
-@keyframes tCH_{0%,100%{color:#666}50%{color:#00e5a0}}
-@keyframes hSp_{0%,100%{transform:rotate(0)}50%{transform:rotate(90deg)}}
-@keyframes fillB_{0%{transform:scaleX(0);transform-origin:left}50%{transform:scaleX(1);transform-origin:left}51%{transform-origin:right}100%{transform:scaleX(0);transform-origin:right}}
-@keyframes cardF_{0%{transform:rotateY(0)}50%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
 @keyframes rpH_{0%{transform:translate(-50%,-50%) scale(0);opacity:.5}100%{transform:translate(-50%,-50%) scale(4);opacity:0}}
-@keyframes tiltH_{0%,100%{transform:perspective(300px) rotateY(0) rotateX(0)}50%{transform:perspective(300px) rotateY(10deg) rotateX(-5deg)}}
-@keyframes bDr_{0%{clip-path:polygon(0 0,0 0,0 0,0 0)}25%{clip-path:polygon(0 0,100% 0,100% 0,0 0)}50%{clip-path:polygon(0 0,100% 0,100% 100%,100% 100%)}75%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}100%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}}
-@keyframes par_{0%{transform:translateY(-5%)}100%{transform:translateY(5%)}}
+@keyframes vgn_{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes parB_{0%,100%{transform:translateY(-6%)}50%{transform:translateY(6%)}}
+@keyframes parF_{0%,100%{transform:translateY(10px)}50%{transform:translateY(-10px)}}
+@keyframes cnt_{to{transform:translateY(-100%)}}
+.pvh-scale{transition:transform .3s ease}.pvh-scale:hover{transform:scale(1.15)}
+.pvh-lift{transition:all .3s ease;box-shadow:0 2px 8px rgba(0,0,0,.15)}.pvh-lift:hover{transform:translateY(-6px);box-shadow:0 14px 32px rgba(0,0,0,.35)}
+.pvh-glow{transition:all .3s ease}.pvh-glow:hover{border-color:var(--primary);box-shadow:0 0 16px color-mix(in srgb,var(--primary) 45%,transparent)}
+.pvh-color{transition:color .3s ease}.pvh-color:hover{color:var(--primary)}
+.pvh-rotate{transition:transform .4s ease}.pvh-rotate:hover{transform:rotate(90deg)}
+.pvh-fill .pvh-fill-bar{transform:scaleX(0);transform-origin:left;transition:transform .4s ease}.pvh-fill:hover .pvh-fill-bar{transform:scaleX(1)}
+.pvh-flip .pvh-flip-inner{transition:transform .6s;transform-style:preserve-3d}.pvh-flip:hover .pvh-flip-inner{transform:rotateY(180deg)}
+.pvh-ripple .pvh-ripple-c{opacity:0}.pvh-ripple:hover .pvh-ripple-c{animation:rpH_ .8s ease infinite}
+.pvh-tilt{transition:transform .3s ease}.pvh-tilt:hover{transform:perspective(500px) rotateY(14deg) rotateX(-8deg)}
+.pvh-draw .pvh-draw-b{clip-path:polygon(0 0,0 0,0 0,0 0);transition:clip-path .6s ease}.pvh-draw:hover .pvh-draw-b{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+.pvh-elastic{transition:transform .4s cubic-bezier(.34,1.56,.64,1)}.pvh-elastic:hover{transform:scale(1.2)}
+.pvh-arrow .pvh-arrow-i{display:inline-block;transition:transform .3s ease}.pvh-arrow:hover .pvh-arrow-i{transform:translateX(6px)}
 @keyframes btnP_{0%,100%{transform:scale(1)}40%{transform:scale(.95)}60%{transform:scale(1)}}
 @keyframes rpB_{0%{transform:scale(0);opacity:.5}100%{transform:scale(4);opacity:0}}
 @keyframes btnG_{0%,100%{box-shadow:none}50%{box-shadow:0 0 20px rgba(79,124,255,.4)}}
 @keyframes tgD_{0%,45%{left:3px}55%,100%{left:25px}}
 @keyframes liqB_{0%,100%{border-radius:22px}25%{border-radius:22px 4px 22px 4px}75%{border-radius:4px 22px 4px 22px}}
-@keyframes arrS_{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
 @keyframes subB_{0%{transform:scale(1)}30%{transform:scale(.8)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
 @keyframes mgP_{0%{transform:translateX(-30px) scale(.8)}60%{transform:translateX(5px) scale(1.05)}80%{transform:translateX(-2px) scale(.98)}100%{transform:translateX(0) scale(1)}}
 @keyframes jelly_{0%{transform:scale(1,1)}30%{transform:scale(1.25,.75)}40%{transform:scale(.75,1.25)}50%{transform:scale(1.15,.85)}65%{transform:scale(.95,1.05)}75%{transform:scale(1.05,.95)}100%{transform:scale(1,1)}}
 @keyframes maskT_{0%{transform:scaleY(0);transform-origin:bottom}45%{transform:scaleY(1);transform-origin:bottom}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(0);transform-origin:top}}
 @keyframes slPg_{0%{transform:translateX(100%)}50%{transform:translateX(0)}100%{transform:translateX(-100%)}}
 @keyframes zmT_{0%{transform:scale(.8);opacity:0}40%{transform:scale(1);opacity:1}60%{transform:scale(1);opacity:1}100%{transform:scale(1.2);opacity:0}}
-@keyframes wipeT_{0%{background-position:0% 0%}50%{background-position:100% 0%}100%{background-position:0% 0%}}
+@keyframes wipeT_{0%,8%{clip-path:inset(0 100% 0 0)}42%,58%{clip-path:inset(0 0 0 0)}92%,100%{clip-path:inset(0 0 0 100%)}}
 @keyframes blurT_{0%{filter:blur(10px);opacity:0}30%{filter:blur(0);opacity:1}70%{filter:blur(0);opacity:1}100%{filter:blur(10px);opacity:0}}
 @keyframes unfld_{from{transform:perspective(400px) rotateX(-90deg);opacity:0}to{transform:perspective(400px) rotateX(0);opacity:1}}
 @keyframes ptU_{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-80px) scale(0);opacity:0}}
@@ -2635,9 +2659,9 @@ export const previewKeyframes = `
 @keyframes sh1_{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(40px,-30px) rotate(180deg);opacity:0}}
 @keyframes sh2_{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(-30px,-40px) rotate(-120deg);opacity:0}}
 @keyframes sh3_{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(10px,-50px) rotate(90deg);opacity:0}}
-@keyframes chkD_{0%{height:0;width:0}50%{height:0;width:6px}100%{height:11px;width:6px}}
+@keyframes chkD_{0%,12%{stroke-dashoffset:23}50%,82%{stroke-dashoffset:0}100%{stroke-dashoffset:23}}
 @keyframes bdgI_{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
-@keyframes flyC_{0%{transform:translate(0,0) scale(1);opacity:1}50%{transform:translate(80px,-60px) scale(.5);opacity:.8}100%{transform:translate(160px,0) scale(0);opacity:0}}
+@keyframes flyC_{0%,12%{transform:translate(0,0) scale(1);opacity:1}55%{transform:translate(28px,-26px) scale(.6);opacity:.9}88%,100%{transform:translate(52px,-4px) scale(.15);opacity:0}}
 @keyframes lkB_{0%{transform:scale(1)}30%{transform:scale(1.4)}60%{transform:scale(.9)}100%{transform:scale(1)}}
 @keyframes br1_{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(20px,-20px) scale(0);opacity:0}}
 @keyframes br2_{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(-20px,-15px) scale(0);opacity:0}}
@@ -2654,10 +2678,15 @@ export const previewKeyframes = `
 @keyframes oF1_{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(25px,-18px) scale(1.1)}66%{transform:translate(-12px,22px) scale(.9)}}
 @keyframes oF2_{0%,100%{transform:translate(0,0)}50%{transform:translate(-22px,-28px)}}
 @keyframes oF3_{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(18px,8px) scale(1.05)}75%{transform:translate(-8px,-18px) scale(.95)}}
-@keyframes agBG_{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes neonP_{from{text-shadow:0 0 7px #fff,0 0 10px #fff,0 0 21px #fff,0 0 42px #4F7CFF}to{text-shadow:0 0 4px #fff,0 0 7px #fff,0 0 14px #fff,0 0 30px #4F7CFF,0 0 60px #4F7CFF,0 0 100px #4F7CFF}}
 @keyframes float1_{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-15px)}}
 @keyframes float2_{0%,100%{transform:translate(0,0)}50%{transform:translate(-15px,20px)}}
 @keyframes float3_{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,10px)}}
 @keyframes starPop_{0%{transform:scale(1)}50%{transform:scale(1.4) rotate(15deg)}100%{transform:scale(1) rotate(0)}}
+@keyframes rollI_{0%{transform:translateX(-60px) rotate(-360deg);opacity:0}60%{transform:translateX(0) rotate(0);opacity:1}100%{transform:translateX(0) rotate(0);opacity:1}}
+@keyframes blurF_{0%{filter:blur(6px);opacity:.2;letter-spacing:6px}100%{filter:blur(0);opacity:1;letter-spacing:2px}}
+@keyframes pend_{0%,100%{transform:rotate(24deg)}50%{transform:rotate(-24deg)}}
+@keyframes hg_{0%{transform:rotate(0)}80%,100%{transform:rotate(180deg)}}
+@keyframes btn3d_{0%,100%{transform:translateY(0);box-shadow:0 5px 0 rgba(0,0,0,.35)}50%{transform:translateY(5px);box-shadow:0 0 0 rgba(0,0,0,.35)}}
+@keyframes bell_{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(24deg)}20%{transform:rotate(-20deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-10deg)}50%{transform:rotate(5deg)}}
 `;

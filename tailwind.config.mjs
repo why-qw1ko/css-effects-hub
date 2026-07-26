@@ -33,7 +33,7 @@ export default {
         serif: ['Instrument Serif', 'Noto Serif SC', 'Georgia', 'serif'],
       },
       borderRadius: {
-        'card': '14px',
+        'card': '12px',
         'btn': '8px',
         'full': '100px',
       },
@@ -41,7 +41,7 @@ export default {
         'sm': '0 1px 3px rgba(0,0,0,0.04)',
         'md': '0 4px 20px rgba(0,0,0,0.06)',
         'lg': '0 12px 44px rgba(0,0,0,0.08)',
-        'card-hover': '0 8px 30px rgba(79,124,255,0.12)',
+        'card-hover': '0 4px 16px rgba(0,0,0,0.06)',
       },
     },
   },

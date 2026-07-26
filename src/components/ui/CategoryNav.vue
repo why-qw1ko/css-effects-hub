@@ -8,7 +8,7 @@
         class="cat-btn"
         :class="{ active: active === cat.id }"
       >
-        <span class="cat-icon">{{ cat.icon }}</span>
+        <component :is="iconFor(cat.id)" class="cat-icon" />
         <span class="cat-name">{{ cat.name }}</span>
         <span class="cat-count">{{ cat.count }}</span>
       </button>
@@ -17,7 +17,31 @@
 </template>
 
 <script setup lang="ts">
+import { markRaw } from 'vue';
+import {
+  Target, Sparkles, Type, Palette, Shapes, Hourglass, MousePointer,
+  MoveVertical, MousePointerClick, Shuffle, Rocket, Zap, Tag,
+} from 'lucide-vue-next';
 import type { Category } from '../../types';
+
+const iconMap: Record<string, unknown> = {
+  all: markRaw(Target),
+  basic: markRaw(Sparkles),
+  text: markRaw(Type),
+  color: markRaw(Palette),
+  geometry: markRaw(Shapes),
+  loading: markRaw(Hourglass),
+  hover: markRaw(MousePointer),
+  scroll: markRaw(MoveVertical),
+  button: markRaw(MousePointerClick),
+  transition: markRaw(Shuffle),
+  advanced: markRaw(Rocket),
+  micro: markRaw(Zap),
+};
+
+function iconFor(id: string) {
+  return iconMap[id] || markRaw(Tag);
+}
 
 defineProps<{
   categories: Category[];
@@ -83,8 +107,10 @@ defineEmits<{ select: [id: string] }>();
 }
 
 .cat-icon {
-  font-size: 13px;
-  line-height: 1;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  stroke-width: 2;
 }
 .cat-name {
   letter-spacing: 0;

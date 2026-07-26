@@ -9,7 +9,7 @@
     <div class="p-4">
       <div class="flex items-center justify-between mb-2 gap-3">
         <span class="badge" :class="categoryBadgeClass">{{ categoryName }}</span>
-        <span class="font-sans text-[10px] text-txt-tertiary uppercase tracking-wider">{{ effect.nameEn }}</span>
+        <span class="font-mono text-[10px] text-txt-tertiary uppercase tracking-wider">{{ effect.nameEn }}</span>
       </div>
       <h3 class="font-display font-bold text-base text-txt mb-1">{{ effect.name }}</h3>
       <p class="font-sans text-xs text-txt-secondary leading-relaxed line-clamp-2">{{ effect.description }}</p>

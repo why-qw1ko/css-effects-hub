@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/ui/Header.vue';
 import Footer from '../components/ui/Footer.vue';
+import { Icon } from 'astro-icon/components';
 import { previewKeyframes } from '../data/effects';
 ---
 
@@ -20,6 +21,67 @@ import { previewKeyframes } from '../data/effects';
       /* Ensure proper stacking */
       body { display: flex; flex-direction: column; min-height: 100vh; }
       main { flex: 1; }
+      /* Top scroll progress bar */
+      #scrollProgressBar {
+        position: fixed;
+        top: 0; left: 0;
+        height: 3px;
+        width: 0;
+        background: var(--primary);
+        z-index: 10001;
+        pointer-events: none;
+        transition: opacity 0.3s;
+      }
+      /* Page navigation loading bar (rainbow) */
+      #pageLoadBar {
+        position: fixed;
+        top: 0; left: 0;
+        height: 3px;
+        width: 0;
+        background: linear-gradient(90deg, #ff3b6b, #ff9f1c, #ffd60a, #34d399, #38bdf8, #8b5cf6, #ff3b6b);
+        background-size: 200% 100%;
+        animation: rainbowFlow 1s linear infinite;
+        z-index: 10002;
+        pointer-events: none;
+        opacity: 0;
+        transition: width 0.25s ease, opacity 0.3s;
+      }
+      @keyframes rainbowFlow {
+        to { background-position: 200% 0; }
+      }
+      /* Back to top button */
+      #backToTopBtn {
+        position: fixed;
+        right: 24px;
+        bottom: 28px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background 0.2s;
+        z-index: 10000;
+      }
+      #backToTopBtn.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      #backToTopBtn:hover {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      #backToTopBtn svg { width: 18px; height: 18px; }
     </style>
     <script>
       // Apply theme before paint
@@ -31,10 +93,129 @@ import { previewKeyframes } from '../data/effects';
     </script>
   </head>
   <body>
+    <div id="scrollProgressBar"></div>
+    <div id="pageLoadBar"></div>
     <Header client:load />
     <main>
       <slot />
     </main>
     <Footer />
+    <button id="backToTopBtn" aria-label="回到顶部" title="回到顶部">
+      <Icon name="lucide:arrow-up" />
+    </button>
+    <script>
+      // Scroll progress bar + back-to-top button
+      const progressBar = document.getElementById('scrollProgressBar');
+      const backToTop = document.getElementById('backToTopBtn');
+      let ticking = false;
+
+      function updateOnScroll() {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - doc.clientHeight;
+        const y = window.scrollY;
+        if (progressBar) {
+          const pct = max > 0 ? (y / max) * 100 : 0;
+          progressBar.style.width = pct + '%';
+          progressBar.style.opacity = max > 0 ? '1' : '0';
+        }
+        if (backToTop) backToTop.classList.toggle('show', y > 300);
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(updateOnScroll);
+        }
+      }, { passive: true });
+
+      backToTop?.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      updateOnScroll();
+
+      // Rainbow loading bar on page navigation
+      const loadBar = document.getElementById('pageLoadBar');
+      let loadTimer: ReturnType<typeof setInterval> | undefined;
+
+      function startPageLoad() {
+        if (!loadBar) return;
+        clearInterval(loadTimer);
+        loadBar.style.opacity = '1';
+        let w = 12;
+        loadBar.style.width = w + '%';
+        // fake progress that slows down approaching 90%
+        loadTimer = setInterval(() => {
+          w += (90 - w) * 0.1;
+          if (loadBar) loadBar.style.width = w + '%';
+        }, 200);
+      }
+
+      function endPageLoad() {
+        if (!loadBar) return;
+        clearInterval(loadTimer);
+        loadBar.style.width = '100%';
+        setTimeout(() => {
+          if (!loadBar) return;
+          loadBar.style.opacity = '0';
+          setTimeout(() => {
+            if (!loadBar) return;
+            loadBar.style.transition = 'none';
+            loadBar.style.width = '0';
+            // force reflow before restoring transition
+            void loadBar.offsetWidth;
+            loadBar.style.transition = '';
+          }, 300);
+        }, 250);
+      }
+
+      // Start on internal link clicks (MPA navigation)
+      document.addEventListener('click', (e) => {
+        const el = e.target instanceof Element ? e.target.closest('a[href]') : null;
+        if (!el) return;
+        const a = el as HTMLAnchorElement;
+        if (a.target === '_blank' || a.hasAttribute('download')) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        const href = a.getAttribute('href') || '';
+        if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+        const url = new URL(a.href, location.href);
+        if (url.origin !== location.origin) return;
+        if (url.pathname === location.pathname && url.hash) return;
+        // 离开前记录当前页滚动位置，供从详情页返回时恢复
+        try { sessionStorage.setItem('cdp-scroll:' + location.pathname, String(window.scrollY)); } catch {}
+        startPageLoad();
+      });
+
+      // Also cover history back/forward and form-less navigations
+      window.addEventListener('beforeunload', startPageLoad);
+
+      // Finish animation when the new page arrives (also handles bfcache restore)
+      if (loadBar) {
+        loadBar.style.transition = 'none';
+        loadBar.style.width = '70%';
+        loadBar.style.opacity = '1';
+        requestAnimationFrame(() => {
+          if (!loadBar) return;
+          loadBar.style.transition = '';
+          endPageLoad();
+        });
+      }
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) endPageLoad();
+      });
+
+      // 从详情页返回列表页时恢复之前的滚动位置
+      try {
+        const saved = sessionStorage.getItem('cdp-scroll:' + location.pathname);
+        const ref = document.referrer ? new URL(document.referrer) : null;
+        const fromDetail = ref && ref.origin === location.origin && ref.pathname.includes('/effect/');
+        const isDetail = location.pathname.includes('/effect/');
+        if (saved && fromDetail && !isDetail && Number(saved) > 0) {
+          window.scrollTo({ top: Number(saved), behavior: 'instant' });
+          requestAnimationFrame(updateOnScroll);
+        }
+      } catch {}
+    </script>
   </body>
 </html>
